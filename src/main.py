@@ -189,6 +189,7 @@ def main():
             grid = shift_pitch(grid, pitch_region)
         else:
             # shift vertical pixels
+            print("pitch: {}, roll: {}".format(pitch, roll))
             grid = shift_roll(grid, roll_region)
 
         # old_pitch, old_roll, old_yaw = pitch, roll, yaw
