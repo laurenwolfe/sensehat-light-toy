@@ -30,7 +30,7 @@ DARK_GREEN = (0, 100, 0)
 
 DARK_CYAN = (0, 140, 140)
 CYAN = (0, 255, 255)
-BLUE = (0,191,255)
+BLUE = (0, 191, 255)
 DARK_BLUE = (0, 0, 140)
 
 BLUE_VIOLET = (138, 43, 226)
@@ -46,7 +46,7 @@ WHITE = (255, 255, 255)
 # ROLL = [GREEN_YELLOW, GREEN, DARK_GREEN, BLANK, BLANK, DARK_ORANGE, ORANGE, GOLD]
 PITCH = [RED, DARK_RED, BLANK, BLANK, DARK_BLUE, BLUE]
 ROLL = [LIME_GREEN, DARK_GREEN, BLANK, BLANK, DARK_ORANGE, ORANGE]
-# YAW = [DARK_CYAN, CYAN, BLUE, DARK_BLUE]
+YAW = [DARK_CYAN, CYAN, BLUE, DARK_BLUE]
 
 
 # determine number corresponding to color index in list
@@ -72,14 +72,14 @@ def get_region(degrees, list_len):
 # simply divide into equal regions if all segments are visible
 def get_region_all_visible(degrees, list_len):
     seg_size = 360 / list_len
-    return degrees // seg_size
+    return int(degrees // seg_size)
 
 
 # pop old pixels and insert new values for left/right rotation
 def shift_grid(grid, region, is_pitch, color_list):
     if is_pitch:
         # LEFT
-        if region < ((len(color_list) - 1) // 2):
+        if region < (len(color_list) - 1) // 2:
             for i in range(GRID_SIZE):
                 grid[i].popleft()
                 grid[i].append(color_list[region])
@@ -91,7 +91,7 @@ def shift_grid(grid, region, is_pitch, color_list):
                 grid[i].appendleft(color_list[region])
     else:
         # AWAY
-        if region < ((len(color_list) - 1) // 2):
+        if region < (len(color_list) - 1) // 2:
             grid.popleft()
             grid.append(deque([color_list[region]] * GRID_SIZE))
 
@@ -125,11 +125,12 @@ def main():
             orient = sense.get_orientation()
             p, r, y = int(orient['pitch']), int(orient['roll']), int(orient['yaw'])
 
-            # sum each value by region and tally the counts
+            # determine the region # by converting from degrees
             p_region = get_region(p, len(PITCH))
             r_region = get_region(r, len(ROLL))
             y_region = get_region_all_visible(y, len(YAW))
 
+            # sum each value by region and tally the counts
             pitch_counts[p_region] += 1
             pitch_sums[p_region] += p
 
@@ -142,12 +143,12 @@ def main():
         # get average value of highest frequency region for pitch
         pitch_count = max(pitch_counts)
         pitch_region = pitch_counts.index(pitch_count)
-        pitch = pitch_sums[pitch_region] / pitch_count
+        avg_pitch = pitch_sums[pitch_region] / pitch_count
 
         # get average value of highest frequency region for roll
         roll_count = max(roll_counts)
         roll_region = roll_counts.index(roll_count)
-        roll = roll_sums[roll_region] / roll_count
+        avg_roll = roll_sums[roll_region] / roll_count
 
         # get average value of highest frequency region for yaw
         yaw_count = max(yaw_counts)
@@ -156,19 +157,18 @@ def main():
 
         # determine whether pitch and roll are +10 degrees from the origin in either direction
         # and if so, which value is higher
-        if pitch >= 180:
-            pitch = abs(pitch - 360)
+        if avg_pitch >= 180:
+            avg_pitch = abs(avg_pitch - 360)
 
-        if roll >= 180:
-            roll = abs(roll - 360)
+        if avg_roll >= 180:
+            avg_roll = abs(avg_roll - 360)
 
         # spin around y axis
-#        if pitch < 10 and roll < 10:
-        if pitch < 0 and roll < 0:
+        if avg_pitch < 0 and avg_roll < 0:
                 sleep(.2)
 
         # tilt around z axis (left and right)
-        elif pitch > roll:
+        elif avg_pitch > avg_roll:
             '''
             # increment / reset directional counters
             away_ctr, toward_ctr = 0, 0
