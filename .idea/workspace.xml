@@ -17,15 +17,14 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="584">
-              <caret line="322" column="10" lean-forward="false" selection-start-line="322" selection-start-column="10" selection-end-line="322" selection-end-column="10" />
+            <state relative-caret-position="528">
+              <caret line="313" column="13" lean-forward="true" selection-start-line="313" selection-start-column="13" selection-end-line="313" selection-end-column="13" />
               <folding>
                 <element signature="e#0#30#0" expanded="true" />
                 <element signature="e#1149#1205#0" expanded="false" />
                 <element signature="e#1372#1952#0" expanded="false" />
                 <element signature="e#2066#2127#0" expanded="false" />
                 <element signature="e#2249#2911#0" expanded="false" />
-                <element signature="e#5578#6224#0" expanded="false" />
                 <element signature="e#6278#7232#0" expanded="false" />
               </folding>
             </state>
@@ -43,7 +42,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>i</find>
       <find>8</find>
       <find>quadrant</find>
       <find>quad</find>
@@ -73,6 +71,7 @@
       <find>flat</find>
       <find>sleep</find>
       <find>DELAY</find>
+      <find>ctrs</find>
     </findStrings>
     <replaceStrings>
       <replace>[blank] * 8</replace>
@@ -432,7 +431,6 @@
             <element signature="e#1372#1952#0" expanded="false" />
             <element signature="e#2066#2127#0" expanded="false" />
             <element signature="e#2249#2911#0" expanded="false" />
-            <element signature="e#5578#6224#0" expanded="false" />
             <element signature="e#6278#7232#0" expanded="false" />
           </folding>
         </state>
@@ -456,7 +454,6 @@
             <element signature="e#1372#1952#0" expanded="false" />
             <element signature="e#2066#2127#0" expanded="false" />
             <element signature="e#2249#2911#0" expanded="false" />
-            <element signature="e#5578#6224#0" expanded="false" />
             <element signature="e#6278#7232#0" expanded="false" />
           </folding>
         </state>
@@ -501,15 +498,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="584">
-          <caret line="322" column="10" lean-forward="false" selection-start-line="322" selection-start-column="10" selection-end-line="322" selection-end-column="10" />
+        <state relative-caret-position="528">
+          <caret line="313" column="13" lean-forward="true" selection-start-line="313" selection-start-column="13" selection-end-line="313" selection-end-column="13" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
             <element signature="e#1149#1205#0" expanded="false" />
             <element signature="e#1372#1952#0" expanded="false" />
             <element signature="e#2066#2127#0" expanded="false" />
             <element signature="e#2249#2911#0" expanded="false" />
-            <element signature="e#5578#6224#0" expanded="false" />
             <element signature="e#6278#7232#0" expanded="false" />
           </folding>
         </state>
