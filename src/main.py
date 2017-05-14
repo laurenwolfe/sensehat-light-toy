@@ -297,7 +297,7 @@ def main():
             i = 0
             grid.clear()
 
-            for el in sense.get_pixels():
+            for el in sense.get_pixels()[0]:
                 if i % GRID_SIZE == 0:
                     row = [0] * 8
 
