@@ -4,8 +4,6 @@ RUN apt-get update && apt-get install -yq \
    python sense-hat raspberrypi-bootloader && \
    apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN mkfifo /tmp/python/out
-
 WORKDIR /usr/src/app
 
 COPY . .
