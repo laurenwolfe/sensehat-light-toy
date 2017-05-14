@@ -110,7 +110,7 @@ def shift_grid(grid, region, is_pitch, color_list):
     return grid
 
 
-def overwrite_grid(sense, color_list, total_rings):
+def overwrite_grid(sense, grid, color_list, total_rings):
     # store the steps out from center to set pixel ring
     ctr = 0
     left = (GRID_SIZE - 1) // 2
@@ -154,7 +154,8 @@ def overwrite_grid(sense, color_list, total_rings):
 
         for x in range(left, right + 1):
             for y in range(left, right + 1):
-                sense.set_pixel(x, y, color_list[color_list_ptr])
+                # sense.set_pixel(x, y, color_list[color_list_ptr])
+                grid[x][y] = color_list[color_list_ptr]
 
         ctr += 1
         color_list_ptr -= 1
@@ -167,11 +168,11 @@ def overwrite_grid(sense, color_list, total_rings):
     sleep(DELAY)
 
 
-def manage_flat_ctrs(ctrs, sense):
+def manage_flat_ctrs(ctrs, sense, grid):
     ctrs['flat'] += 1
     ctrs['away'], ctrs['toward'], ctrs['left'], ctrs['right'] = 0, 0, 0, 0
 
-    overwrite_grid(sense, FLAT, ctrs['flat'])
+    overwrite_grid(sense, grid, FLAT, ctrs['flat'])
 
 
 def manage_pitch_ctrs(ctrs, pitch_region, grid):
@@ -291,32 +292,12 @@ def main():
 
         # keep sensor parallel with the ground
         if data['avg_pitch'] < 10 and data['avg_roll'] < 10:
-            manage_flat_ctrs(ctrs, sense)
-
-            # repopulate grid deque
-            # i = 0
-            # grid.clear()
-
-            for lists in sense.get_pixels():
-                print(lists)
-                '''
-                for el in lists:
-                    if i % GRID_SIZE == 0:
-                        row = [0] * 8
-
-                    row[i % GRID_SIZE] = el
-
-                    if i % GRID_SIZE == 7:
-                        grid.append(deque(row))
-
-                    i += 1
-
-            print("i: {}".format(i))
-            '''
+            manage_flat_ctrs(ctrs, sense, grid)
 
         # tilt around z axis (left and right)
         elif data['avg_pitch'] > data['avg_roll']:
             manage_pitch_ctrs(ctrs, data['pitch_region'], grid)
+
         # tilt around x axis (toward and away)
         else:
             manage_roll_ctrs(ctrs, data['roll_region'], grid)
@@ -328,7 +309,7 @@ def main():
             grid_list += list(row)
 
         sense.set_pixels(grid_list)
-        sleep(.2)
+        sleep(.5)
 
 
 main()
