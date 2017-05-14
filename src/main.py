@@ -95,37 +95,31 @@ def shift_roll(grid, region):
     if region == 0:
         grid.pop()
         grid.appendleft(deque([SOFT_TOWARD] * GRID_SIZE))
-        print(grid)
 
     # hard towards, 45 -> 90
     elif region == 1:
         grid.pop()
         grid.appendleft(deque([HARD_TOWARD] * GRID_SIZE))
-        print(grid)
 
     # too hard towards, 90 -> 180
     elif region == 2:
         grid.pop()
         grid.appendleft(deque([BLANK] * GRID_SIZE))
-        print(grid)
 
     # too hard away, 180 -> 270
     elif region == 3:
         grid.popleft()
         grid.append(deque([BLANK] * GRID_SIZE))
-        print(grid)
 
     # hard away, 270 -> 315
     elif region == 4:
         grid.popleft()
         grid.append(deque([HARD_AWAY] * GRID_SIZE))
-        print(grid)
 
     # soft away, 315 -> 360
     elif region == 5:
         grid.popleft()
         grid.append(deque([SOFT_AWAY] * GRID_SIZE))
-        print(grid)
 
     return grid
 
@@ -191,6 +185,7 @@ def main():
 
         if abs(pitch) > abs(roll):
             # shift horizontal pixels
+            print("pitch: {}, roll: {}".format(pitch, roll))
             grid = shift_pitch(grid, pitch_region)
         else:
             # shift vertical pixels
