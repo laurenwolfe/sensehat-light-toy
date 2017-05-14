@@ -115,7 +115,8 @@ def overwrite_grid(grid, sense, color_list, total_rings):
     # store the steps out from center to set pixel ring
     left = (GRID_SIZE - 1) // 2
     right = GRID_SIZE // 2
-    rings = deque([None] * (GRID_SIZE // 2))
+    # rings = deque([None] * (GRID_SIZE // 2))
+    rings = deque([None] * total_rings)
 
     # while i < count
     # if count < MAX
@@ -142,151 +143,34 @@ def overwrite_grid(grid, sense, color_list, total_rings):
             # wrap the list index if we reach 0
             if color_idx < 0:
                 color_idx = len(color_list) - 1
-        # Wipe rings away with blanks once max is acheived
+        # Wipe rings away with blanks once max is achieved
         else:
             rings.pop()
             rings.appendleft(BLANK)
-
-        idx = 0
 
         for el in rings:
             if el is not None:
                 for step in range(tmp_right - tmp_left + 1):
                     l_edge = int(tmp_left + step)
-                    r_edge = int(tmp_right - idx)
 
-                    #4
                     grid[tmp_left][l_edge] = el
-                    #1
                     grid[tmp_right][l_edge] = el
-                    #2
                     grid[l_edge][tmp_right] = el
-                    #3
                     grid[l_edge][tmp_left] = el
-                    # idx += 1
 
+                push_grid(grid, sense)
                 print("({},{}), ({},{}), ({},{}), ({},{}),".
                       format(tmp_left, l_edge, tmp_right, l_edge, l_edge, tmp_right, l_edge, tmp_left))
-            else:
-                print("rings is None at index {}".format(idx))
 
             tmp_left -= 1
             tmp_right += 1
 
-            if tmp_left < 0 or tmp_right > GRID_SIZE:
-                print("out of bounds!")
+            if tmp_left < 0:
+                tmp_left = left
+            if tmp_right >= GRID_SIZE:
+                tmp_right = right
 
-                if tmp_left < 0:
-                    tmp_left = left
-                if tmp_right >= GRID_SIZE:
-                    tmp_right = right
-
-        print("exited grid insertion loop.")
-        grid_list = []
-
-        for row in grid:
-            grid_list += list(row)
-
-        sense.set_pixels(grid_list)
-
-
-    '''
-    # if total rings exceeds the 50% of the maximum number of pixels released, then get a count of blank rings,
-    # up to the maximum number of displayable rings
-    num_blank_rings = total_rings - MAX_PIXELS
-
-    if num_blank_rings > 0:
-        num_color_rings = (total_rings % right) + 1
-    elif num_blank_rings >= right:
-        num_blank_rings = right
-        num_color_rings = 0
-    else:
-        # calculate the total number of colored rings to display by subtracting blank rings and determining whether the
-        # result is valid
-        num_color_rings = total_rings % right
-        num_blank_rings = right - num_color_rings
-
-    # start index position for color list -- higher indices are "newer" and displayed in the center
-    color_list_ptr = total_rings % len(color_list)
-
-#    tmp_left = (GRID_SIZE - 1) // 2
-#    tmp_right = GRID_SIZE // 2
-
-    # output color rings
-    for total in range(total_rings):
-        for i in range(0, num_color_rings):
-            while i < MAX_PIXELS:
-                for step in range(right - left + 1):
-                    grid[left][left + step] = color_list[color_list_ptr]
-                    grid[right][left + step] = color_list[color_list_ptr]
-                    grid[left + step][left] = color_list[color_list_ptr]
-                    grid[left + step][right] = color_list[color_list_ptr]
-                color_list_ptr -= 1
-                left -= 1
-                right += 1
-
-
-
-    
-    # output blank rings
-    for i in range(0, num_blank_rings):
-        for x in range(left - i, right + i + 1):
-            for y in range(left - i, right + i + 1):
-                print("blank - i: {}, x: {}, y: {}".format(i, x, y))
-                grid[x][y] = BLANK
-
-        if tmp_left < 0:
-            tmp_left = left
-        if tmp_right >= GRID_SIZE:
-            tmp_right = right
-        if color_list_ptr < 0:
-            color_list_ptr = len(color_list) - 1
-
-        idx = i % left
-
-        if tmp_left < 0 or tmp_right >= GRID_SIZE:
-            print("color overflowing")
-            print("color overflowing")
-            print("color overflowing")
-        
-
-        print("bounds - idx: {}, tmp_left: {}, tmp_right: {}, limit: {}".
-              format(idx, tmp_left, tmp_right, num_color_rings))
-
-        grid[(idx + tmp_left)][tmp_left] = color_list[color_list_ptr]
-        grid[(idx + tmp_left)][tmp_right] = color_list[color_list_ptr]
-        grid[tmp_left][(tmp_right - idx)] = color_list[color_list_ptr]
-        grid[tmp_right][(tmp_left + idx)] = color_list[color_list_ptr]
-
-
-        color_list_ptr -= 1
-        tmp_left -= 1
-        tmp_right += 1
-
-        # output blank rings
-     tmp_left = left
-     tmp_right = right
-
-
-    for i in range(0, min(num_blank_rings, right)):
-        if tmp_left < 0 or tmp_right >= GRID_SIZE:
-            print("blank overflowing")
-            print("blank overflowing")
-            print("blank overflowing")
-
-        idx = i % left
-
-        grid[idx + tmp_left][tmp_left] = BLANK
-        grid[idx + tmp_left][tmp_right] = BLANK
-        grid[tmp_left][tmp_left + idx] = BLANK
-        grid[tmp_right][tmp_right - idx] = BLANK
-
-        print("blank - i: {}, tmp_left: {}, tmp_right: {}, tmp_left + i: {}, tmp_right - i: {}".
-              format(idx, tmp_left, tmp_right, tmp_left + idx, tmp_right - idx))
-
-        tmp_left -= 1
-        tmp_right += 1
-        '''
+        print("pushed all rings.")
 
 
 def manage_flat_ctrs(ctrs, grid, sense):
@@ -393,24 +277,31 @@ def sample_sensor_output(sense):
     return data
 
 
+def push_grid(grid, sense):
+    grid_list = []
+
+    for row in grid:
+        grid_list += list(row)
+
+    sense.set_pixels(grid_list)
+    sleep(.3)
+
+
 def main():
     sense = SenseHat()
     sense.set_imu_config(False, True, True)
-    # sense.clear()
+    sense.clear()
 
     grid = deque([deque([BLANK] * GRID_SIZE)] * GRID_SIZE)
-
     ctrs = {'left': 0, 'right': 0, 'toward': 0, 'away': 0, 'flat': 0}
 
     while True:
         # convert deques to a flattened list
         data = sample_sensor_output(sense)
-
         # determine whether pitch and roll are +10 degrees from the origin in either direction
         # and if so, which value is higher
         if data['avg_pitch'] >= 180:
             data['avg_pitch'] = abs(data['avg_pitch'] - 360)
-
         if data['avg_roll'] >= 180:
             data['avg_roll'] = abs(data['avg_roll'] - 360)
 
@@ -428,14 +319,6 @@ def main():
                 print("toward: {}, away: {}".format(ctrs['toward'], ctrs['away']))
                 manage_roll_ctrs(ctrs, data['roll_region'], grid)
 
-            grid_list = []
-
-            for row in grid:
-                grid_list += list(row)
-
-            sense.set_pixels(grid_list)
-
-            sleep(.3)
-
+            push_grid(grid, sense)
 
 main()
