@@ -272,7 +272,7 @@ def sample_sensor_output(sense):
 def main():
     sense = SenseHat()
     sense.set_imu_config(False, True, True)
-    sense.clear()
+    # sense.clear()
 
     grid = deque([deque([BLANK] * GRID_SIZE)] * GRID_SIZE)
 
@@ -295,7 +295,7 @@ def main():
 
             # repopulate grid deque
             i = 0
-            grid = deque.clear()
+            grid.clear()
 
             for el in sense.get_pixels():
                 if i % GRID_SIZE == 0:
