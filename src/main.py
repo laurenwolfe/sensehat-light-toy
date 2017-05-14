@@ -184,7 +184,6 @@ def overwrite_grid(grid, sense, color_list, total_rings):
             grid_list += list(row)
 
         sense.set_pixels(grid_list)
-        sleep(.5)
 
 
     '''
@@ -432,7 +431,7 @@ def main():
 
             sense.set_pixels(grid_list)
 
-            sleep(.1)
+            sleep(.3)
 
 
 main()
