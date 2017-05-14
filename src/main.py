@@ -44,9 +44,9 @@ WHITE = (255, 255, 255)
 
 # PITCH = [VIOLET_RED, RED, DARK_RED, BLANK, BLANK, DARK_PURPLE, PURPLE, LIGHT_PURPLE]
 # ROLL = [GREEN_YELLOW, GREEN, DARK_GREEN, BLANK, BLANK, DARK_ORANGE, ORANGE, GOLD]
-PITCH = [RED, DARK_RED, BLANK, BLANK, DARK_PURPLE, BLUE]
-ROLL = [GREEN_YELLOW, DARK_GREEN, BLANK, BLANK, DARK_ORANGE, GOLD]
-YAW = [DARK_CYAN, CYAN, BLUE, DARK_BLUE]
+PITCH = [RED, DARK_RED, BLANK, BLANK, DARK_BLUE, BLUE]
+ROLL = [LIME_GREEN, DARK_GREEN, BLANK, BLANK, DARK_ORANGE, ORANGE]
+# YAW = [DARK_CYAN, CYAN, BLUE, DARK_BLUE]
 
 
 # determine number corresponding to color index in list
@@ -79,7 +79,7 @@ def get_region_all_visible(degrees, list_len):
 def shift_grid(grid, region, is_pitch, color_list):
     if is_pitch:
         # LEFT
-        if region < (len(color_list) - 1 // 2):
+        if region < ((len(color_list) - 1) // 2):
             for i in range(GRID_SIZE):
                 grid[i].popleft()
                 grid[i].append(color_list[region])
@@ -91,7 +91,7 @@ def shift_grid(grid, region, is_pitch, color_list):
                 grid[i].appendleft(color_list[region])
     else:
         # AWAY
-        if region < (len(color_list) - 1 // 2):
+        if region < ((len(color_list) - 1) // 2):
             grid.popleft()
             grid.append(deque([color_list[region]] * GRID_SIZE))
 
