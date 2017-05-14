@@ -70,29 +70,28 @@ def get_region(degrees, list_len):
 # simply divide into equal regions if all segments are visible
 def get_region_all_visible(degrees, list_len):
     seg_size = 360 / list_len
-    return degrees / seg_size
+    return degrees // seg_size
 
 
 # pop old pixels and insert new values for left/right rotation
 def shift_grid(grid, region, is_pitch, color_list):
-
     for i in range(GRID_SIZE):
         if region < (len(color_list) - 1) // 2:
             if is_pitch:
-                # left
+                ### left
                 grid[i].popleft()
                 grid[i].append(color_list[region])
             else:
-                # away
+                ### away
                 grid.popleft()
                 grid.append(deque([color_list[region]] * GRID_SIZE))
         else:
             if is_pitch:
-                # right
+                ### right
                 grid[i].pop()
                 grid[i].appendleft(color_list[region])
             else:
-                # toward
+                ### toward
                 grid.pop()
                 grid.appendleft(deque([color_list[region]] * GRID_SIZE))
 
@@ -180,7 +179,7 @@ def main():
             if left_ctr >= GRID_SIZE * 3 or right_ctr >= GRID_SIZE * 3:
                 pitch_region = len(PITCH) // 2
             '''
-            grid = shift_grid(grid, pitch_region, True)
+            grid = shift_grid(grid, pitch_region, True, PITCH)
 
         # tilt around x axis (toward and away)
         else:
@@ -201,7 +200,7 @@ def main():
             if toward_ctr > GRID_SIZE * 3 or away_ctr > GRID_SIZE * 3:
                 roll_region = len(ROLL) // 2
             '''
-            grid = shift_grid(grid, roll_region, False)
+            grid = shift_grid(grid, roll_region, False, ROLL)
 
         # convert deques to a flattened list
         grid_list = []
