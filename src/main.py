@@ -112,22 +112,10 @@ def shift_grid(grid, region, is_pitch, color_list):
 
 
 def overwrite_grid(grid, sense, color_list, total_rings):
-    pushed = False
     # store the steps out from center to set pixel ring
     left = (GRID_SIZE - 1) // 2
     right = GRID_SIZE // 2
-    # rings = deque([None] * (GRID_SIZE // 2))
     rings = deque([None] * total_rings)
-
-    # while i < count
-    # if count < MAX
-    # - append new color to front of rings list
-    # else:
-    # - append blank
-    # for el in rings:
-    # if not None: overwrite pixels in grid corresponding to position:
-    # - 3, 4; 2, 5; 1,6; 0, 7
-    # push pixels to board
 
     color_idx = randint(0, len(color_list) - 1)
 
@@ -136,47 +124,45 @@ def overwrite_grid(grid, sense, color_list, total_rings):
 
     for i in range(total_rings):
         # Haven't exceeded max pixel flow, add another color ring
+        rings.pop()
         if i < MAX_PIXELS:
-            rings.pop()
             rings.appendleft(color_list[color_idx])
-            color_idx -= 1
-
-            # wrap the list index if we reach 0
-            if color_idx < 0:
-                color_idx = len(color_list) - 1
         # Wipe rings away with blanks once max is achieved
         else:
-            rings.pop()
             rings.appendleft(BLANK)
 
-        for el in rings:
-            if el is not None:
-                for step in range(tmp_right - tmp_left + 1):
-                    l_edge = int(tmp_left + step)
+        color_idx -= 1
 
-                    grid[tmp_left][l_edge] = el
-                    grid[tmp_right][l_edge] = el
-                    grid[l_edge][tmp_right] = el
-                    grid[l_edge][tmp_left] = el
+        # wrap the list index if we reach 0
+        if color_idx < 0:
+            color_idx = len(color_list) - 1
 
-                print("({},{}), ({},{}), ({},{}), ({},{}),".
-                      format(tmp_left, l_edge, tmp_right, l_edge, l_edge, tmp_right, l_edge, tmp_left))
+    while i < range(rings) and i is not None:
+        for step in range(tmp_right - tmp_left + 1):
+            l_edge = int(tmp_left + step)
 
-            tmp_left -= 1
-            tmp_right += 1
+            grid[tmp_left][l_edge] = rings[i]
+            grid[tmp_right][l_edge] = rings[i]
+            grid[l_edge][tmp_right] = rings[i]
+            grid[l_edge][tmp_left] = rings[i]
 
-            if tmp_left < 0:
-                tmp_left = left
-                push_grid(grid, sense)
-                pushed = True
-            if tmp_right >= GRID_SIZE:
-                tmp_right = right
-                push_grid(grid, sense)
-                pushed = True
-            print("pushed all rings.")
+        print("({},{}), ({},{}), ({},{}), ({},{}),".
+              format(tmp_left, l_edge, tmp_right, l_edge, l_edge, tmp_right, l_edge, tmp_left))
 
-    if not pushed:
-        push_grid(grid, sense)
+        i += i
+        tmp_left -= 1
+        tmp_right += 1
+
+        # write pixels to board once grid is loaded with newest batch of data
+        if tmp_left < 0:
+            tmp_left = left
+            push_grid(grid, sense)
+        if tmp_right >= GRID_SIZE:
+            tmp_right = right
+            push_grid(grid, sense)
+
+    # final push at the very end
+    push_grid(grid, sense)
 
 
 def manage_flat_ctrs(ctrs, grid, sense):
