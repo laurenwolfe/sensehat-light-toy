@@ -208,9 +208,9 @@ def main():
             # if counter reaches/exceeds grid size, stop outputting color until direction changes
             # by setting region equal to a non-visible segment
             if away_ctr > GRID_SIZE * 3:
-                roll_region = (len(ROLL) - 1) // 2
-            elif toward_ctr > GRID_SIZE * 3:
                 roll_region = len(ROLL) // 2
+            elif toward_ctr > GRID_SIZE * 3:
+                roll_region = (len(ROLL) - 1) // 2
 
             grid = shift_grid(grid, roll_region, False, ROLL)
 
