@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e55dba28-993c-48b1-a3d3-cfaed52400ba" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/wolfela.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/wolfela.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main.py" afterPath="$PROJECT_DIR$/src/main.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,8 +18,8 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="115" column="21" lean-forward="true" selection-start-line="115" selection-start-column="21" selection-end-line="115" selection-end-column="21" />
+            <state relative-caret-position="855">
+              <caret line="305" column="0" lean-forward="true" selection-start-line="305" selection-start-column="0" selection-end-line="305" selection-end-column="0" />
               <folding>
                 <element signature="e#0#30#0" expanded="true" />
                 <element signature="e#592#621#0" expanded="false" />
@@ -26,6 +27,11 @@
                 <element signature="e#1336#1916#0" expanded="false" />
                 <element signature="e#2030#2091#0" expanded="false" />
                 <element signature="e#2213#2875#0" expanded="false" />
+                <element signature="e#2934#4658#0" expanded="false" />
+                <element signature="e#4700#4839#0" expanded="false" />
+                <element signature="e#4895#5541#0" expanded="false" />
+                <element signature="e#5595#6549#0" expanded="false" />
+                <element signature="e#6589#8236#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -60,14 +66,17 @@
       <find>abs</find>
       <find>GRID_SIZE</find>
       <find>shift_grid</find>
-      <find>grid</find>
       <find>pitch</find>
-      <find>pitch_region</find>
       <find>get_r</find>
       <find>GRI</find>
       <find>max_radius</find>
       <find>ctr</find>
       <find>toward_ctr</find>
+      <find>grid</find>
+      <find>avg_pitch</find>
+      <find>avg_roll</find>
+      <find>pitch_region</find>
+      <find>roll_region</find>
     </findStrings>
     <replaceStrings>
       <replace>[blank] * 8</replace>
@@ -84,6 +93,10 @@
       <replace>ctrs['toward']</replace>
       <replace>ctrs['left']</replace>
       <replace>ctrs['right']</replace>
+      <replace>data['avg_pitch']</replace>
+      <replace>data['avg_roll']</replace>
+      <replace>data['pitch_region']</replace>
+      <replace>data['roll_region']</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -384,7 +397,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="1" />
+      <option name="time" value="2" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -424,6 +437,11 @@
             <element signature="e#1336#1916#0" expanded="false" />
             <element signature="e#2030#2091#0" expanded="false" />
             <element signature="e#2213#2875#0" expanded="false" />
+            <element signature="e#2934#4658#0" expanded="false" />
+            <element signature="e#4700#4839#0" expanded="false" />
+            <element signature="e#4895#5541#0" expanded="false" />
+            <element signature="e#5595#6549#0" expanded="false" />
+            <element signature="e#6589#8236#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -447,6 +465,11 @@
             <element signature="e#1336#1916#0" expanded="false" />
             <element signature="e#2030#2091#0" expanded="false" />
             <element signature="e#2213#2875#0" expanded="false" />
+            <element signature="e#2934#4658#0" expanded="false" />
+            <element signature="e#4700#4839#0" expanded="false" />
+            <element signature="e#4895#5541#0" expanded="false" />
+            <element signature="e#5595#6549#0" expanded="false" />
+            <element signature="e#6589#8236#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -490,8 +513,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="115" column="21" lean-forward="true" selection-start-line="115" selection-start-column="21" selection-end-line="115" selection-end-column="21" />
+        <state relative-caret-position="855">
+          <caret line="305" column="0" lean-forward="true" selection-start-line="305" selection-start-column="0" selection-end-line="305" selection-end-column="0" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
             <element signature="e#592#621#0" expanded="false" />
@@ -499,6 +522,11 @@
             <element signature="e#1336#1916#0" expanded="false" />
             <element signature="e#2030#2091#0" expanded="false" />
             <element signature="e#2213#2875#0" expanded="false" />
+            <element signature="e#2934#4658#0" expanded="false" />
+            <element signature="e#4700#4839#0" expanded="false" />
+            <element signature="e#4895#5541#0" expanded="false" />
+            <element signature="e#5595#6549#0" expanded="false" />
+            <element signature="e#6589#8236#0" expanded="false" />
           </folding>
         </state>
       </provider>

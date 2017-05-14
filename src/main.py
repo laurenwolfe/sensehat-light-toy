@@ -115,7 +115,7 @@ def overwrite_grid(sense, color_list, total_rings):
 
     # if total rings exceeds the 50% of the maximum number of pixels released, then get a count of blank rings,
     # up to the maximum number of displayable rings
-    num_blank_rings = total_rings - (MAX_PIXELS // 2)
+    num_blank_rings = total_rings - MAX_PIXELS
     if num_blank_rings < 0:
         num_blank_rings = 0
     elif num_blank_rings >= right:
@@ -159,6 +159,110 @@ def overwrite_grid(sense, color_list, total_rings):
     sleep(DELAY)
 
 
+def manage_flat_ctrs(ctrs, sense):
+    ctrs['flat'] += 1
+    ctrs['away'], ctrs['toward'], ctrs['left'], ctrs['right'] = 0, 0, 0, 0
+
+    overwrite_grid(sense, FLAT, ctrs['flat'])
+
+
+def manage_pitch_ctrs(ctrs, pitch_region, grid):
+    # increment / reset directional counters
+    ctrs['away'], ctrs['toward'], ctrs['flat'] = 0, 0, 0
+    if pitch_region < (len(PITCH) - 2) // 2:
+        ctrs['left'] += 1
+        ctrs['right'] = 0
+    elif pitch_region >= (len(PITCH) - 1) // 2:
+        ctrs['right'] += 1
+        ctrs['left'] = 0
+    else:
+        ctrs['left'], ctrs['right'] = 0, 0
+
+    # if counter reaches/exceeds grid size, stop outputting color until direction changes
+    if ctrs['left'] >= MAX_PIXELS:
+        pitch_region = (len(PITCH) - 1) // 2
+    elif ctrs['right'] >= MAX_PIXELS:
+        pitch_region = (len(PITCH)) // 2
+
+    shift_grid(grid, pitch_region, True, PITCH)
+
+
+def manage_roll_ctrs(ctrs, roll_region, grid):
+    # reset counters of all other types -- roll is dominant sensor input
+    ctrs['left'], ctrs['right'], ctrs['flat'] = 0, 0, 0
+
+    # region count for tilting towards
+    if roll_region < (len(ROLL) - 2) // 2:
+        ctrs['toward'] += 1
+        ctrs['away'] = 0
+    # region count for tilting away
+    elif roll_region >= (len(ROLL) - 1) // 2:
+        ctrs['away'] += 1
+        ctrs['toward'] = 0
+    # in the blank zone between 90 -> 270, reset counters
+    else:
+        ctrs['away'], ctrs['toward'], = 0, 0
+
+    # if counter reaches/exceeds maximum # of sequential pixels for a given direction, stop outputting
+    # until direction changes by setting region equal to a non-visible segment.
+    # the pixels fall off the screen in a downward direction.
+    if ctrs['away'] > MAX_PIXELS:
+        roll_region = len(ROLL) // 2
+    elif ctrs['toward'] > MAX_PIXELS:
+        roll_region = (len(ROLL) - 1) // 2
+
+    shift_grid(grid, roll_region, False, ROLL)
+
+
+def sample_sensor_output(sense):
+    pitch_counts = [0] * len(PITCH)
+    pitch_sums = [0] * len(PITCH)
+    roll_counts = [0] * len(ROLL)
+    roll_sums = [0] * len(ROLL)
+    yaw_counts = [0] * len(YAW)
+    yaw_sums = [0] * len(YAW)
+
+    # take sample_size samples at sleep_time interval
+    for i in range(NUM_SAMPLES):
+        orient = sense.get_orientation()
+        p, r, y = int(orient['pitch']), int(orient['roll']), int(orient['yaw'])
+
+        # determine the region # by converting from degrees
+        p_region = get_region(p, len(PITCH))
+        r_region = get_region(r, len(ROLL))
+        y_region = get_region_all_visible(y, len(YAW))
+
+        # sum each value by region and tally the counts
+        pitch_counts[p_region] += 1
+        pitch_sums[p_region] += p
+
+        roll_counts[r_region] += 1
+        roll_sums[r_region] += r
+
+        yaw_counts[y_region] += 1
+        yaw_sums[y_region] += y
+
+    # get average value of highest frequency region for pitch
+    pitch_count = max(pitch_counts)
+    pitch_region = pitch_counts.index(pitch_count)
+    avg_pitch = pitch_sums[pitch_region] / pitch_count
+
+    # get average value of highest frequency region for roll
+    roll_count = max(roll_counts)
+    roll_region = roll_counts.index(roll_count)
+    avg_roll = roll_sums[roll_region] / roll_count
+
+    # get average value of highest frequency region for yaw
+    yaw_count = max(yaw_counts)
+    yaw_region = yaw_counts.index(yaw_count)
+    avg_yaw = yaw_sums[yaw_region] / yaw_count
+
+    data = {'avg_pitch': avg_pitch, 'pitch_region': pitch_region, 'avg_roll': avg_roll, 'roll_region': roll_region,
+            'avg_yaw': avg_yaw, 'yaw_region': yaw_region}
+
+    return data
+
+
 def main():
     sense = SenseHat()
     sense.set_imu_config(False, True, True)
@@ -169,106 +273,25 @@ def main():
     ctrs = {'left': 0, 'right': 0, 'toward': 0, 'away': 0, 'flat': 0}
 
     while True:
-        pitch_counts = [0] * len(PITCH)
-        pitch_sums = [0] * len(PITCH)
-        roll_counts = [0] * len(ROLL)
-        roll_sums = [0] * len(ROLL)
-        yaw_counts = [0] * len(YAW)
-        yaw_sums = [0] * len(YAW)
-
-        # take sample_size samples at sleep_time interval
-        for i in range(NUM_SAMPLES):
-            orient = sense.get_orientation()
-            p, r, y = int(orient['pitch']), int(orient['roll']), int(orient['yaw'])
-
-            # determine the region # by converting from degrees
-            p_region = get_region(p, len(PITCH))
-            r_region = get_region(r, len(ROLL))
-            y_region = get_region_all_visible(y, len(YAW))
-
-            # sum each value by region and tally the counts
-            pitch_counts[p_region] += 1
-            pitch_sums[p_region] += p
-
-            roll_counts[r_region] += 1
-            roll_sums[r_region] += r
-
-            yaw_counts[y_region] += 1
-            yaw_sums[y_region] += y
-
-        # get average value of highest frequency region for pitch
-        pitch_count = max(pitch_counts)
-        pitch_region = pitch_counts.index(pitch_count)
-        avg_pitch = pitch_sums[pitch_region] / pitch_count
-
-        # get average value of highest frequency region for roll
-        roll_count = max(roll_counts)
-        roll_region = roll_counts.index(roll_count)
-        avg_roll = roll_sums[roll_region] / roll_count
-
-        # get average value of highest frequency region for yaw
-        # yaw_count = max(yaw_counts)
-        # yaw_region = yaw_counts.index(yaw_count)
-        # yaw = yaw_sums[yaw_region] / yaw_count
+        data = sample_sensor_output(sense)
 
         # determine whether pitch and roll are +10 degrees from the origin in either direction
         # and if so, which value is higher
-        if avg_pitch >= 180:
-            avg_pitch = abs(avg_pitch - 360)
+        if data['avg_pitch'] >= 180:
+            data['avg_pitch'] = abs(data['avg_pitch'] - 360)
 
-        if avg_roll >= 180:
-            avg_roll = abs(avg_roll - 360)
+        if data['avg_roll'] >= 180:
+            data['avg_roll'] = abs(data['avg_roll'] - 360)
 
-        # spin around y axis
-        if avg_pitch < 8 and avg_roll < 8:
-            ctrs['flat'] += 1
-            ctrs['away'], ctrs['toward'], ctrs['left'], ctrs['right'] = 0, 0, 0, 0
-
-            overwrite_grid(sense, FLAT, ctrs['flat'])
-
+        # keep sensor parallel with the ground
+        if data['avg_pitch'] < 8 and data['avg_roll'] < 8:
+            manage_flat_ctrs(ctrs, sense)
         # tilt around z axis (left and right)
-        elif avg_pitch > avg_roll:
-
-            # increment / reset directional counters
-            ctrs['away'], ctrs['toward'] = 0, 0
-            if pitch_region < (len(PITCH) - 2) // 2:
-                ctrs['left'] += 1
-                ctrs['right'] = 0
-            elif pitch_region >= (len(PITCH) - 1) // 2:
-                ctrs['right'] += 1
-                ctrs['left'] = 0
-            else:
-                ctrs['left'], ctrs['right'] = 0, 0
-
-            # if counter reaches/exceeds grid size, stop outputting color until direction changes
-            if ctrs['left'] >= MAX_PIXELS:
-                pitch_region = (len(PITCH) - 1) // 2
-            elif ctrs['right'] >= MAX_PIXELS:
-                pitch_region = (len(PITCH)) // 2
-
-            grid = shift_grid(grid, pitch_region, True, PITCH)
-
+        elif data['avg_pitch'] > data['avg_roll']:
+            manage_pitch_ctrs(ctrs, data['pitch_region'], grid)
         # tilt around x axis (toward and away)
         else:
-            # increment / reset directional counters
-            ctrs['left'], ctrs['right'] = 0, 0
-            if roll_region < (len(ROLL) - 2) // 2:
-                ctrs['toward'] += 1
-                ctrs['away'] = 0
-            elif roll_region >= (len(ROLL) - 1) // 2:
-                ctrs['away'] += 1
-                ctrs['toward'] = 0
-            else:
-                ctrs['away'], ctrs['toward'] = 0, 0
-
-            # if counter reaches/exceeds grid size, stop outputting color until direction changes
-            # by setting region equal to a non-visible segment
-            if ctrs['away'] > MAX_PIXELS:
-                roll_region = len(ROLL) // 2
-            elif ctrs['toward'] > MAX_PIXELS:
-                roll_region = (len(ROLL) - 1) // 2
-
-            grid = shift_grid(grid, roll_region, False, ROLL)
+            manage_roll_ctrs(ctrs, data['roll_region'], grid)
 
         # convert deques to a flattened list
         grid_list = []
