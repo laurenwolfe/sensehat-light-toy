@@ -118,19 +118,21 @@ def overwrite_grid(grid, color_list, total_rings):
     # if total rings exceeds the 50% of the maximum number of pixels released, then get a count of blank rings,
     # up to the maximum number of displayable rings
     num_blank_rings = total_rings - MAX_PIXELS
+
     if num_blank_rings < 0:
         num_blank_rings = 0
-        num_color_rings = total_rings
+        num_color_rings = total_rings % right
     elif num_blank_rings >= right:
         num_blank_rings = right
         num_color_rings = 0
     else:
         # calculate the total number of colored rings to display by subtracting blank rings and determining whether the
         # result is valid
-        num_color_rings = max(0, total_rings - num_blank_rings)
+        num_color_rings = total_rings % right
+        num_blank_rings = right - num_color_rings
 
     # start index position for color list -- higher indices are "newer" and displayed in the center
-    color_list_ptr = (num_blank_rings + num_color_rings - 1) % len(color_list)
+    color_list_ptr = total_rings % len(color_list)
 
     tmp_left = (GRID_SIZE - 1) // 2
     tmp_right = GRID_SIZE // 2
@@ -144,21 +146,20 @@ def overwrite_grid(grid, color_list, total_rings):
         if color_list_ptr < 0:
             color_list_ptr = len(color_list) - 1
 
-        # print("test color -  left: {}, right: {}, color_idx: {}".format(tmp_left, tmp_right, color_list_ptr))
+        idx = i % left
 
         if tmp_left < 0 or tmp_right >= GRID_SIZE:
             print("color overflowing")
             print("color overflowing")
             print("color overflowing")
 
+        print("bounds - idx: {}, tmp_left: {}, tmp_right: {}, tmp_left +idx: {}, tmp_right -idx: {}".
+              format(idx, tmp_left, tmp_right, str(tmp_left +idx), str(tmp_right -idx)))
 
-        print("bounds - i: {}, tmp_left: {}, tmp_right: {}, tmp_left + i: {}, tmp_right - i: {}".
-              format(i, tmp_left, tmp_right, str(tmp_left + i), str(tmp_right - i)))
-
-        grid[(i + tmp_left)][tmp_left] = color_list[color_list_ptr]
-        grid[(i + tmp_left)][tmp_right] = color_list[color_list_ptr]
-        grid[tmp_left][(tmp_right - i)] = color_list[color_list_ptr]
-        grid[tmp_right][(tmp_left + i)] = color_list[color_list_ptr]
+        grid[(idx + tmp_left)][tmp_left] = color_list[color_list_ptr]
+        grid[(idx + tmp_left)][tmp_right] = color_list[color_list_ptr]
+        grid[tmp_left][(tmp_right - idx)] = color_list[color_list_ptr]
+        grid[tmp_right][(tmp_left + idx)] = color_list[color_list_ptr]
 
 
         color_list_ptr -= 1
@@ -176,13 +177,15 @@ def overwrite_grid(grid, color_list, total_rings):
             print("blank overflowing")
             print("blank overflowing")
 
-        grid[i + tmp_left][tmp_left] = BLANK
-        grid[i + tmp_left][tmp_right] = BLANK
-        grid[tmp_left][tmp_left + i] = BLANK
-        grid[tmp_right][tmp_right - i] = BLANK
+        idx = i % left
+
+        grid[idx + tmp_left][tmp_left] = BLANK
+        grid[idx + tmp_left][tmp_right] = BLANK
+        grid[tmp_left][tmp_left + idx] = BLANK
+        grid[tmp_right][tmp_right - idx] = BLANK
 
         print("blank - i: {}, tmp_left: {}, tmp_right: {}, tmp_left + i: {}, tmp_right - i: {}".
-              format(i, tmp_left, tmp_right, tmp_left + i, tmp_right - i))
+              format(idx, tmp_left, tmp_right, tmp_left + idx, tmp_right - idx))
 
         tmp_left -= 1
         tmp_right += 1

@@ -17,18 +17,18 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="156" column="0" lean-forward="true" selection-start-line="156" selection-start-column="0" selection-end-line="156" selection-end-column="0" />
+            <state relative-caret-position="674">
+              <caret line="148" column="18" lean-forward="false" selection-start-line="148" selection-start-column="18" selection-end-line="148" selection-end-column="18" />
               <folding>
                 <element signature="e#0#30#0" expanded="true" />
                 <element signature="e#1149#1205#0" expanded="false" />
                 <element signature="e#1372#1952#0" expanded="false" />
                 <element signature="e#2066#2127#0" expanded="false" />
                 <element signature="e#2249#2911#0" expanded="false" />
-                <element signature="e#5958#6604#0" expanded="false" />
-                <element signature="e#6658#7612#0" expanded="false" />
-                <element signature="e#7652#9232#0" expanded="false" />
-                <element signature="e#9251#10707#0" expanded="false" />
+                <element signature="e#5935#6581#0" expanded="false" />
+                <element signature="e#6635#7589#0" expanded="false" />
+                <element signature="e#7629#9209#0" expanded="false" />
+                <element signature="e#9228#10684#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -45,7 +45,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>8</find>
       <find>quadrant</find>
       <find>quad</find>
       <find>seq_le</find>
@@ -75,6 +74,7 @@
       <find>sleep</find>
       <find>DELAY</find>
       <find>ctrs</find>
+      <find>i</find>
     </findStrings>
     <replaceStrings>
       <replace>[blank] * 8</replace>
@@ -95,6 +95,7 @@
       <replace>data['avg_roll']</replace>
       <replace>data['pitch_region']</replace>
       <replace>data['roll_region']</replace>
+      <replace>idx</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -118,7 +119,7 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-1615" />
+    <option name="x" value="65" />
     <option name="y" value="1046" />
     <option name="width" value="1615" />
     <option name="height" value="1054" />
@@ -359,7 +360,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1615" y="1046" width="1615" height="1054" extended-state="6" />
+    <frame x="65" y="1046" width="1615" height="1054" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.08606811" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -434,10 +435,10 @@
             <element signature="e#1372#1952#0" expanded="false" />
             <element signature="e#2066#2127#0" expanded="false" />
             <element signature="e#2249#2911#0" expanded="false" />
-            <element signature="e#5958#6604#0" expanded="false" />
-            <element signature="e#6658#7612#0" expanded="false" />
-            <element signature="e#7652#9232#0" expanded="false" />
-            <element signature="e#9251#10707#0" expanded="false" />
+            <element signature="e#5935#6581#0" expanded="false" />
+            <element signature="e#6635#7589#0" expanded="false" />
+            <element signature="e#7629#9209#0" expanded="false" />
+            <element signature="e#9228#10684#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -460,10 +461,10 @@
             <element signature="e#1372#1952#0" expanded="false" />
             <element signature="e#2066#2127#0" expanded="false" />
             <element signature="e#2249#2911#0" expanded="false" />
-            <element signature="e#5958#6604#0" expanded="false" />
-            <element signature="e#6658#7612#0" expanded="false" />
-            <element signature="e#7652#9232#0" expanded="false" />
-            <element signature="e#9251#10707#0" expanded="false" />
+            <element signature="e#5935#6581#0" expanded="false" />
+            <element signature="e#6635#7589#0" expanded="false" />
+            <element signature="e#7629#9209#0" expanded="false" />
+            <element signature="e#9228#10684#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -507,18 +508,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="156" column="0" lean-forward="true" selection-start-line="156" selection-start-column="0" selection-end-line="156" selection-end-column="0" />
+        <state relative-caret-position="674">
+          <caret line="148" column="18" lean-forward="false" selection-start-line="148" selection-start-column="18" selection-end-line="148" selection-end-column="18" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
             <element signature="e#1149#1205#0" expanded="false" />
             <element signature="e#1372#1952#0" expanded="false" />
             <element signature="e#2066#2127#0" expanded="false" />
             <element signature="e#2249#2911#0" expanded="false" />
-            <element signature="e#5958#6604#0" expanded="false" />
-            <element signature="e#6658#7612#0" expanded="false" />
-            <element signature="e#7652#9232#0" expanded="false" />
-            <element signature="e#9251#10707#0" expanded="false" />
+            <element signature="e#5935#6581#0" expanded="false" />
+            <element signature="e#6635#7589#0" expanded="false" />
+            <element signature="e#7629#9209#0" expanded="false" />
+            <element signature="e#9228#10684#0" expanded="false" />
           </folding>
         </state>
       </provider>
