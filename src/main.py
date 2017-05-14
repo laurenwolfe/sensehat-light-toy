@@ -132,7 +132,7 @@ def main():
     grid = deque([deque([BLANK] * GRID_SIZE), deque([BLANK] * GRID_SIZE),
                   deque([BLANK] * GRID_SIZE), deque([BLANK] * GRID_SIZE),
                   deque([BLANK] * GRID_SIZE), deque([BLANK] * GRID_SIZE),
-                  deque([BLANK] * GRID_SIZE), deque([Color.BLANK] * GRID_SIZE)])
+                  deque([BLANK] * GRID_SIZE), deque([BLANK] * GRID_SIZE)])
 
     # old_pitch, old_roll, old_yaw = 0, 0, 0
 
