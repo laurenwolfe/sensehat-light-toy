@@ -135,7 +135,7 @@ def overwrite_grid(grid, color_list, total_rings):
     color_list_ptr = num_blank_rings + num_color_rings - 1
 
     tmp_left = left
-    tme_right = right
+    tmp_right = right
 
     # output blank rings
     for blank in range(0, num_blank_rings):
