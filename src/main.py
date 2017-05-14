@@ -306,6 +306,8 @@ def main():
                 if i % GRID_SIZE == 7:
                     grid.append(deque(row))
 
+            print("i: {}".format(i))
+
 
         # tilt around z axis (left and right)
         elif data['avg_pitch'] > data['avg_roll']:
