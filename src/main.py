@@ -146,8 +146,8 @@ def overwrite_grid(grid, sense, color_list, total_rings):
             grid[l_edge][tmp_right] = rings[i]
             grid[l_edge][tmp_left] = rings[i]
 
-        print("({},{}), ({},{}), ({},{}), ({},{}),".
-              format(tmp_left, l_edge, tmp_right, l_edge, l_edge, tmp_right, l_edge, tmp_left))
+            print("({},{}), ({},{}), ({},{}), ({},{}),".
+                  format(tmp_left, l_edge, tmp_right, l_edge, l_edge, tmp_right, l_edge, tmp_left))
 
         i += i
         tmp_left -= 1
