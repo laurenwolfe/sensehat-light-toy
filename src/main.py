@@ -136,6 +136,7 @@ def overwrite_grid(sense, color_list, total_rings):
 
     # output blank rings
     for blank in range(0, num_blank_rings):
+        print("left bound: {}, right bound: {}".format(left, right))
         for x in range(left, right):
             for y in range(left, right):
                 sense.set_pixel(x, y, BLANK)
@@ -145,9 +146,11 @@ def overwrite_grid(sense, color_list, total_rings):
 
     # output color rings
     for ring in range(num_blank_rings, min(num_blank_rings + num_color_rings, right)):
+        print("left bound: {}, right bound: {}".format(left, right))
         for x in range(left, right):
             for y in range(left, right):
                 sense.set_pixel(x, y, color_list[color_list_ptr])
+
         ctr += 1
         color_list_ptr -= 1
         left -= 1
@@ -215,6 +218,7 @@ def manage_roll_ctrs(ctrs, roll_region, grid):
 
 
 def sample_sensor_output(sense):
+    data = {}
     pitch_counts = [0] * len(PITCH)
     pitch_sums = [0] * len(PITCH)
     roll_counts = [0] * len(ROLL)
@@ -244,21 +248,18 @@ def sample_sensor_output(sense):
 
     # get average value of highest frequency region for pitch
     pitch_count = max(pitch_counts)
-    pitch_region = pitch_counts.index(pitch_count)
-    avg_pitch = pitch_sums[pitch_region] / pitch_count
+    data['pitch_region'] = pitch_counts.index(pitch_count)
+    data['avg_pitch'] = pitch_sums[data['pitch_region']] / pitch_count
 
     # get average value of highest frequency region for roll
     roll_count = max(roll_counts)
-    roll_region = roll_counts.index(roll_count)
-    avg_roll = roll_sums[roll_region] / roll_count
+    data['roll_region'] = roll_counts.index(roll_count)
+    data['avg_roll'] = roll_sums[data['roll_region']] / roll_count
 
     # get average value of highest frequency region for yaw
     yaw_count = max(yaw_counts)
-    yaw_region = yaw_counts.index(yaw_count)
-    avg_yaw = yaw_sums[yaw_region] / yaw_count
-
-    data = {'avg_pitch': avg_pitch, 'pitch_region': pitch_region, 'avg_roll': avg_roll, 'roll_region': roll_region,
-            'avg_yaw': avg_yaw, 'yaw_region': yaw_region}
+    data['yaw_region'] = yaw_counts.index(yaw_count)
+    data['avg_yaw'] = yaw_sums[data['yaw_region']] / yaw_count
 
     return data
 
