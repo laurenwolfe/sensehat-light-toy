@@ -277,9 +277,9 @@ def push_grid(grid, sense):
     for row in grid:
         grid_list += list(row)
 
-    # sense.clear()
+    sense.clear()
     sense.set_pixels(grid_list)
-    sleep(.1)
+    sleep(.2)
 
 
 def main():
