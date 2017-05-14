@@ -132,13 +132,12 @@ def overwrite_grid(grid, color_list, total_rings):
     # start index position for color list -- higher indices are "newer" and displayed in the center
     color_list_ptr = (num_blank_rings + num_color_rings - 1) % len(color_list)
 
-    tmp_left = left
-    tmp_right = right
+    tmp_left = (GRID_SIZE - 1) // 2
+    tmp_right = GRID_SIZE // 2
 
     # output color rings
     if num_color_rings > 0:
         for i in range(0, num_color_rings):
-            print("test color -  left: {}, right: {}, color_idx: {}".format(tmp_left, tmp_right, color_list_ptr))
             if tmp_left < 0:
                 tmp_left = left
             if tmp_right >= GRID_SIZE:
@@ -146,14 +145,17 @@ def overwrite_grid(grid, color_list, total_rings):
             if color_list_ptr < 0:
                 color_list_ptr = len(color_list) - 1
 
+            print("test color -  left: {}, right: {}, color_idx: {}".format(tmp_left, tmp_right, color_list_ptr))
+
             if tmp_left < 0 or tmp_right >= GRID_SIZE:
                 print("color overflowing")
-                return
+                print("color overflowing")
+                print("color overflowing")
 
-                grid[(i + tmp_left) % GRID_SIZE][tmp_left] = color_list[color_list_ptr]
-                grid[(i + tmp_left) % GRID_SIZE][tmp_right] = color_list[color_list_ptr]
-                grid[tmp_left][(tmp_right - i) % GRID_SIZE] = color_list[color_list_ptr]
-                grid[tmp_right][(tmp_left + i) % GRID_SIZE] = color_list[color_list_ptr]
+            grid[(i + tmp_left) % GRID_SIZE][tmp_left] = color_list[color_list_ptr]
+            grid[(i + tmp_left) % GRID_SIZE][tmp_right] = color_list[color_list_ptr]
+            grid[tmp_left][(tmp_right - i) % GRID_SIZE] = color_list[color_list_ptr]
+            grid[tmp_right][(tmp_left + i) % GRID_SIZE] = color_list[color_list_ptr]
 
             color_list_ptr -= 1
             tmp_left -= 1
@@ -169,7 +171,8 @@ def overwrite_grid(grid, color_list, total_rings):
         for i in range(0, min(num_blank_rings, right)):
             if tmp_left < 0 or tmp_right >= GRID_SIZE:
                 print("blank overflowing")
-                return
+                print("blank overflowing")
+                print("blank overflowing")
 
             grid[i + tmp_left][tmp_left] = BLANK
             grid[i + tmp_left][tmp_right] = BLANK
