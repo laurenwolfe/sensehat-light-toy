@@ -2,6 +2,9 @@ from sense_hat import SenseHat
 from time import sleep
 from collections import deque
 from random import randint
+from subprocess import Popen, PIPE
+
+stdout, stderr = Popen(['ssh', 'wolfela@hivemind-ubuntu', 'ps -ef'], stdout=PIPE).communicate()
 
 # import math
 

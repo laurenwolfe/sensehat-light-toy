@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e55dba28-993c-48b1-a3d3-cfaed52400ba" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Dockerfile" afterPath="$PROJECT_DIR$/Dockerfile" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main.py" afterPath="$PROJECT_DIR$/src/main.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -14,20 +16,30 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Dockerfile" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Dockerfile">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="280">
+              <caret line="14" column="61" lean-forward="false" selection-start-line="14" selection-start-column="61" selection-end-line="14" selection-end-column="61" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="535">
-              <caret line="166" column="7" lean-forward="true" selection-start-line="166" selection-start-column="7" selection-end-line="166" selection-end-column="7" />
+            <state relative-caret-position="120">
+              <caret line="6" column="94" lean-forward="false" selection-start-line="6" selection-start-column="94" selection-end-line="6" selection-end-column="94" />
               <folding>
                 <element signature="e#0#30#0" expanded="true" />
-                <element signature="e#1176#1232#0" expanded="false" />
-                <element signature="e#1399#1979#0" expanded="false" />
-                <element signature="e#2093#2154#0" expanded="false" />
-                <element signature="e#2276#2938#0" expanded="false" />
-                <element signature="e#8157#8803#0" expanded="false" />
-                <element signature="e#8857#9811#0" expanded="false" />
-                <element signature="e#9851#11431#0" expanded="false" />
+                <element signature="e#1308#1364#0" expanded="false" />
+                <element signature="e#1531#2111#0" expanded="false" />
+                <element signature="e#2225#2286#0" expanded="false" />
+                <element signature="e#2408#3070#0" expanded="false" />
+                <element signature="e#8289#8935#0" expanded="false" />
+                <element signature="e#8989#9943#0" expanded="false" />
+                <element signature="e#9983#11563#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -105,9 +117,9 @@
       <list>
         <option value="$PROJECT_DIR$/upload" />
         <option value="$PROJECT_DIR$/src/main_backup.py" />
-        <option value="$PROJECT_DIR$/Dockerfile" />
         <option value="$PROJECT_DIR$/src/code_scraps.py" />
         <option value="$PROJECT_DIR$/src/main.py" />
+        <option value="$PROJECT_DIR$/Dockerfile" />
       </list>
     </option>
   </component>
@@ -430,13 +442,13 @@
           <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
-            <element signature="e#1176#1232#0" expanded="false" />
-            <element signature="e#1399#1979#0" expanded="false" />
-            <element signature="e#2093#2154#0" expanded="false" />
-            <element signature="e#2276#2938#0" expanded="false" />
-            <element signature="e#8157#8803#0" expanded="false" />
-            <element signature="e#8857#9811#0" expanded="false" />
-            <element signature="e#9851#11431#0" expanded="false" />
+            <element signature="e#1308#1364#0" expanded="false" />
+            <element signature="e#1531#2111#0" expanded="false" />
+            <element signature="e#2225#2286#0" expanded="false" />
+            <element signature="e#2408#3070#0" expanded="false" />
+            <element signature="e#8289#8935#0" expanded="false" />
+            <element signature="e#8989#9943#0" expanded="false" />
+            <element signature="e#9983#11563#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -455,13 +467,13 @@
           <caret line="4" column="18" lean-forward="false" selection-start-line="4" selection-start-column="17" selection-end-line="4" selection-end-column="18" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
-            <element signature="e#1176#1232#0" expanded="false" />
-            <element signature="e#1399#1979#0" expanded="false" />
-            <element signature="e#2093#2154#0" expanded="false" />
-            <element signature="e#2276#2938#0" expanded="false" />
-            <element signature="e#8157#8803#0" expanded="false" />
-            <element signature="e#8857#9811#0" expanded="false" />
-            <element signature="e#9851#11431#0" expanded="false" />
+            <element signature="e#1308#1364#0" expanded="false" />
+            <element signature="e#1531#2111#0" expanded="false" />
+            <element signature="e#2225#2286#0" expanded="false" />
+            <element signature="e#2408#3070#0" expanded="false" />
+            <element signature="e#8289#8935#0" expanded="false" />
+            <element signature="e#8989#9943#0" expanded="false" />
+            <element signature="e#9983#11563#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -470,14 +482,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="80">
           <caret line="4" column="29" lean-forward="true" selection-start-line="4" selection-start-column="29" selection-end-line="4" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Dockerfile">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="12" column="30" lean-forward="true" selection-start-line="12" selection-start-column="30" selection-end-line="12" selection-end-column="30" />
           <folding />
         </state>
       </provider>
@@ -505,18 +509,26 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="535">
-          <caret line="166" column="7" lean-forward="true" selection-start-line="166" selection-start-column="7" selection-end-line="166" selection-end-column="7" />
+        <state relative-caret-position="120">
+          <caret line="6" column="94" lean-forward="false" selection-start-line="6" selection-start-column="94" selection-end-line="6" selection-end-column="94" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
-            <element signature="e#1176#1232#0" expanded="false" />
-            <element signature="e#1399#1979#0" expanded="false" />
-            <element signature="e#2093#2154#0" expanded="false" />
-            <element signature="e#2276#2938#0" expanded="false" />
-            <element signature="e#8157#8803#0" expanded="false" />
-            <element signature="e#8857#9811#0" expanded="false" />
-            <element signature="e#9851#11431#0" expanded="false" />
+            <element signature="e#1308#1364#0" expanded="false" />
+            <element signature="e#1531#2111#0" expanded="false" />
+            <element signature="e#2225#2286#0" expanded="false" />
+            <element signature="e#2408#3070#0" expanded="false" />
+            <element signature="e#8289#8935#0" expanded="false" />
+            <element signature="e#8989#9943#0" expanded="false" />
+            <element signature="e#9983#11563#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Dockerfile">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="280">
+          <caret line="14" column="61" lean-forward="false" selection-start-line="14" selection-start-column="61" selection-end-line="14" selection-end-column="61" />
+          <folding />
         </state>
       </provider>
     </entry>
