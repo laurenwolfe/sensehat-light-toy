@@ -1,10 +1,18 @@
 from sense_hat import SenseHat
 from time import sleep
 from collections import deque
+import math
 
+GRID_SIZE = 8
+NUM_SAMPLES = 5
+DELAY = 0.1
+
+########## RGB COLOR CODES #########
 VIOLET_RED = (199, 21, 133)
 PINK = (100, 0, 0)
 RED = (220, 20, 60)
+DARK_RED = (140, 0, 40)
+
 ORANGE_RED = (255, 69, 0)
 TOMATO = (255, 99, 71)
 
@@ -20,131 +28,62 @@ GREEN_YELLOW = (160, 215, 40)
 GREEN = (0, 170, 0)
 DARK_GREEN = (0, 100, 0)
 
-BLUE = (17, 51, 204)
+DARK_CYAN = (0, 140, 140)
+CYAN = (0, 255, 255)
+BLUE = (0,191,255)
 DARK_BLUE = (0, 0, 140)
-BLUE_VIOLET = (138, 43, 226)
 
+BLUE_VIOLET = (138, 43, 226)
 LIGHT_PURPLE = (186, 85, 211)
 PURPLE = (130, 0, 130)
+DARK_PURPLE = (100, 0, 100)
 INDIGO = (75, 0, 130)
 
 BLANK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
-GRID_SIZE = 8
-
-HARD_LEFT = RED
-SOFT_LEFT = VIOLET_RED
-SOFT_RIGHT = LIGHT_PURPLE
-HARD_RIGHT = PURPLE
-
-HARD_TOWARD = GREEN
-SOFT_TOWARD = GREEN_YELLOW
-SOFT_AWAY = GOLD
-HARD_AWAY = ORANGE
-
-BLANK = BLANK
-NUM_SAMPLES = 5
-DELAY = 0.1
+PITCH = [VIOLET_RED, RED, DARK_RED, BLANK, BLANK, DARK_PURPLE, PURPLE, LIGHT_PURPLE]
+ROLL = [GREEN_YELLOW, GREEN, DARK_GREEN, BLANK, BLANK, DARK_ORANGE, ORANGE, GOLD]
+YAW = [DARK_CYAN, CYAN, BLUE, DARK_BLUE]
 
 
-def get_region_45(num):
-    if num < 45:
-        return 0
-    elif num >= 45 and num < 90:
-        return 1
-    elif num >= 90 and num < 180:
-        return 2
-    elif num >= 180 and num < 270:
-        return 3
-    elif num >= 270 and num < 315:
-        return 4
-    elif num >= 315:
-        return 5
+# determine number corresponding to color index in list
+def get_region(degrees, list_len):
+    num_gradations = (list_len - 2) / 2
+
+    # calculate region # based on number of visible segments
+    if degrees < 90 or degrees <= 270:
+        segment_size = 90 / num_gradations
+        return int(degrees / segment_size)
+    # only two blank segments, each 90 degrees
+    elif degrees >= 90 and degrees < 180:
+        return num_gradations + 1
+    else:
+        return num_gradations + 2
 
 
-def get_region_90(num):
-    if num < 90:
-        return 0
-    elif num >= 90 and num < 180:
-        return 1
-    elif num >= 180 and num < 270:
-        return 2
-    elif num >= 270:
-        return 3
+# simply divide into equal regions if all segments are visible
+def get_region_all_visible(degrees, list_len):
+    seg_size = 360 / list_len
+    return degrees / seg_size
 
 
 # pop old pixels and insert new values for left/right rotation
-def shift_pitch(grid, region):
-    # soft left, 0 -> 45
-    if region == 0:
-        for i in range(GRID_SIZE):
+def shift_grid(grid, region, is_pitch):
+    # shift away or left
+    if (is_pitch and region <= len(PITCH) / 2) or (not is_pitch and region > (len(ROLL) + 2) / 2):
+        direction = 0
+    # shift towards or right
+    else:
+        direction = 1
+
+    for i in range(GRID_SIZE):
+        if direction == 0:
             grid[i].popleft()
-            grid[i].append(SOFT_LEFT)
-
-    # hard left, 45 -> 90
-    elif region == 1:
-        for i in range(GRID_SIZE):
-            grid[i].popleft()
-            grid[i].append(HARD_LEFT)
-
-    # too far left, 90 -> 180:
-    elif region == 2:
-        for i in range(GRID_SIZE):
-            grid[i].popleft()
-            grid.append(BLANK)
-
-    # too far right, 180 -> 270:
-    elif region == 3:
-        for i in range(GRID_SIZE):
+            grid[i].append(ROLL[region])
+        else:
             grid[i].pop()
-            grid[i].appendleft(BLANK)
-
-    # hard right, 270 -> 315
-    elif region == 4:
-        for i in range(GRID_SIZE):
-            grid[i].pop()
-            grid[i].appendleft(HARD_RIGHT)
-
-    # soft right, 315 -> 360
-    elif region == 5:
-        for i in range(GRID_SIZE):
-            grid[i].pop()
-            grid[i].appendleft(SOFT_RIGHT)
-
-    return grid
-
-
-def shift_roll(grid, region):
-    # soft towards, 0 -> 45
-    if region == 0:
-        grid.pop()
-        grid.appendleft(deque([SOFT_TOWARD] * GRID_SIZE))
-
-    # hard towards, 45 -> 90
-    elif region == 1:
-        grid.pop()
-        grid.appendleft(deque([HARD_TOWARD] * GRID_SIZE))
-
-    # too hard towards, 90 -> 180
-    elif region == 2:
-        grid.pop()
-        grid.appendleft(deque([BLANK] * GRID_SIZE))
-
-    # too hard away, 180 -> 270
-    elif region == 3:
-        grid.popleft()
-        grid.append(deque([BLANK] * GRID_SIZE))
-
-    # hard away, 270 -> 315
-    elif region == 4:
-        grid.popleft()
-        grid.append(deque([HARD_AWAY] * GRID_SIZE))
-
-    # soft away, 315 -> 360
-    elif region == 5:
-        grid.popleft()
-        grid.append(deque([SOFT_AWAY] * GRID_SIZE))
+            grid[i].appendleft(ROLL[region])
 
     return grid
 
@@ -159,42 +98,43 @@ def main():
                   deque([BLANK] * GRID_SIZE), deque([BLANK] * GRID_SIZE),
                   deque([BLANK] * GRID_SIZE), deque([BLANK] * GRID_SIZE)])
 
-    # old_pitch, old_roll, old_yaw = 0, 0, 0
+    left_ctr, right_ctr, toward_ctr, away_ctr = 0, 0, 0, 0
 
     while True:
-        pitch_counts = [0] * 6
-        pitch_sums = [0] * 6
-        roll_counts = [0] * 6
-        roll_sums = [0] * 6
-        yaw_counts = [0] * 4
-        yaw_sums = [0] * 4
+        pitch_counts = [0] * len(PITCH)
+        pitch_sums = [0] * len(PITCH)
+        roll_counts = [0] * len(ROLL)
+        roll_sums = [0] * len(ROLL)
+        yaw_counts = [0] * len(YAW)
+        yaw_sums = [0] * len(YAW)
 
         # take sample_size samples at sleep_time interval
         for i in range(NUM_SAMPLES):
             orient = sense.get_orientation()
-            p, r, y = orient['pitch'], orient['roll'], orient['yaw']
+            p, r, y = int(orient['pitch']), int(orient['roll']), int(orient['yaw'])
 
             # sum each value by region and tally the counts
-            pitch_counts[get_region_45(p)] += 1
-            pitch_sums[get_region_45(p)] += p
-            roll_counts[get_region_45(r)] += 1
-            roll_sums[get_region_45(r)] += r
-            yaw_counts[get_region_90(y)] += 1
-            yaw_sums[get_region_90(y)] += y
+            p_region = get_region(p, len(PITCH))
+            r_region = get_region(r, len(ROLL))
+            y_region = get_region_all_visible(y, len(YAW))
 
-            # short delay between samples
-            # sleep(DELAY)
+            pitch_counts[p_region] += 1
+            pitch_sums[p_region] += p
+
+            roll_counts[r_region] += 1
+            roll_sums[r_region] += r
+
+            yaw_counts[y_region] += 1
+            yaw_sums[y_region] += y
 
         # get average value of highest frequency region for pitch
         pitch_count = max(pitch_counts)
         pitch_region = pitch_counts.index(pitch_count)
-        print("pitch: region {}, count {}".format(pitch_region, pitch_count))
         pitch = pitch_sums[pitch_region] / pitch_count
 
         # get average value of highest frequency region for roll
         roll_count = max(roll_counts)
         roll_region = roll_counts.index(roll_count)
-        print("roll: region {}, count {}". format(roll_region, roll_count))
         roll = roll_sums[roll_region] / roll_count
 
         # get average value of highest frequency region for yaw
@@ -202,31 +142,64 @@ def main():
         yaw_region = yaw_counts.index(yaw_count)
         yaw = yaw_sums[yaw_region] / yaw_count
 
-        # determine whether pitch or roll has the largest delta:
-        # large will take precedent in
-
+        # determine whether pitch and roll are +10 degrees from the origin in either direction
+        # and if so, which value is higher
         if pitch > 180:
-            pitch -= 360
+            pitch = abs(pitch - 360)
+
         if roll > 180:
-            roll -= 360
+            roll = abs(roll - 360)
 
-        if abs(pitch) > abs(roll):
-            # shift horizontal pixels
-            print("pitch: {}, roll: {}".format(pitch, roll))
-            grid = shift_pitch(grid, pitch_region)
+        # spin around y axis
+        if pitch < 10 and roll < 10:
+            sleep(.2)
+
+        # tilt around z axis (left and right)
+        elif pitch > roll:
+            # increment pixel counter
+            if pitch_region < (len(PITCH) - 2) // 2:
+                left_ctr += 1
+                right_ctr, toward_ctr, away_ctr = 0, 0, 0
+            elif pitch_region >= (len(PITCH) - 1) // 2:
+                right_ctr += 1
+                left_ctr, toward_ctr, away_ctr = 0, 0, 0
+            else:
+                left_ctr, right_ctr, away_ctr, toward_ctr = 0, 0, 0, 0
+
+            # if counter reaches/exceeds grid size, stop outputting color until direction changes
+            if left_ctr >= GRID_SIZE or right_ctr >= GRID_SIZE:
+                pitch_region = len(PITCH) // 2
+
+            grid = shift_grid(grid, pitch_region, True)
+
+        # tilt around x axis (toward and away)
         else:
-            # shift vertical pixels
-            print("pitch: {}, roll: {}".format(pitch, roll))
-            grid = shift_roll(grid, roll_region)
+            # increment and reset directional counters
+            left_ctr, right_ctr = 0, 0
 
-        # old_pitch, old_roll, old_yaw = pitch, roll, yaw
+            if roll_region < (len(ROLL) - 2) // 2:
+                 toward_ctr += 1
+                 away_ctr = 0
+            elif roll_region >= (len(ROLL) - 1) // 2:
+                away_ctr += 1
+                toward_ctr = 0
+            else:
+                away_ctr, toward_ctr = 0, 0
 
+            # if counter reaches/exceeds grid size, stop outputting color until direction changes
+            # by setting region equal to a non-visible segment
+            if toward_ctr > GRID_SIZE or away_ctr > GRID_SIZE:
+                roll_region = len(ROLL) // 2
+
+            grid = shift_grid(grid, roll_region, False)
+
+        # convert deques to a flattened list
         grid_list = []
 
         for row in grid:
             grid_list += list(row)
 
         sense.set_pixels(grid_list)
-        sleep(.1)
+
 
 main()
