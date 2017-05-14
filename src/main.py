@@ -150,7 +150,7 @@ def overwrite_grid(grid, sense, color_list, total_rings):
         idx = 0
 
         for el in rings:
-            print("tmp_left: {}, tmp_right: {}, idx: {}".format(tmp_left, tmp_right, idx))
+#            print("tmp_left: {}, tmp_right: {}, idx: {}".format(tmp_left, tmp_right, idx))
             if el is not None:
                 edge = int(tmp_left + idx)
                 grid[tmp_left][edge] = el
