@@ -139,12 +139,16 @@ def overwrite_grid(grid, color_list, total_rings):
 
     # output color rings
     for i in range(0, num_color_rings):
-        for x in range(left - i, right + i + 1):
-            for y in range(left - i, right + i + 1):
-                print("color - i: {}, x: {}, y: {}".format(i, x, y))
-                grid[x][y] = color_list[color_list_ptr]
+        for step in range(right - left + 1):
+            grid[left][left + step] = color_list[color_list_ptr]
+            grid[right][left + step] = color_list[color_list_ptr]
+            grid[left + step][left] = color_list[color_list_ptr]
+            grid[left + step][right] = color_list[color_list_ptr]
         color_list_ptr -= 1
+        left -= 1
+        right += 1
 
+    '''
     # output blank rings
     for i in range(0, num_blank_rings):
         for x in range(left - i, right + i + 1):
@@ -152,7 +156,6 @@ def overwrite_grid(grid, color_list, total_rings):
                 print("blank - i: {}, x: {}, y: {}".format(i, x, y))
                 grid[x][y] = BLANK
 
-        '''
         if tmp_left < 0:
             tmp_left = left
         if tmp_right >= GRID_SIZE:
