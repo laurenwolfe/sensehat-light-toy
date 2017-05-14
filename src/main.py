@@ -149,14 +149,17 @@ def overwrite_grid(grid, sense, color_list, total_rings):
 
         print("Rings: {}".format(rings))
 
-        for idx in range(GRID_SIZE // 2):
-            if rings[idx] is not None:
-                grid[left][int(left + idx)] = rings[idx]
-                grid[right][int(left + idx)] = rings[idx]
-                grid[int(left + idx)][left] = rings[idx]
-                grid[int(left + idx)][right] = rings[idx]
+        idx = 0
+
+        for el in rings:
+            if el is not None:
+                grid[left][int(left + idx)] = el
+                grid[right][int(left + idx)] = el
+                grid[int(left + idx)][left] = el
+                grid[int(left + idx)][right] = el
             else:
                 print("rings is None at index {}".format(idx))
+            idx += 1
 
         grid_list = []
 
