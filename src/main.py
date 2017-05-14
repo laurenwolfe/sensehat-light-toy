@@ -302,6 +302,7 @@ def main():
         # keep sensor parallel with the ground
         if (data['avg_pitch'] < 15 or data['avg_pitch'] > 345) and (data['avg_roll'] < 15 or data['avg_roll'] > 345):
             manage_flat_ctrs(ctrs, grid)
+            print(data)
 
         # tilt around z axis (left and right)
         elif data['avg_pitch'] > data['avg_roll']:
