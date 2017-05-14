@@ -129,14 +129,14 @@ def overwrite_grid(sense, color_list, total_rings):
     elif num_color_rings >= right:
         num_color_rings = right - num_blank_rings
 
-    print("blank rings: {}, colored rings: {}".format(num_blank_rings, num_color_rings))
+    # print("blank rings: {}, colored rings: {}".format(num_blank_rings, num_color_rings))
 
     # start index position for color list -- higher indices are "newer" and displayed in the center
     color_list_ptr = num_blank_rings + num_color_rings - 1
 
     # output blank rings
     for blank in range(0, num_blank_rings):
-        print("left bound: {}, right bound: {}".format(left, right))
+        # print("left bound: {}, right bound: {}".format(left, right))
         for x in range(left, right):
             for y in range(left, right):
                 sense.set_pixel(x, y, BLANK)
@@ -145,10 +145,12 @@ def overwrite_grid(sense, color_list, total_rings):
         right += 1
 
     # output color rings
-    for ring in range(num_blank_rings, min(num_blank_rings + num_color_rings, right)):
+    for ring in range(num_blank_rings, min(num_blank_rings + num_color_rings, right + 1)):
         print("left bound: {}, right bound: {}".format(left, right))
-        for x in range(left, right):
-            for y in range(left, right):
+        print("ptr: {}, color: {}".format(color_list_ptr, color_list[color_list_ptr]))
+
+        for x in range(left, right + 1):
+            for y in range(left, right + 1):
                 sense.set_pixel(x, y, color_list[color_list_ptr])
 
         ctr += 1
