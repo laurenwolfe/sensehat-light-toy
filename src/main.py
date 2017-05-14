@@ -7,7 +7,7 @@ from collections import deque
 GRID_SIZE = 8
 MAX_PIXELS = GRID_SIZE * 3
 NUM_SAMPLES = 10
-DELAY = 0.1
+DELAY = 0.05
 
 # RGB COLOR CODES
 PINK = (100, 0, 0)
