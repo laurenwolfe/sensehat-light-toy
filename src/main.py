@@ -6,7 +6,7 @@ from random import randint
 # import math
 
 GRID_SIZE = 8
-MAX_PIXELS = GRID_SIZE * 3
+MAX_PIXELS = GRID_SIZE * 2
 NUM_SAMPLES = 10
 DELAY = 0.05
 
@@ -140,7 +140,7 @@ def overwrite_grid(grid, sense, color_list, total_rings):
         else:
             rings.appendleft(BLANK)
 
-    print(rings)
+        print("idx {}".format(idx))
 
     i = 0
 
@@ -156,6 +156,8 @@ def overwrite_grid(grid, sense, color_list, total_rings):
         i += 1
         tmp_left -= 1
         tmp_right += 1
+        print("i {}".format(i))
+
 #        push_grid(grid, sense)
 
         # write pixels to board once grid is loaded with newest batch of data
@@ -277,7 +279,7 @@ def push_grid(grid, sense):
 
     # sense.clear()
     sense.set_pixels(grid_list)
-    sleep(.2)
+    sleep(.1)
 
 
 def main():
@@ -300,16 +302,13 @@ def main():
 
         # keep sensor parallel with the ground
         if data['avg_pitch'] < 15 and data['avg_roll'] < 15:
-            # print("ctrs: {}".format(ctrs['flat']))
             manage_flat_ctrs(ctrs, grid, sense)
         # tilt around z axis (left and right)
         else:
             if data['avg_pitch'] > data['avg_roll']:
-                # print("left: {}, right: {}".format(ctrs['left'], ctrs['right']))
                 manage_pitch_ctrs(ctrs, data['pitch_region'], grid)
             # tilt around x axis (toward and away)
             else:
-                # print("toward: {}, away: {}".format(ctrs['toward'], ctrs['away']))
                 manage_roll_ctrs(ctrs, data['roll_region'], grid)
 
             push_grid(grid, sense)
