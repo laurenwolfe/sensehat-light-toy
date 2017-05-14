@@ -156,6 +156,8 @@ def overwrite_grid(grid, sense, color_list, total_rings):
             else:
                 print("rings is None at index {}".format(idx))
             idx += 1
+            left -= 1
+            right += 1
 
         grid_list = []
 
