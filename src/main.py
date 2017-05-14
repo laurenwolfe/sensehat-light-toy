@@ -299,7 +299,7 @@ def main():
 
             for el in sense.get_pixels():
                 if i % GRID_SIZE == 0:
-                    row = []
+                    row = [0] * 8
 
                 row[i % GRID_SIZE] = el
 
