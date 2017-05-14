@@ -3,13 +3,14 @@ from time import sleep
 from collections import deque
 
 L_RED = (100, 0, 0)
-RED = (209, 0, 0)
 ORANGE = (255, 102, 34)
 YELLOW = (255, 118, 33)
 GREEN = (51, 221, 0)
-BLUE = (17, 51, 204)
+RED = (220, 20, 60)
+R_BLUE = (102, 0, 34)
 INDIGO = (34, 0, 102)
 L_PURPLE = (70, 0, 70)
+BLUE = (17, 51, 204)
 PURPLE = (140, 0, 140)
 BLANK = (0, 0, 0)
 WHITE = (255, 255, 255)
