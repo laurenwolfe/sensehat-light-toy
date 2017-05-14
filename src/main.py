@@ -77,25 +77,28 @@ def get_region_all_visible(degrees, list_len):
 
 # pop old pixels and insert new values for left/right rotation
 def shift_grid(grid, region, is_pitch, color_list):
-    for i in range(GRID_SIZE):
-        if region < (len(color_list) - 1) // 2:
-            if is_pitch:
-                ### left
+    if is_pitch:
+        # LEFT
+        if region < (len(color_list) - 1 // 2):
+            for i in range(GRID_SIZE):
                 grid[i].popleft()
                 grid[i].append(color_list[region])
-            else:
-                ### away
-                grid.popleft()
-                grid.append(deque([color_list[region]] * GRID_SIZE))
+
+        # RIGHT
         else:
-            if is_pitch:
-                ### right
+            for i in range(GRID_SIZE):
                 grid[i].pop()
                 grid[i].appendleft(color_list[region])
-            else:
-                ### toward
-                grid.pop()
-                grid.appendleft(deque([color_list[region]] * GRID_SIZE))
+    else:
+        # AWAY
+        if region < (len(color_list) - 1 // 2):
+            grid.popleft()
+            grid.append(deque([color_list[region]] * GRID_SIZE))
+
+        # TOWARD
+        else:
+            grid.pop()
+            grid.appendleft(deque([color_list[region]] * GRID_SIZE))
 
     return grid
 

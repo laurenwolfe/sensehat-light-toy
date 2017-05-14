@@ -17,13 +17,13 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="580">
-              <caret line="47" column="0" lean-forward="false" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
+            <state relative-caret-position="244">
+              <caret line="81" column="24" lean-forward="true" selection-start-line="81" selection-start-column="24" selection-end-line="81" selection-end-column="24" />
               <folding>
                 <element signature="e#0#30#0" expanded="true" />
                 <element signature="e#1257#1813#0" expanded="false" />
-                <element signature="e#4998#5618#1" expanded="false" />
-                <element signature="e#5756#6436#1" expanded="false" />
+                <element signature="e#4994#5614#1" expanded="false" />
+                <element signature="e#5752#6432#1" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -408,8 +408,8 @@
           <folding>
             <element signature="e#0#30#0" expanded="true" />
             <element signature="e#1257#1813#0" expanded="false" />
-            <element signature="e#4998#5618#1" expanded="false" />
-            <element signature="e#5756#6436#1" expanded="false" />
+            <element signature="e#4994#5614#1" expanded="false" />
+            <element signature="e#5752#6432#1" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -429,8 +429,8 @@
           <folding>
             <element signature="e#0#30#0" expanded="true" />
             <element signature="e#1257#1813#0" expanded="false" />
-            <element signature="e#4998#5618#1" expanded="false" />
-            <element signature="e#5756#6436#1" expanded="false" />
+            <element signature="e#4994#5614#1" expanded="false" />
+            <element signature="e#5752#6432#1" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -476,13 +476,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="580">
-          <caret line="47" column="0" lean-forward="false" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
+        <state relative-caret-position="244">
+          <caret line="81" column="24" lean-forward="true" selection-start-line="81" selection-start-column="24" selection-end-line="81" selection-end-column="24" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
             <element signature="e#1257#1813#0" expanded="false" />
-            <element signature="e#4998#5618#1" expanded="false" />
-            <element signature="e#5756#6436#1" expanded="false" />
+            <element signature="e#4994#5614#1" expanded="false" />
+            <element signature="e#5752#6432#1" expanded="false" />
           </folding>
         </state>
       </provider>
