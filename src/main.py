@@ -46,7 +46,7 @@ INDIGO = (75, 0, 130)
 
 PITCH = [PINK, RED, DARK_RED, BLANK, BLANK, DARK_PURPLE, PURPLE, LIGHT_PURPLE]
 ROLL = [LIME_GREEN, GREEN, DARK_GREEN, BLANK, BLANK, DARK_ORANGE, ORANGE, GOLD]
-YAW = [DARK_CYAN, CYAN, BLUE, DARK_BLUE]  # TODO replace
+# YAW = [DARK_CYAN, CYAN, BLUE, DARK_BLUE]
 # FLAT = [DARK_CYAN, CYAN, BLUE, DARK_BLUE]
 FLAT = [WHITE, INDIGO, TOMATO, CYAN, VIOLET_RED]
 
@@ -273,7 +273,7 @@ def push_grid(grid, sense):
     for row in grid:
         grid_list += list(row)
 
-    sense.clear()
+    # sense.clear()
     sense.set_pixels(grid_list)
     sleep(.3)
 
