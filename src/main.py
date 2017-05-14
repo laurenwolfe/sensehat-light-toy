@@ -158,11 +158,11 @@ def overwrite_grid(grid, sense, color_list, total_rings):
         tmp_right += 1
         print("i {}".format(i))
 
-#        push_grid(grid, sense)
+        push_grid(grid, sense)
 
         # write pixels to board once grid is loaded with newest batch of data
         if tmp_left < 0 or tmp_right >= GRID_SIZE:
-            push_grid(grid, sense)
+#            push_grid(grid, sense)
             tmp_left = left
             tmp_right = right
 
