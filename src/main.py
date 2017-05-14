@@ -1,6 +1,7 @@
 from sense_hat import SenseHat
 from time import sleep
 from collections import deque
+from random import randint
 
 # import math
 
@@ -110,18 +111,65 @@ def shift_grid(grid, region, is_pitch, color_list):
     return grid
 
 
-def overwrite_grid(grid, color_list, total_rings):
+def overwrite_grid(grid, sense, color_list, total_rings):
     # store the steps out from center to set pixel ring
     left = (GRID_SIZE - 1) // 2
     right = GRID_SIZE // 2
+    rings = [(None), (None), (None), (None)]
 
+    # while i < count
+    # if count < MAX
+    # - append new color to front of rings list
+    # else:
+    # - append blank
+    # for el in rings:
+    # if not None: overwrite pixels in grid corresponding to position:
+    # - 3, 4; 2, 5; 1,6; 0, 7
+    # push pixels to board
+
+    color_idx = randint(0, len(color_list) - 1)
+
+    for i in range(total_rings):
+        # Haven't exceeded max pixel flow, add another color ring
+        if i < MAX_PIXELS:
+            rings.pop()
+            rings.append(color_list[color_idx])
+            color_idx -= 1
+
+            # wrap the list index if we reach 0
+            if color_idx < 0:
+                color_idx = len(color_list) - 1
+        # Wipe rings away with blanks once max is acheived
+        else:
+            rings.pop()
+            rings.append(BLANK)
+
+        for idx in range(GRID_SIZE // 2):
+            right = GRID_SIZE // 2 + idx
+            left = ((GRID_SIZE - idx) // 2) - 1
+            if rings[idx] is not None:
+                for step in range(right - left + 1):
+                    grid[left][left + step] = rings[idx]
+                    grid[right][left + step] = rings[idx]
+                    grid[left + step][left] = rings[idx]
+                    grid[left + step][right] = rings[idx]
+
+        grid_list = []
+
+        for row in grid:
+            grid_list += list(row)
+
+        sense.set_pixels(grid_list)
+        sleep(.1)
+
+
+    '''
     # if total rings exceeds the 50% of the maximum number of pixels released, then get a count of blank rings,
     # up to the maximum number of displayable rings
     num_blank_rings = total_rings - MAX_PIXELS
 
-    if num_blank_rings < 0:
-        num_blank_rings = 0
-        num_color_rings = total_rings % right
+    if num_blank_rings > 0:
+        num_color_rings = (total_rings % right) + 1
     elif num_blank_rings >= right:
         num_blank_rings = right
         num_color_rings = 0
@@ -138,17 +186,21 @@ def overwrite_grid(grid, color_list, total_rings):
 #    tmp_right = GRID_SIZE // 2
 
     # output color rings
-    for i in range(0, num_color_rings):
-        for step in range(right - left + 1):
-            grid[left][left + step] = color_list[color_list_ptr]
-            grid[right][left + step] = color_list[color_list_ptr]
-            grid[left + step][left] = color_list[color_list_ptr]
-            grid[left + step][right] = color_list[color_list_ptr]
-        color_list_ptr -= 1
-        left -= 1
-        right += 1
+    for total in range(total_rings):
+        for i in range(0, num_color_rings):
+            while i < MAX_PIXELS:
+                for step in range(right - left + 1):
+                    grid[left][left + step] = color_list[color_list_ptr]
+                    grid[right][left + step] = color_list[color_list_ptr]
+                    grid[left + step][left] = color_list[color_list_ptr]
+                    grid[left + step][right] = color_list[color_list_ptr]
+                color_list_ptr -= 1
+                left -= 1
+                right += 1
 
-    '''
+
+
+    
     # output blank rings
     for i in range(0, num_blank_rings):
         for x in range(left - i, right + i + 1):
@@ -209,11 +261,12 @@ def overwrite_grid(grid, color_list, total_rings):
         tmp_right += 1
         '''
 
-def manage_flat_ctrs(ctrs, grid):
+
+def manage_flat_ctrs(ctrs, grid, sense):
     ctrs['flat'] += 1
     ctrs['away'], ctrs['toward'], ctrs['left'], ctrs['right'] = 0, 0, 0, 0
 
-    overwrite_grid(grid, FLAT, ctrs['flat'])
+    overwrite_grid(grid, sense, FLAT, ctrs['flat'])
 
 
 def manage_pitch_ctrs(ctrs, pitch_region, grid):
@@ -337,7 +390,7 @@ def main():
         # keep sensor parallel with the ground
         if data['avg_pitch'] < 15 and data['avg_roll'] < 15:
             print("ctrs: {}".format(ctrs['flat']))
-            manage_flat_ctrs(ctrs, grid)
+            manage_flat_ctrs(ctrs, grid, sense)
         # tilt around z axis (left and right)
         elif data['avg_pitch'] > data['avg_roll']:
             print("left: {}, right: {}".format(ctrs['left'], ctrs['right']))
