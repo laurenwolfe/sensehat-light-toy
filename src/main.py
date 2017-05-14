@@ -110,8 +110,8 @@ def shift_grid(grid, region, is_pitch, color_list):
 def overwrite_grid(sense, color_list, total_rings):
     # store the steps out from center to set pixel ring
     ctr = 0
-    left = (len(GRID_SIZE) - 1) // 2
-    right = len(GRID_SIZE) // 2
+    left = (GRID_SIZE - 1) // 2
+    right = GRID_SIZE // 2
 
     # if total rings exceeds the 50% of the maximum number of pixels released, then get a count of blank rings,
     # up to the maximum number of displayable rings
