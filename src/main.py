@@ -81,7 +81,7 @@ def get_region_all_visible(degrees, list_len):
 def shift_grid(grid, region, is_pitch, color_list):
     if is_pitch:
         # LEFT
-        if region < (len(color_list) - 1) // 2:
+        if region <= (len(color_list) - 1) // 2:
             for i in range(GRID_SIZE):
                 grid[i].popleft()
                 grid[i].append(color_list[region])
@@ -93,14 +93,14 @@ def shift_grid(grid, region, is_pitch, color_list):
                 grid[i].appendleft(color_list[region])
     else:
         # AWAY
-        if region < (len(color_list) - 1) // 2:
-            grid.popleft()
-            grid.append(deque([color_list[region]] * GRID_SIZE))
+        if region <= (len(color_list) - 1) // 2:
+            grid.pop()
+            grid.appendleft(deque([color_list[region]] * GRID_SIZE))
 
         # TOWARD
         else:
-            grid.pop()
-            grid.appendleft(deque([color_list[region]] * GRID_SIZE))
+            grid.popleft()
+            grid.append(deque([color_list[region]] * GRID_SIZE))
 
     return grid
 
@@ -132,11 +132,13 @@ def main():
             r_region = get_region(r, len(ROLL))
             y_region = get_region_all_visible(y, len(YAW))
 
+            '''
             if p_region < 0:
                 p_region = len(PITCH) - p_region
 
             if r_region < 0:
                 r_region = len(ROLL) - r_region
+            '''
 
             # sum each value by region and tally the counts
             pitch_counts[p_region] += 1
