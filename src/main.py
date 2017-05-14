@@ -136,53 +136,54 @@ def overwrite_grid(grid, color_list, total_rings):
     tmp_right = GRID_SIZE // 2
 
     # output color rings
-    if num_color_rings > 0:
-        for i in range(0, num_color_rings):
-            if tmp_left < 0:
-                tmp_left = left
-            if tmp_right >= GRID_SIZE:
-                tmp_right = right
-            if color_list_ptr < 0:
-                color_list_ptr = len(color_list) - 1
+    for i in range(0, num_color_rings):
+        if tmp_left < 0:
+            tmp_left = left
+        if tmp_right >= GRID_SIZE:
+            tmp_right = right
+        if color_list_ptr < 0:
+            color_list_ptr = len(color_list) - 1
 
-            # print("test color -  left: {}, right: {}, color_idx: {}".format(tmp_left, tmp_right, color_list_ptr))
+        # print("test color -  left: {}, right: {}, color_idx: {}".format(tmp_left, tmp_right, color_list_ptr))
 
-            if tmp_left < 0 or tmp_right >= GRID_SIZE:
-                print("color overflowing")
-                print("color overflowing")
-                print("color overflowing")
+        if tmp_left < 0 or tmp_right >= GRID_SIZE:
+            print("color overflowing")
+            print("color overflowing")
+            print("color overflowing")
 
-            grid[(i + tmp_left)][tmp_left] = color_list[color_list_ptr]
-            grid[(i + tmp_left)][tmp_right] = color_list[color_list_ptr]
-            grid[tmp_left][(tmp_right - i)] = color_list[color_list_ptr]
-            grid[tmp_right][(tmp_left + i)] = color_list[color_list_ptr]
+        grid[(i + tmp_left)][tmp_left] = color_list[color_list_ptr]
+        grid[(i + tmp_left)][tmp_right] = color_list[color_list_ptr]
+        grid[tmp_left][(tmp_right - i)] = color_list[color_list_ptr]
+        grid[tmp_right][(tmp_left + i)] = color_list[color_list_ptr]
 
-            print("bounds - tmp_left: {}, tmp_right: {}, tmp_left + i: {}, tmp_right - i: {}".format(tmp_left, tmp_right, tmp_left + i, tmp_right - i))
+        print("bounds - i: {}, tmp_left: {}, tmp_right: {}, tmp_left + i: {}, tmp_right - i: {}".
+              format(i, tmp_left, tmp_right, tmp_left + i, tmp_right - i))
 
-            color_list_ptr -= 1
-            tmp_left -= 1
-            tmp_right += 1
+        color_list_ptr -= 1
+        tmp_left -= 1
+        tmp_right += 1
 
     # output blank rings
-    if num_blank_rings > 0:
-        tmp_left = left
-        tmp_right = right
+    tmp_left = left
+    tmp_right = right
 
-        print("test blank -  left: {}, right: {}".format(tmp_left, tmp_right))
 
-        for i in range(0, min(num_blank_rings, right)):
-            if tmp_left < 0 or tmp_right >= GRID_SIZE:
-                print("blank overflowing")
-                print("blank overflowing")
-                print("blank overflowing")
+    for i in range(0, min(num_blank_rings, right)):
+        if tmp_left < 0 or tmp_right >= GRID_SIZE:
+            print("blank overflowing")
+            print("blank overflowing")
+            print("blank overflowing")
 
-            grid[i + tmp_left][tmp_left] = BLANK
-            grid[i + tmp_left][tmp_right] = BLANK
-            grid[tmp_left][tmp_left + i] = BLANK
-            grid[tmp_right][tmp_right - i] = BLANK
+        grid[i + tmp_left][tmp_left] = BLANK
+        grid[i + tmp_left][tmp_right] = BLANK
+        grid[tmp_left][tmp_left + i] = BLANK
+        grid[tmp_right][tmp_right - i] = BLANK
 
-            tmp_left -= 1
-            tmp_right += 1
+        print("blank - i: {}, tmp_left: {}, tmp_right: {}, tmp_left + i: {}, tmp_right - i: {}".
+              format(i, tmp_left, tmp_right, tmp_left + i, tmp_right - i))
+
+        tmp_left -= 1
+        tmp_right += 1
 
 
 def manage_flat_ctrs(ctrs, grid):
