@@ -145,7 +145,7 @@ def overwrite_grid(sense, color_list, total_rings):
         right += 1
 
     # output color rings
-    for ring in range(num_blank_rings, min(num_blank_rings + num_color_rings, right + 1)):
+    for ring in range(0, num_color_rings):
         print("left bound: {}, right bound: {}".format(left, right))
         print("ptr: {}, color: {}".format(color_list_ptr, color_list[color_list_ptr]))
 
