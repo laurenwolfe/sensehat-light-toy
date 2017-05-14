@@ -49,12 +49,13 @@ YAW = [DARK_CYAN, CYAN, BLUE, DARK_BLUE]
 
 # determine number corresponding to color index in list
 def get_region(degrees, list_len):
-    num_gradations = (list_len - 2) / 2
+        
+    num_gradations = (list_len - 2) // 2
 
     # calculate region # based on number of visible segments
-    if degrees < 90 or degrees <= 270:
+    if degrees < 90 or degrees >= 270:
         segment_size = 90 / num_gradations
-        return int(degrees / segment_size)
+        return degrees // segment_size
     # only two blank segments, each 90 degrees
     elif degrees >= 90 and degrees < 180:
         return num_gradations + 1
