@@ -294,10 +294,12 @@ def main():
             manage_flat_ctrs(ctrs, sense)
 
             # repopulate grid deque
-            i = 0
-            grid.clear()
+            # i = 0
+            # grid.clear()
 
             for lists in sense.get_pixels():
+                print(lists)
+                '''
                 for el in lists:
                     if i % GRID_SIZE == 0:
                         row = [0] * 8
@@ -310,7 +312,7 @@ def main():
                     i += 1
 
             print("i: {}".format(i))
-
+            '''
 
         # tilt around z axis (left and right)
         elif data['avg_pitch'] > data['avg_roll']:
