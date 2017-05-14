@@ -148,8 +148,8 @@ def overwrite_grid(grid, sense, color_list, total_rings):
             grid[l_edge][tmp_right] = rings[i]
             grid[l_edge][tmp_left] = rings[i]
 
-            print("({},{}), ({},{}), ({},{}), ({},{}),".
-                  format(tmp_left, l_edge, tmp_right, l_edge, l_edge, tmp_right, l_edge, tmp_left))
+#            print("({},{}), ({},{}), ({},{}), ({},{}),".
+#                  format(tmp_left, l_edge, tmp_right, l_edge, l_edge, tmp_right, l_edge, tmp_left))
 
         i += 1
         tmp_left -= 1
@@ -275,7 +275,7 @@ def push_grid(grid, sense):
 
     # sense.clear()
     sense.set_pixels(grid_list)
-    sleep(.3)
+    sleep(.2)
 
 
 def main():
