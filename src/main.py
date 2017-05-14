@@ -110,7 +110,7 @@ def shift_grid(grid, region, is_pitch, color_list):
     return grid
 
 
-def overwrite_grid(sense, grid, color_list, total_rings):
+def overwrite_grid(grid, color_list, total_rings):
     # store the steps out from center to set pixel ring
     left = (GRID_SIZE - 1) // 2
     right = GRID_SIZE // 2
@@ -169,11 +169,11 @@ def overwrite_grid(sense, grid, color_list, total_rings):
     sleep(DELAY)
 
 
-def manage_flat_ctrs(ctrs, sense, grid):
+def manage_flat_ctrs(ctrs, grid):
     ctrs['flat'] += 1
     ctrs['away'], ctrs['toward'], ctrs['left'], ctrs['right'] = 0, 0, 0, 0
 
-    overwrite_grid(sense, grid, FLAT, ctrs['flat'])
+    overwrite_grid(grid, FLAT, ctrs['flat'])
 
 
 def manage_pitch_ctrs(ctrs, pitch_region, grid):
@@ -292,8 +292,8 @@ def main():
             data['avg_roll'] = abs(data['avg_roll'] - 360)
 
         # keep sensor parallel with the ground
-        if data['avg_pitch'] < 10 and data['avg_roll'] < 10:
-            manage_flat_ctrs(ctrs, sense, grid)
+        if (data['avg_pitch'] < 15 or data['avg_pitch'] > 345) and (data['avg_roll'] < 15 or data['avg_roll'] > 345):
+            manage_flat_ctrs(ctrs, grid)
 
         # tilt around z axis (left and right)
         elif data['avg_pitch'] > data['avg_roll']:
