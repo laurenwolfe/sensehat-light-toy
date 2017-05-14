@@ -1,13 +1,13 @@
 from sense_hat import SenseHat
 from time import sleep
 from collections import deque
-import math
+# import math
 
 GRID_SIZE = 8
 NUM_SAMPLES = 5
 DELAY = 0.1
 
-########## RGB COLOR CODES #########
+# RGB COLOR CODES
 VIOLET_RED = (199, 21, 133)
 PINK = (100, 0, 0)
 RED = (220, 20, 60)
@@ -51,22 +51,24 @@ YAW = [DARK_CYAN, CYAN, BLUE, DARK_BLUE]
 
 # determine number corresponding to color index in list
 def get_region(degrees, list_len):
-    num_gradations = (list_len - 2) // 2
+    vis_segments = list_len - 2
+    segment_size = 180 // vis_segments
 
     # calculate region # based on number of visible segments
     if degrees < 90:
-        segment_size = 90 / num_gradations
         return degrees // segment_size
+
     # only two blank segments, each 90 degrees
-    elif degrees >= 270:
-        # return a negative index
-        degrees = abs(degrees - 360)
-        segment_size = 90 / num_gradations
-        return (degrees // segment_size) * -1
     elif degrees >= 90 and degrees < 180:
-        return num_gradations + 1
-    else:
-        return num_gradations + 2
+        return (vis_segments // 2) + 1
+    elif degrees >= 180 and degrees < 270:
+        return (vis_segments // 2) + 2
+
+    # upper region of values
+    elif degrees >= 270:
+        # How many segments to subtract from the top?
+        degrees = abs(degrees - 360)
+        return list_len - 1 - (degrees // segment_size)
 
 
 # simply divide into equal regions if all segments are visible
@@ -110,7 +112,7 @@ def main():
 
     grid = deque([deque([BLANK] * GRID_SIZE)] * GRID_SIZE)
 
-    left_ctr, right_ctr, toward_ctr, away_ctr = 0, 0, 0, 0
+    # left_ctr, right_ctr, toward_ctr, away_ctr = 0, 0, 0, 0
 
     while True:
         pitch_counts = [0] * len(PITCH)
