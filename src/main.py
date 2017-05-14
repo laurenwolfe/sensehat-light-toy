@@ -128,43 +128,52 @@ def overwrite_grid(grid, color_list, total_rings):
     num_color_rings = total_rings - num_blank_rings
     if num_color_rings < 0:
         num_color_rings = 0
-    elif num_color_rings >= right:
-        num_color_rings = right - num_blank_rings
-
-    # print("blank rings: {}, colored rings: {}".format(num_blank_rings, num_color_rings))
+#    elif num_color_rings >= right:
+#        num_color_rings = right - num_blank_rings
 
     # start index position for color list -- higher indices are "newer" and displayed in the center
     color_list_ptr = num_blank_rings + num_color_rings - 1
 
+    tmp_left = left
+    tme_right = right
+
     # output blank rings
     for blank in range(0, num_blank_rings):
-        # print("left bound: {}, right bound: {}".format(left, right))
-        for i in range(left, right + 1):
-            grid[i][left] = BLANK
-            grid[i][right] = BLANK
-            grid[left][i] = BLANK
-            grid[right][i] = BLANK
+        if tmp_left < 0:
+            tmp_left = left
+        if tmp_right >= GRID_SIZE:
+            tmp_right = right
 
-        left -= 1
-        right += 1
+        # print("left bound: {}, right bound: {}".format(left, right))
+        for i in range(tmp_left, tmp_right + 1):
+            grid[i][tmp_left] = BLANK
+            grid[i][tmp_right] = BLANK
+            grid[tmp_left][i] = BLANK
+            grid[tmp_right][i] = BLANK
+
+        tmp_left -= 1
+        tmp_right += 1
 
     # output color rings
     for ring in range(0, num_color_rings):
-        for i in range(left, right + 1):
-            grid[i][left] = color_list[color_list_ptr]
-            grid[i][right] = color_list[color_list_ptr]
-            grid[left][i] = color_list[color_list_ptr]
-            grid[right][i] = color_list[color_list_ptr]
-
-            print("i: {}, left: {}, right: {}".format(i, left, right))
-
-        color_list_ptr -= 1
-
+        if tmp_left < 0:
+            tmp_left = left
+        if tmp_right >= GRID_SIZE:
+            tmp_right = right
         if color_list_ptr < 0:
             color_list_ptr = len(color_list) - 1
 
-        left -= 1
-        right += 1
+        for i in range(tmp_left, tmp_right + 1):
+            grid[i][tmp_left] = color_list[color_list_ptr]
+            grid[i][tmp_right] = color_list[color_list_ptr]
+            grid[tmp_left][i] = color_list[color_list_ptr]
+            grid[tmp_right][i] = color_list[color_list_ptr]
+
+           # print("i: {}, left: {}, right: {}".format(i, left, right))
+
+        color_list_ptr -= 1
+        tmp_left -= 1
+        tmp_right += 1
 
     sleep(DELAY)
 
