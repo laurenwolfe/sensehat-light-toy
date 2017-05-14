@@ -144,15 +144,16 @@ def overwrite_grid(grid, sense, color_list, total_rings):
             rings.pop()
             rings.append(BLANK)
 
+        print("Rings: {}".format(rings))
+
         for idx in range(GRID_SIZE // 2):
-            right = GRID_SIZE // 2 + idx
-            left = ((GRID_SIZE - idx) // 2) - 1
             if rings[idx] is not None:
-                for step in range(right - left + 1):
-                    grid[left][left + step] = rings[idx]
-                    grid[right][left + step] = rings[idx]
-                    grid[left + step][left] = rings[idx]
-                    grid[left + step][right] = rings[idx]
+                grid[left][int(left + idx)] = rings[idx]
+                grid[right][int(left + idx)] = rings[idx]
+                grid[int(left + idx)][left] = rings[idx]
+                grid[int(left + idx)][right] = rings[idx]
+            else:
+                print("rings is None at index {}".format(idx))
 
         grid_list = []
 
