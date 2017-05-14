@@ -1,28 +1,24 @@
 from sense_hat import SenseHat
 from time import sleep
 from collections import deque
-from enum import Enum
 
-
-class Color(Enum):
-    L_RED = (100, 0, 0)
-    RED = (209, 0, 0)
-    ORANGE = (255, 102, 34)
-    YELLOW = (255, 118, 33)
-    GREEN = (51, 221, 0)
-    BLUE = (17, 51, 204)
-    INDIGO = (34, 0, 102)
-    VIOLET = (51, 0, 68)
-    BLANK = (0, 0, 0)
-    WHITE = (255, 255, 255)
-
+L_RED = (100, 0, 0)
+RED = (209, 0, 0)
+ORANGE = (255, 102, 34)
+YELLOW = (255, 118, 33)
+GREEN = (51, 221, 0)
+BLUE = (17, 51, 204)
+INDIGO = (34, 0, 102)
+VIOLET = (51, 0, 68)
+BLANK = (0, 0, 0)
+WHITE = (255, 255, 255)
 
 GRID_SIZE = 8
-SOFT_LEFT = SOFT_TOWARD = Color.VIOLET
-HARD_LEFT = HARD_TOWARD = Color.RED
-SOFT_RIGHT = SOFT_AWAY = Color.BLUE
-HARD_RIGHT = HARD_AWAY = Color.GREEN
-BLANK = Color.BLANK
+SOFT_LEFT = SOFT_TOWARD = VIOLET
+HARD_LEFT = HARD_TOWARD = RED
+SOFT_RIGHT = SOFT_AWAY = BLUE
+HARD_RIGHT = HARD_AWAY = GREEN
+BLANK = BLANK
 NUM_SAMPLES = 10
 DELAY = 0.05
 
@@ -133,10 +129,10 @@ def main():
     sense.set_imu_config(False, True, True)
     sense.clear()
 
-    grid = deque([deque([Color.BLANK] * GRID_SIZE), deque([Color.BLANK] * GRID_SIZE),
-                  deque([Color.BLANK] * GRID_SIZE), deque([Color.BLANK] * GRID_SIZE),
-                  deque([Color.BLANK] * GRID_SIZE), deque([Color.BLANK] * GRID_SIZE),
-                  deque([Color.BLANK] * GRID_SIZE), deque([Color.BLANK] * GRID_SIZE)])
+    grid = deque([deque([BLANK] * GRID_SIZE), deque([BLANK] * GRID_SIZE),
+                  deque([BLANK] * GRID_SIZE), deque([BLANK] * GRID_SIZE),
+                  deque([BLANK] * GRID_SIZE), deque([BLANK] * GRID_SIZE),
+                  deque([BLANK] * GRID_SIZE), deque([Color.BLANK] * GRID_SIZE)])
 
     # old_pitch, old_roll, old_yaw = 0, 0, 0
 
