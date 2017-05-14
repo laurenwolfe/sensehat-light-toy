@@ -28,12 +28,11 @@
         <entry file="file://$PROJECT_DIR$/src/main.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="824">
-              <caret line="87" column="26" lean-forward="false" selection-start-line="87" selection-start-column="26" selection-end-line="87" selection-end-column="26" />
+              <caret line="128" column="0" lean-forward="true" selection-start-line="128" selection-start-column="0" selection-end-line="128" selection-end-column="0" />
               <folding>
                 <element signature="e#0#30#0" expanded="true" />
                 <element signature="e#511#783#0" expanded="false" />
                 <element signature="e#814#987#0" expanded="false" />
-                <element signature="e#2051#2823#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -85,6 +84,7 @@
       <find>quad</find>
       <find>seq_le</find>
       <find>Color.</find>
+      <find>append</find>
     </findStrings>
     <replaceStrings>
       <replace>[blank] * 8</replace>
@@ -433,7 +433,6 @@
             <element signature="e#0#30#0" expanded="true" />
             <element signature="e#511#783#0" expanded="false" />
             <element signature="e#814#987#0" expanded="false" />
-            <element signature="e#2051#2823#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -454,7 +453,6 @@
             <element signature="e#0#30#0" expanded="true" />
             <element signature="e#511#783#0" expanded="false" />
             <element signature="e#814#987#0" expanded="false" />
-            <element signature="e#2051#2823#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -488,12 +486,11 @@
     <entry file="file://$PROJECT_DIR$/src/main.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="824">
-          <caret line="87" column="26" lean-forward="false" selection-start-line="87" selection-start-column="26" selection-end-line="87" selection-end-column="26" />
+          <caret line="128" column="0" lean-forward="true" selection-start-line="128" selection-start-column="0" selection-end-line="128" selection-end-column="0" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
             <element signature="e#511#783#0" expanded="false" />
             <element signature="e#814#987#0" expanded="false" />
-            <element signature="e#2051#2823#0" expanded="false" />
           </folding>
         </state>
       </provider>
