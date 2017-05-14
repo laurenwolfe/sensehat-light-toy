@@ -150,19 +150,25 @@ def overwrite_grid(grid, sense, color_list, total_rings):
         idx = 0
 
         for el in rings:
-#            print("tmp_left: {}, tmp_right: {}, idx: {}".format(tmp_left, tmp_right, idx))
             if el is not None:
-                edge = int(tmp_left + idx)
-                grid[tmp_left][edge] = el
-                grid[tmp_right][edge] = el
-                grid[edge][tmp_left] = el
-                grid[edge][tmp_right] = el
+                for step in range(right - left + 1):
+                    l_edge = int(tmp_left + idx)
+                    r_edge = int(tmp_right - idx)
+
+                    #4
+                    grid[tmp_left][l_edge] = el
+                    #1
+                    grid[tmp_right][l_edge] = el
+                    #2
+                    grid[r_edge][tmp_right] = el
+                    #3
+                    grid[l_edge][tmp_left] = el
+                    idx += 1
 
                 print("({},{}), ({},{}), ({},{}), ({},{}),".
-                      format(tmp_left, edge, tmp_right, edge, edge, tmp_left, edge, tmp_right))
+                      format(tmp_left, l_edge, tmp_right, l_edge, r_edge, tmp_right, l_edge, tmp_left))
             else:
                 print("rings is None at index {}".format(idx))
-            idx += 1
             tmp_left -= 1
             tmp_right += 1
 
