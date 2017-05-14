@@ -145,17 +145,19 @@ def overwrite_grid(grid, color_list, total_rings):
             if color_list_ptr < 0:
                 color_list_ptr = len(color_list) - 1
 
-            print("test color -  left: {}, right: {}, color_idx: {}".format(tmp_left, tmp_right, color_list_ptr))
+            # print("test color -  left: {}, right: {}, color_idx: {}".format(tmp_left, tmp_right, color_list_ptr))
 
             if tmp_left < 0 or tmp_right >= GRID_SIZE:
                 print("color overflowing")
                 print("color overflowing")
                 print("color overflowing")
 
-            grid[(i + tmp_left) % GRID_SIZE][tmp_left] = color_list[color_list_ptr]
-            grid[(i + tmp_left) % GRID_SIZE][tmp_right] = color_list[color_list_ptr]
-            grid[tmp_left][(tmp_right - i) % GRID_SIZE] = color_list[color_list_ptr]
-            grid[tmp_right][(tmp_left + i) % GRID_SIZE] = color_list[color_list_ptr]
+            grid[(i + tmp_left)][tmp_left] = color_list[color_list_ptr]
+            grid[(i + tmp_left)][tmp_right] = color_list[color_list_ptr]
+            grid[tmp_left][(tmp_right - i)] = color_list[color_list_ptr]
+            grid[tmp_right][(tmp_left + i)] = color_list[color_list_ptr]
+
+            print("bounds - tmp_left: {}, tmp_right: {}, tmp_left + i: {}, tmp_right - i: {}".format(tmp_left, tmp_right, tmp_left + i, tmp_right - i))
 
             color_list_ptr -= 1
             tmp_left -= 1
