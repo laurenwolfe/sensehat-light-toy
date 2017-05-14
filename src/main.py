@@ -297,14 +297,17 @@ def main():
             i = 0
             grid.clear()
 
-            for el in sense.get_pixels()[0]:
-                if i % GRID_SIZE == 0:
-                    row = [0] * 8
+            for lists in sense.get_pixels():
+                for el in lists:
+                    if i % GRID_SIZE == 0:
+                        row = [0] * 8
 
-                row[i % GRID_SIZE] = el
+                    row[i % GRID_SIZE] = el
 
-                if i % GRID_SIZE == 7:
-                    grid.append(deque(row))
+                    if i % GRID_SIZE == 7:
+                        grid.append(deque(row))
+
+                    i += 1
 
             print("i: {}".format(i))
 
