@@ -129,6 +129,9 @@ def overwrite_grid(grid, sense, color_list, total_rings):
 
     color_idx = randint(0, len(color_list) - 1)
 
+    tmp_left = left
+    tmp_right = right
+
     for i in range(total_rings):
         # Haven't exceeded max pixel flow, add another color ring
         if i < MAX_PIXELS:
@@ -147,17 +150,22 @@ def overwrite_grid(grid, sense, color_list, total_rings):
         idx = 0
 
         for el in rings:
-            print("left: {}, right: {}, idx: {}".format(left, right, idx))
+            print("tmp_left: {}, tmp_right: {}, idx: {}".format(tmp_left, tmp_right, idx))
             if el is not None:
-                grid[left][int(left + idx)] = el
-                grid[right][int(left + idx)] = el
-                grid[int(left + idx)][left] = el
-                grid[int(left + idx)][right] = el
+                grid[tmp_left][int(tmp_left + idx)] = el
+                grid[tmp_right][int(tmp_left + idx)] = el
+                grid[int(tmp_left + idx)][tmp_left] = el
+                grid[int(tmp_left + idx)][tmp_right] = el
             else:
                 print("rings is None at index {}".format(idx))
             idx += 1
-            left -= 1
-            right += 1
+            tmp_left -= 1
+            tmp_right += 1
+
+            if tmp_left < 0:
+                tmp_left = left
+            if tmp_right >= GRID_SIZE:
+                tmp_right = right
 
         grid_list = []
 
