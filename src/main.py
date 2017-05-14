@@ -110,7 +110,7 @@ def shift_grid(grid, region, is_pitch, color_list):
     return grid
 
 
-def overwrite_grid(sense, color_list, total_rings, grid):
+def overwrite_grid(sense, color_list, total_rings):
     # store the steps out from center to set pixel ring
     ctr = 0
     left = (GRID_SIZE - 1) // 2
