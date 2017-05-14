@@ -130,6 +130,12 @@ def main():
             r_region = get_region(r, len(ROLL))
             y_region = get_region_all_visible(y, len(YAW))
 
+            if p_region < 0:
+                p_region = len(PITCH) - p_region
+
+            if r_region < 0:
+                r_region = len(ROLL) - r_region
+
             # sum each value by region and tally the counts
             pitch_counts[p_region] += 1
             pitch_sums[p_region] += p
@@ -139,6 +145,8 @@ def main():
 
             yaw_counts[y_region] += 1
             yaw_sums[y_region] += y
+
+            print("pitch: {}, roll: {}".format(p, r))
 
         # get average value of highest frequency region for pitch
         pitch_count = max(pitch_counts)
