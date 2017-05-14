@@ -167,7 +167,7 @@ def main():
                 left_ctr, right_ctr, away_ctr, toward_ctr = 0, 0, 0, 0
 
             # if counter reaches/exceeds grid size, stop outputting color until direction changes
-            if left_ctr >= GRID_SIZE or right_ctr >= GRID_SIZE:
+            if left_ctr >= GRID_SIZE * 3 or right_ctr >= GRID_SIZE * 3:
                 pitch_region = len(PITCH) // 2
 
             grid = shift_grid(grid, pitch_region, True)
