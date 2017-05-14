@@ -134,11 +134,25 @@ def overwrite_grid(grid, color_list, total_rings):
     # start index position for color list -- higher indices are "newer" and displayed in the center
     color_list_ptr = total_rings % len(color_list)
 
-    tmp_left = (GRID_SIZE - 1) // 2
-    tmp_right = GRID_SIZE // 2
+#    tmp_left = (GRID_SIZE - 1) // 2
+#    tmp_right = GRID_SIZE // 2
 
     # output color rings
     for i in range(0, num_color_rings):
+        for x in range(left - i, right + i + 1):
+            for y in range(left - i, right + i + 1):
+                print("color - i: {}, x: {}, y: {}".format(i, x, y))
+                grid[x][y] = color_list[color_list_ptr]
+        color_list_ptr -= 1
+
+    # output blank rings
+    for i in range(0, num_blank_rings):
+        for x in range(left - i, right + i + 1):
+            for y in range(left - i, right + i + 1):
+                print("blank - i: {}, x: {}, y: {}".format(i, x, y))
+                grid[x][y] = BLANK
+
+        '''
         if tmp_left < 0:
             tmp_left = left
         if tmp_right >= GRID_SIZE:
@@ -152,6 +166,7 @@ def overwrite_grid(grid, color_list, total_rings):
             print("color overflowing")
             print("color overflowing")
             print("color overflowing")
+        
 
         print("bounds - idx: {}, tmp_left: {}, tmp_right: {}, limit: {}".
               format(idx, tmp_left, tmp_right, num_color_rings))
@@ -166,9 +181,9 @@ def overwrite_grid(grid, color_list, total_rings):
         tmp_left -= 1
         tmp_right += 1
 
-    # output blank rings
-    tmp_left = left
-    tmp_right = right
+        # output blank rings
+     tmp_left = left
+     tmp_right = right
 
 
     for i in range(0, min(num_blank_rings, right)):
@@ -189,7 +204,7 @@ def overwrite_grid(grid, color_list, total_rings):
 
         tmp_left -= 1
         tmp_right += 1
-
+        '''
 
 def manage_flat_ctrs(ctrs, grid):
     ctrs['flat'] += 1
