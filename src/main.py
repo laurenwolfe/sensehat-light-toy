@@ -126,7 +126,7 @@ def overwrite_grid(grid, sense, color_list, total_rings):
     for idx in range(total_rings):
         # Haven't exceeded max pixel flow, add another color ring
         rings.pop()
-        if idx < MAX_PIXELS:
+        if idx < MAX_PIXELS // 2:
             rings.appendleft(color_list[color_idx])
         # Wipe rings away with blanks once max is achieved
         else:
