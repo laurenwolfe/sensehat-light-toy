@@ -156,27 +156,29 @@ def main():
 
         # tilt around z axis (left and right)
         elif pitch > roll:
-            # increment pixel counter
+            '''
+            # increment / reset directional counters
+            away_ctr, toward_ctr = 0, 0
             if pitch_region < (len(PITCH) - 2) // 2:
                 left_ctr += 1
-                right_ctr, toward_ctr, away_ctr = 0, 0, 0
+                right_ctr = 0
             elif pitch_region >= (len(PITCH) - 1) // 2:
                 right_ctr += 1
-                left_ctr, toward_ctr, away_ctr = 0, 0, 0
+                left_ctr = 0
             else:
-                left_ctr, right_ctr, away_ctr, toward_ctr = 0, 0, 0, 0
+                left_ctr, right_ctr = 0, 0
 
             # if counter reaches/exceeds grid size, stop outputting color until direction changes
             if left_ctr >= GRID_SIZE * 3 or right_ctr >= GRID_SIZE * 3:
                 pitch_region = len(PITCH) // 2
-
+            '''
             grid = shift_grid(grid, pitch_region, True)
 
         # tilt around x axis (toward and away)
         else:
-            # increment and reset directional counters
+            '''
+            # increment / reset directional counters
             left_ctr, right_ctr = 0, 0
-
             if roll_region < (len(ROLL) - 2) // 2:
                  toward_ctr += 1
                  away_ctr = 0
@@ -188,9 +190,9 @@ def main():
 
             # if counter reaches/exceeds grid size, stop outputting color until direction changes
             # by setting region equal to a non-visible segment
-            if toward_ctr > GRID_SIZE or away_ctr > GRID_SIZE:
+            if toward_ctr > GRID_SIZE * 3 or away_ctr > GRID_SIZE * 3:
                 roll_region = len(ROLL) // 2
-
+            '''
             grid = shift_grid(grid, roll_region, False)
 
         # convert deques to a flattened list
