@@ -123,9 +123,13 @@ def overwrite_grid(sense, color_list, total_rings):
 
     # calculate the total number of colored rings to display by subtracting blank rings and determining whether the
     # result is valid
-    num_color_rings = right - num_blank_rings
+    num_color_rings = total_rings - num_blank_rings
     if num_color_rings < 0:
         num_color_rings = 0
+    elif num_color_rings >= right:
+        num_color_rings = right - num_blank_rings
+
+    print("blank rings: {}, colored rings: {}".format(num_blank_rings, num_color_rings))
 
     # start index position for color list -- higher indices are "newer" and displayed in the center
     color_list_ptr = num_blank_rings + num_color_rings - 1
@@ -246,7 +250,6 @@ def main():
 
         # tilt around x axis (toward and away)
         else:
-
             # increment / reset directional counters
             ctrs['left'], ctrs['right'] = 0, 0
             if roll_region < (len(ROLL) - 2) // 2:
@@ -274,6 +277,6 @@ def main():
             grid_list += list(row)
 
         sense.set_pixels(grid_list)
-
+        sleep(.2)
 
 main()
