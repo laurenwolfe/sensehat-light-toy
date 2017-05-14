@@ -153,8 +153,8 @@ def overwrite_grid(grid, color_list, total_rings):
             print("color overflowing")
             print("color overflowing")
 
-        print("bounds - idx: {}, tmp_left: {}, tmp_right: {}, tmp_left +idx: {}, tmp_right -idx: {}".
-              format(idx, tmp_left, tmp_right, str(tmp_left +idx), str(tmp_right -idx)))
+        print("bounds - idx: {}, tmp_left: {}, tmp_right: {}, limit: {}".
+              format(idx, tmp_left, tmp_right, num_color_rings))
 
         grid[(idx + tmp_left)][tmp_left] = color_list[color_list_ptr]
         grid[(idx + tmp_left)][tmp_right] = color_list[color_list_ptr]
