@@ -177,7 +177,7 @@ def overwrite_grid(grid, sense, color_list, total_rings):
 
     if not pushed:
         push_grid(grid, sense)
-        
+
 
 def manage_flat_ctrs(ctrs, grid, sense):
     ctrs['flat'] += 1
@@ -313,16 +313,16 @@ def main():
 
         # keep sensor parallel with the ground
         if data['avg_pitch'] < 15 and data['avg_roll'] < 15:
-            print("ctrs: {}".format(ctrs['flat']))
+            # print("ctrs: {}".format(ctrs['flat']))
             manage_flat_ctrs(ctrs, grid, sense)
         # tilt around z axis (left and right)
         else:
             if data['avg_pitch'] > data['avg_roll']:
-                print("left: {}, right: {}".format(ctrs['left'], ctrs['right']))
+                # print("left: {}, right: {}".format(ctrs['left'], ctrs['right']))
                 manage_pitch_ctrs(ctrs, data['pitch_region'], grid)
             # tilt around x axis (toward and away)
             else:
-                print("toward: {}, away: {}".format(ctrs['toward'], ctrs['away']))
+                # print("toward: {}, away: {}".format(ctrs['toward'], ctrs['away']))
                 manage_roll_ctrs(ctrs, data['roll_region'], grid)
 
             push_grid(grid, sense)
