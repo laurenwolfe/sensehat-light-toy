@@ -120,59 +120,57 @@ def overwrite_grid(grid, color_list, total_rings):
     num_blank_rings = total_rings - MAX_PIXELS
     if num_blank_rings < 0:
         num_blank_rings = 0
+        num_color_rings = total_rings
     elif num_blank_rings >= right:
         num_blank_rings = right
-
-    # calculate the total number of colored rings to display by subtracting blank rings and determining whether the
-    # result is valid
-    num_color_rings = total_rings - num_blank_rings
-    if num_color_rings < 0:
         num_color_rings = 0
-#    elif num_color_rings >= right:
-#        num_color_rings = right - num_blank_rings
+    else:
+        # calculate the total number of colored rings to display by subtracting blank rings and determining whether the
+        # result is valid
+        num_color_rings = max(0, total_rings - num_blank_rings)
 
     # start index position for color list -- higher indices are "newer" and displayed in the center
-    color_list_ptr = num_blank_rings + num_color_rings - 1
+    color_list_ptr = (num_blank_rings + num_color_rings - 1) % len(color_list)
 
     tmp_left = left
     tmp_right = right
 
-    # output blank rings
-    for blank in range(0, num_blank_rings):
-        if tmp_left < 0:
-            tmp_left = left
-        if tmp_right >= GRID_SIZE:
-            tmp_right = right
-
-        # print("left bound: {}, right bound: {}".format(left, right))
-        for i in range(tmp_left, tmp_right + 1):
-            grid[i][tmp_left] = BLANK
-            grid[i][tmp_right] = BLANK
-            grid[tmp_left][i] = BLANK
-            grid[tmp_right][i] = BLANK
-
-        tmp_left -= 1
-        tmp_right += 1
-
     # output color rings
-    for i in range(0, num_color_rings):
-        if tmp_left < 0:
-            tmp_left = left
-        if tmp_right >= GRID_SIZE:
-            tmp_right = right
-        if color_list_ptr < 0:
-            color_list_ptr = len(color_list) - 1
+    if num_color_rings > 0:
+        for i in range(0, num_color_rings):
+            if tmp_left < 0:
+                tmp_left = left
+            if tmp_right >= GRID_SIZE:
+                tmp_right = right
+            if color_list_ptr < 0:
+                color_list_ptr = len(color_list) - 1
 
-            grid[i % GRID_SIZE][tmp_left] = color_list[color_list_ptr]
-            grid[i % GRID_SIZE][tmp_right] = color_list[color_list_ptr]
-            grid[tmp_left][i % GRID_SIZE] = color_list[color_list_ptr]
-            grid[tmp_right][i % GRID_SIZE] = color_list[color_list_ptr]
+                grid[i % GRID_SIZE][tmp_left] = color_list[color_list_ptr]
+                grid[i % GRID_SIZE][tmp_right] = color_list[color_list_ptr]
+                grid[tmp_left][i % GRID_SIZE] = color_list[color_list_ptr]
+                grid[tmp_right][i % GRID_SIZE] = color_list[color_list_ptr]
 
-           # print("i: {}, left: {}, right: {}".format(i, left, right))
+            color_list_ptr -= 1
+            tmp_left -= 1
+            tmp_right += 1
 
-        color_list_ptr -= 1
-        tmp_left -= 1
-        tmp_right += 1
+    # output blank rings
+    if num_blank_rings > 0:
+        tmp_left = left
+        tmp_right = right
+
+        for i in range(0, num_blank_rings):
+            if tmp_left < 0 or tmp_right >= GRID_SIZE:
+                sleep(DELAY)
+                return
+
+            grid[i + tmp_left][tmp_left] = BLANK
+            grid[i + tmp_left][tmp_right] = BLANK
+            grid[tmp_left][i + tmp_left] = BLANK
+            grid[tmp_right][i + tmp_left] = BLANK
+
+            tmp_left -= 1
+            tmp_right += 1
 
     sleep(DELAY)
 
@@ -289,6 +287,9 @@ def main():
     ctrs = {'left': 0, 'right': 0, 'toward': 0, 'away': 0, 'flat': 0}
 
     while True:
+        # convert deques to a flattened list
+        grid_list = []
+
         data = sample_sensor_output(sense)
 
         # determine whether pitch and roll are +10 degrees from the origin in either direction
@@ -300,26 +301,20 @@ def main():
             data['avg_roll'] = abs(data['avg_roll'] - 360)
 
         # keep sensor parallel with the ground
-        if (data['avg_pitch'] < 15 or data['avg_pitch'] > 345) and (data['avg_roll'] < 15 or data['avg_roll'] > 345):
+        if data['avg_pitch'] < 15 and data['avg_roll'] < 15:
             manage_flat_ctrs(ctrs, grid)
-            print(data)
-
         # tilt around z axis (left and right)
         elif data['avg_pitch'] > data['avg_roll']:
             manage_pitch_ctrs(ctrs, data['pitch_region'], grid)
-
         # tilt around x axis (toward and away)
         else:
             manage_roll_ctrs(ctrs, data['roll_region'], grid)
-
-        # convert deques to a flattened list
-        grid_list = []
 
         for row in grid:
             grid_list += list(row)
 
         sense.set_pixels(grid_list)
-        sleep(.3)
+        sleep(.1)
 
 
 main()
