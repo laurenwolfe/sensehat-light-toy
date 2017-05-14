@@ -118,7 +118,7 @@ def overwrite_grid(grid, sense, color_list, total_rings):
     # store the steps out from center to set pixel ring
     left = (GRID_SIZE - 1) // 2
     right = GRID_SIZE // 2
-    rings = [None, None, None, None]
+    rings = deque([None] * (GRID_SIZE // 2))
 
     # while i < count
     # if count < MAX
@@ -136,7 +136,7 @@ def overwrite_grid(grid, sense, color_list, total_rings):
         # Haven't exceeded max pixel flow, add another color ring
         if i < MAX_PIXELS:
             rings.pop()
-            rings.append(color_list[color_idx])
+            rings.appendleft(color_list[color_idx])
             color_idx -= 1
 
             # wrap the list index if we reach 0
@@ -145,7 +145,7 @@ def overwrite_grid(grid, sense, color_list, total_rings):
         # Wipe rings away with blanks once max is acheived
         else:
             rings.pop()
-            rings.append(BLANK)
+            rings.appendleft(BLANK)
 
         print("Rings: {}".format(rings))
 
