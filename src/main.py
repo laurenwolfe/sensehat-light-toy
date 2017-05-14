@@ -115,7 +115,7 @@ def overwrite_grid(grid, sense, color_list, total_rings):
     # store the steps out from center to set pixel ring
     left = (GRID_SIZE - 1) // 2
     right = GRID_SIZE // 2
-    rings = [(None), (None), (None), (None)]
+    rings = [None, None, None, None]
 
     # while i < count
     # if count < MAX
