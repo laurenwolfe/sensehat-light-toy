@@ -19,8 +19,8 @@ HARD_LEFT = HARD_TOWARD = RED
 SOFT_RIGHT = SOFT_AWAY = BLUE
 HARD_RIGHT = HARD_AWAY = GREEN
 BLANK = BLANK
-NUM_SAMPLES = 10
-DELAY = 0.05
+NUM_SAMPLES = 20
+DELAY = 0.1
 
 
 def get_region_45(num):
@@ -163,10 +163,12 @@ def main():
         # get average value of highest frequency region for pitch
         pitch_count = max(pitch_counts)
         pitch_region = pitch_counts.index(pitch_count)
+        print("pitch: region {}, count {}".format(pitch_region, pitch_count))
         pitch = pitch_sums[pitch_region] / pitch_count
 
         # get average value of highest frequency region for roll
         roll_count = max(roll_counts)
+        print("roll: region {}, count {}". format(roll_region, roll_count))
         roll_region = roll_counts.index(roll_count)
         roll = roll_sums[roll_region] / roll_count
 
