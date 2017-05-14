@@ -137,6 +137,7 @@ def overwrite_grid(grid, color_list, total_rings):
 
     # output color rings
     if num_color_rings > 0:
+        print("test color -  left: {}, right: {}".format(tmp_left, tmp_right))
         for i in range(0, num_color_rings):
             if tmp_left < 0:
                 tmp_left = left
@@ -163,7 +164,9 @@ def overwrite_grid(grid, color_list, total_rings):
         tmp_left = left
         tmp_right = right
 
-        for i in range(0, max(num_blank_rings, right)):
+        print("test blank -  left: {}, right: {}".format(tmp_left, tmp_right))
+
+        for i in range(0, min(num_blank_rings, right)):
             if tmp_left < 0 or tmp_right >= GRID_SIZE:
                 print("blank overflowing")
                 return
