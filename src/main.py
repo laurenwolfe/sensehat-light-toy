@@ -4,7 +4,7 @@ from collections import deque
 # import math
 
 GRID_SIZE = 8
-NUM_SAMPLES = 5
+NUM_SAMPLES = 10
 DELAY = 0.1
 
 # RGB COLOR CODES
@@ -112,7 +112,7 @@ def main():
 
     grid = deque([deque([BLANK] * GRID_SIZE)] * GRID_SIZE)
 
-    # left_ctr, right_ctr, toward_ctr, away_ctr = 0, 0, 0, 0
+    left_ctr, right_ctr, toward_ctr, away_ctr = 0, 0, 0, 0
 
     while True:
         pitch_counts = [0] * len(PITCH)
@@ -132,14 +132,6 @@ def main():
             r_region = get_region(r, len(ROLL))
             y_region = get_region_all_visible(y, len(YAW))
 
-            '''
-            if p_region < 0:
-                p_region = len(PITCH) - p_region
-
-            if r_region < 0:
-                r_region = len(ROLL) - r_region
-            '''
-
             # sum each value by region and tally the counts
             pitch_counts[p_region] += 1
             pitch_sums[p_region] += p
@@ -149,8 +141,6 @@ def main():
 
             yaw_counts[y_region] += 1
             yaw_sums[y_region] += y
-
-            print("pitch: {}, roll: {}".format(p, r))
 
         # get average value of highest frequency region for pitch
         pitch_count = max(pitch_counts)
@@ -163,9 +153,9 @@ def main():
         avg_roll = roll_sums[roll_region] / roll_count
 
         # get average value of highest frequency region for yaw
-        yaw_count = max(yaw_counts)
-        yaw_region = yaw_counts.index(yaw_count)
-        yaw = yaw_sums[yaw_region] / yaw_count
+        # yaw_count = max(yaw_counts)
+        # yaw_region = yaw_counts.index(yaw_count)
+        # yaw = yaw_sums[yaw_region] / yaw_count
 
         # determine whether pitch and roll are +10 degrees from the origin in either direction
         # and if so, which value is higher
@@ -181,7 +171,7 @@ def main():
 
         # tilt around z axis (left and right)
         elif avg_pitch > avg_roll:
-            '''
+
             # increment / reset directional counters
             away_ctr, toward_ctr = 0, 0
             if pitch_region < (len(PITCH) - 2) // 2:
@@ -196,17 +186,17 @@ def main():
             # if counter reaches/exceeds grid size, stop outputting color until direction changes
             if left_ctr >= GRID_SIZE * 3 or right_ctr >= GRID_SIZE * 3:
                 pitch_region = len(PITCH) // 2
-            '''
+
             grid = shift_grid(grid, pitch_region, True, PITCH)
 
         # tilt around x axis (toward and away)
         else:
-            '''
+
             # increment / reset directional counters
             left_ctr, right_ctr = 0, 0
             if roll_region < (len(ROLL) - 2) // 2:
-                 toward_ctr += 1
-                 away_ctr = 0
+                toward_ctr += 1
+                away_ctr = 0
             elif roll_region >= (len(ROLL) - 1) // 2:
                 away_ctr += 1
                 toward_ctr = 0
@@ -217,7 +207,7 @@ def main():
             # by setting region equal to a non-visible segment
             if toward_ctr > GRID_SIZE * 3 or away_ctr > GRID_SIZE * 3:
                 roll_region = len(ROLL) // 2
-            '''
+
             grid = shift_grid(grid, roll_region, False, ROLL)
 
         # convert deques to a flattened list
