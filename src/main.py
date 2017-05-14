@@ -199,3 +199,5 @@ def main():
 
         sense.set_pixels(grid_list)
         sleep(.1)
+
+main()
