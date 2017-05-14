@@ -116,7 +116,8 @@ def overwrite_grid(grid, sense, color_list, total_rings):
     # store the steps out from center to set pixel ring
     left = (GRID_SIZE - 1) // 2
     right = GRID_SIZE // 2
-    rings = deque([None] * total_rings)
+    # rings = deque([None] * total_rings)
+    rings = deque([None] * (MAX_PIXELS + GRID_SIZE))
 
     color_idx = randint(0, len(color_list) - 1)
 
@@ -128,15 +129,18 @@ def overwrite_grid(grid, sense, color_list, total_rings):
         rings.pop()
         if idx < MAX_PIXELS // 2:
             rings.appendleft(color_list[color_idx])
+
+            color_idx -= 1
+
+            # wrap the list index if we reach 0
+            if color_idx < 0:
+                color_idx = len(color_list) - 1
+
         # Wipe rings away with blanks once max is achieved
         else:
             rings.appendleft(BLANK)
 
-        color_idx -= 1
-
-        # wrap the list index if we reach 0
-        if color_idx < 0:
-            color_idx = len(color_list) - 1
+    print(rings)
 
     i = 0
 
@@ -149,13 +153,10 @@ def overwrite_grid(grid, sense, color_list, total_rings):
             grid[l_edge][tmp_right] = rings[i]
             grid[l_edge][tmp_left] = rings[i]
 
-#            print("({},{}), ({},{}), ({},{}), ({},{}),".
-#                  format(tmp_left, l_edge, tmp_right, l_edge, l_edge, tmp_right, l_edge, tmp_left))
-
         i += 1
         tmp_left -= 1
         tmp_right += 1
-        push_grid(grid, sense)
+#        push_grid(grid, sense)
 
         # write pixels to board once grid is loaded with newest batch of data
         if tmp_left < 0 or tmp_right >= GRID_SIZE:
