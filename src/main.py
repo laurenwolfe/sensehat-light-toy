@@ -57,7 +57,7 @@ def get_region(degrees, list_len):
         return degrees // segment_size
     # only two blank segments, each 90 degrees
     elif degrees >= 270:
-        #return a negative index
+        # return a negative index
         degrees = abs(degrees - 360)
         segment_size = 90 / num_gradations
         return (degrees // segment_size) * -1
@@ -76,7 +76,7 @@ def get_region_all_visible(degrees, list_len):
 # pop old pixels and insert new values for left/right rotation
 def shift_grid(grid, region, is_pitch):
     # shift away or left
-    if (is_pitch and region <= len(PITCH) / 2) or (not is_pitch and region > (len(ROLL) + 2) / 2):
+    if (is_pitch and region < (len(PITCH) - 1) // 2) or (not is_pitch and region >= (len(ROLL) + 2) // 2):
         direction = 0
     # shift towards or right
     else:
@@ -98,10 +98,7 @@ def main():
     sense.set_imu_config(False, True, True)
     sense.clear()
 
-    grid = deque([deque([BLANK] * GRID_SIZE), deque([BLANK] * GRID_SIZE),
-                  deque([BLANK] * GRID_SIZE), deque([BLANK] * GRID_SIZE),
-                  deque([BLANK] * GRID_SIZE), deque([BLANK] * GRID_SIZE),
-                  deque([BLANK] * GRID_SIZE), deque([BLANK] * GRID_SIZE)])
+    grid = deque([deque([BLANK] * GRID_SIZE)] * GRID_SIZE)
 
     left_ctr, right_ctr, toward_ctr, away_ctr = 0, 0, 0, 0
 
