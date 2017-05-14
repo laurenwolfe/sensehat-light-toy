@@ -112,6 +112,7 @@ def shift_grid(grid, region, is_pitch, color_list):
 
 
 def overwrite_grid(grid, sense, color_list, total_rings):
+    pushed = False
     # store the steps out from center to set pixel ring
     left = (GRID_SIZE - 1) // 2
     right = GRID_SIZE // 2
@@ -158,7 +159,6 @@ def overwrite_grid(grid, sense, color_list, total_rings):
                     grid[l_edge][tmp_right] = el
                     grid[l_edge][tmp_left] = el
 
-                push_grid(grid, sense)
                 print("({},{}), ({},{}), ({},{}), ({},{}),".
                       format(tmp_left, l_edge, tmp_right, l_edge, l_edge, tmp_right, l_edge, tmp_left))
 
@@ -167,11 +167,17 @@ def overwrite_grid(grid, sense, color_list, total_rings):
 
             if tmp_left < 0:
                 tmp_left = left
+                push_grid(grid, sense)
+                pushed = True
             if tmp_right >= GRID_SIZE:
                 tmp_right = right
+                push_grid(grid, sense)
+                pushed = True
+            print("pushed all rings.")
 
-        print("pushed all rings.")
-
+    if not pushed:
+        push_grid(grid, sense)
+        
 
 def manage_flat_ctrs(ctrs, grid, sense):
     ctrs['flat'] += 1
