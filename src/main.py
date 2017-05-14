@@ -158,8 +158,9 @@ def main():
             roll = abs(roll - 360)
 
         # spin around y axis
-        if pitch < 10 and roll < 10:
-            sleep(.2)
+#        if pitch < 10 and roll < 10:
+        if pitch < 0 and roll < 0:
+                sleep(.2)
 
         # tilt around z axis (left and right)
         elif pitch > roll:
