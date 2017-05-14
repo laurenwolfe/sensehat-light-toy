@@ -304,12 +304,15 @@ def main():
 
         # keep sensor parallel with the ground
         if data['avg_pitch'] < 15 and data['avg_roll'] < 15:
+            print("flat: {}".format(ctrs['flat']))
             manage_flat_ctrs(ctrs, grid)
         # tilt around z axis (left and right)
         elif data['avg_pitch'] > data['avg_roll']:
+            print("pitch: {}".format(ctrs['pitch']))
             manage_pitch_ctrs(ctrs, data['pitch_region'], grid)
         # tilt around x axis (toward and away)
         else:
+            print("roll: {}".format(ctrs['roll']))
             manage_roll_ctrs(ctrs, data['roll_region'], grid)
 
         grid_list = []
@@ -317,7 +320,7 @@ def main():
         for row in grid:
             grid_list += list(row)
 
-        print(grid)
+        # print(grid)
 
         sense.set_pixels(grid_list)
 
