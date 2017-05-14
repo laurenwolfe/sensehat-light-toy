@@ -10,4 +10,4 @@ COPY . .
 
 ENV INITSYSTEM on
 
-CMD modprobe i2c-dev && python src/main.py &> /tmp/python/out
+CMD modprobe i2c-dev && python src/main.py
