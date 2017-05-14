@@ -138,7 +138,7 @@ def overwrite_grid(grid, color_list, total_rings):
     # output color rings
     if num_color_rings > 0:
         for i in range(0, num_color_rings):
-            print("test color -  left: {}, right: {}".format(tmp_left, tmp_right))
+            print("test color -  left: {}, right: {}, color_idx: {}".format(tmp_left, tmp_right, color_list_ptr))
             if tmp_left < 0:
                 tmp_left = left
             if tmp_right >= GRID_SIZE:
