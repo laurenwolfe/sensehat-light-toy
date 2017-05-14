@@ -4,27 +4,20 @@ from collections import deque
 # import math
 
 GRID_SIZE = 8
+MAX_PIXELS = GRID_SIZE * 3
 NUM_SAMPLES = 10
 DELAY = 0.1
 
 # RGB COLOR CODES
-VIOLET_RED = (199, 21, 133)
 PINK = (100, 0, 0)
 RED = (220, 20, 60)
 DARK_RED = (140, 0, 40)
 
-ORANGE_RED = (255, 69, 0)
-TOMATO = (255, 99, 71)
-
-LIGHT_YELLOW = (255, 255, 102)
 GOLD = (255, 215, 0)
-YELLOW_GREEN = (195, 215, 40)
-
 ORANGE = (255, 165, 0)
 DARK_ORANGE = (255, 140, 0)
 
 LIME_GREEN = (51, 205, 50)
-GREEN_YELLOW = (160, 215, 40)
 GREEN = (0, 170, 0)
 DARK_GREEN = (0, 100, 0)
 
@@ -33,20 +26,29 @@ CYAN = (0, 255, 255)
 BLUE = (0, 191, 255)
 DARK_BLUE = (0, 0, 140)
 
-BLUE_VIOLET = (138, 43, 226)
-LIGHT_PURPLE = (186, 85, 211)
+LIGHT_PURPLE = (166, 65, 190)
 PURPLE = (130, 0, 130)
 DARK_PURPLE = (100, 0, 100)
-INDIGO = (75, 0, 130)
 
 BLANK = (0, 0, 0)
-WHITE = (255, 255, 255)
 
-PITCH = [VIOLET_RED, RED, DARK_RED, BLANK, BLANK, DARK_PURPLE, PURPLE, LIGHT_PURPLE]
-ROLL = [GREEN_YELLOW, GREEN, DARK_GREEN, BLANK, BLANK, DARK_ORANGE, ORANGE, GOLD]
+# VIOLET_RED = (199, 21, 133)
+# WHITE = (255, 255, 255)
+# ORANGE_RED = (255, 69, 0)
+# TOMATO = (255, 99, 71)
+# LIGHT_YELLOW = (255, 255, 102)
+# YELLOW_GREEN = (195, 215, 40)
+# GREEN_YELLOW = (160, 215, 40)
+# BLUE_VIOLET = (138, 43, 226)
+# INDIGO = (75, 0, 130)
+
+
+PITCH = [PINK, RED, DARK_RED, BLANK, BLANK, DARK_PURPLE, PURPLE, LIGHT_PURPLE]
+ROLL = [LIME_GREEN, GREEN, DARK_GREEN, BLANK, BLANK, DARK_ORANGE, ORANGE, GOLD]
+YAW = [DARK_CYAN, CYAN, BLUE, DARK_BLUE]  # TODO replace
+FLAT = [DARK_CYAN, CYAN, BLUE, DARK_BLUE]
 # PITCH = [RED, DARK_RED, BLANK, BLANK, DARK_BLUE, BLUE]
 # ROLL = [LIME_GREEN, DARK_GREEN, BLANK, BLANK, DARK_ORANGE, ORANGE]
-YAW = [DARK_CYAN, CYAN, BLUE, DARK_BLUE]
 
 
 # determine number corresponding to color index in list
@@ -59,9 +61,9 @@ def get_region(degrees, list_len):
         return degrees // segment_size
 
     # only two blank segments, each 90 degrees
-    elif degrees >= 90 and degrees < 180:
+    elif 90 <= degrees < 180:
         return (vis_segments // 2) + 1
-    elif degrees >= 180 and degrees < 270:
+    elif 180 <= degrees < 270:
         return (vis_segments // 2) + 2
 
     # upper region of values
@@ -105,6 +107,54 @@ def shift_grid(grid, region, is_pitch, color_list):
     return grid
 
 
+def overwrite_grid(sense, color_list, total_rings):
+    # store the steps out from center to set pixel ring
+    ctr = 0
+    left = (len(color_list) - 1) // 2
+    right = len(color_list) // 2
+
+    # if total rings exceeds the 50% of the maximum number of pixels released, then get a count of blank rings,
+    # up to the maximum number of displayable rings
+    num_blank_rings = total_rings - MAX_PIXELS // 2
+    if num_blank_rings < 0:
+        num_blank_rings = 0
+    elif num_blank_rings >= right:
+        num_blank_rings = right
+
+    # calculate the total number of colored rings to display by subtracting blank rings and determining whether the
+    # result is valid
+    num_color_rings = right - num_blank_rings
+    if num_color_rings < 0:
+        num_color_rings = 0
+
+    # start index position for color list -- higher indices are "newer" and displayed in the center
+    color_list_ptr = num_blank_rings + num_color_rings - 1
+
+    # output blank rings
+    for blank in range(0, num_blank_rings):
+        for x in range(left, right):
+            for y in range(left, right):
+                sense.set_pixel(x, y, BLANK)
+        ctr += 1
+        left -= 1
+        right += 1
+
+    # output color rings
+    for ring in range(num_blank_rings, min(num_blank_rings + num_color_rings, right)):
+        for x in range(left, right):
+            for y in range(left, right):
+                sense.set_pixel(x, y, color_list[color_list_ptr])
+        ctr += 1
+        color_list_ptr -= 1
+        left -= 1
+        right += 1
+
+        if color_list_ptr < 0:
+            color_list_ptr = len(color_list) - 1
+
+    sleep(DELAY)
+
+
 def main():
     sense = SenseHat()
     sense.set_imu_config(False, True, True)
@@ -112,7 +162,7 @@ def main():
 
     grid = deque([deque([BLANK] * GRID_SIZE)] * GRID_SIZE)
 
-    left_ctr, right_ctr, toward_ctr, away_ctr = 0, 0, 0, 0
+    ctrs = {'left': 0, 'right': 0, 'toward': 0, 'away': 0, 'flat': 0}
 
     while True:
         pitch_counts = [0] * len(PITCH)
@@ -166,27 +216,30 @@ def main():
             avg_roll = abs(avg_roll - 360)
 
         # spin around y axis
-        if avg_pitch < 0 and avg_roll < 0:
-                sleep(.2)
+        if avg_pitch < 8 and avg_roll < 8:
+            ctrs['flat'] += 1
+            ctrs['away'], ctrs['toward'], ctrs['left'], ctrs['right'] = 0, 0, 0, 0
+
+            overwrite_grid(sense, FLAT, ctrs['flat'])
 
         # tilt around z axis (left and right)
         elif avg_pitch > avg_roll:
 
             # increment / reset directional counters
-            away_ctr, toward_ctr = 0, 0
+            ctrs['away'], ctrs['toward'] = 0, 0
             if pitch_region < (len(PITCH) - 2) // 2:
-                left_ctr += 1
-                right_ctr = 0
+                ctrs['left'] += 1
+                ctrs['right'] = 0
             elif pitch_region >= (len(PITCH) - 1) // 2:
-                right_ctr += 1
-                left_ctr = 0
+                ctrs['right'] += 1
+                ctrs['left'] = 0
             else:
-                left_ctr, right_ctr = 0, 0
+                ctrs['left'], ctrs['right'] = 0, 0
 
             # if counter reaches/exceeds grid size, stop outputting color until direction changes
-            if left_ctr >= GRID_SIZE * 3:
+            if ctrs['left'] >= MAX_PIXELS:
                 pitch_region = (len(PITCH) - 1) // 2
-            elif right_ctr >= GRID_SIZE * 3:
+            elif ctrs['right'] >= MAX_PIXELS:
                 pitch_region = (len(PITCH)) // 2
 
             grid = shift_grid(grid, pitch_region, True, PITCH)
@@ -195,21 +248,21 @@ def main():
         else:
 
             # increment / reset directional counters
-            left_ctr, right_ctr = 0, 0
+            ctrs['left'], ctrs['right'] = 0, 0
             if roll_region < (len(ROLL) - 2) // 2:
-                toward_ctr += 1
-                away_ctr = 0
+                ctrs['toward'] += 1
+                ctrs['away'] = 0
             elif roll_region >= (len(ROLL) - 1) // 2:
-                away_ctr += 1
-                toward_ctr = 0
+                ctrs['away'] += 1
+                ctrs['toward'] = 0
             else:
-                away_ctr, toward_ctr = 0, 0
+                ctrs['away'], ctrs['toward'] = 0, 0
 
             # if counter reaches/exceeds grid size, stop outputting color until direction changes
             # by setting region equal to a non-visible segment
-            if away_ctr > GRID_SIZE * 3:
+            if ctrs['away'] > MAX_PIXELS:
                 roll_region = len(ROLL) // 2
-            elif toward_ctr > GRID_SIZE * 3:
+            elif ctrs['toward'] > MAX_PIXELS:
                 roll_region = (len(ROLL) - 1) // 2
 
             grid = shift_grid(grid, roll_region, False, ROLL)
