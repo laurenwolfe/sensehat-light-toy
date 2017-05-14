@@ -168,8 +168,8 @@ def main():
 
         # get average value of highest frequency region for roll
         roll_count = max(roll_counts)
-        print("roll: region {}, count {}". format(roll_region, roll_count))
         roll_region = roll_counts.index(roll_count)
+        print("roll: region {}, count {}". format(roll_region, roll_count))
         roll = roll_sums[roll_region] / roll_count
 
         # get average value of highest frequency region for yaw
