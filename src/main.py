@@ -176,8 +176,6 @@ def overwrite_grid(grid, color_list, total_rings):
             tmp_left -= 1
             tmp_right += 1
 
-    sleep(DELAY)
-
 
 def manage_flat_ctrs(ctrs, grid):
     ctrs['flat'] += 1
@@ -263,6 +261,8 @@ def sample_sensor_output(sense):
         yaw_counts[y_region] += 1
         yaw_sums[y_region] += y
 
+        sleep(DELAY)
+
     # get average value of highest frequency region for pitch
     pitch_count = max(pitch_counts)
     data['pitch_region'] = pitch_counts.index(pitch_count)
@@ -292,8 +292,6 @@ def main():
 
     while True:
         # convert deques to a flattened list
-        grid_list = []
-
         data = sample_sensor_output(sense)
 
         # determine whether pitch and roll are +10 degrees from the origin in either direction
@@ -314,10 +312,15 @@ def main():
         else:
             manage_roll_ctrs(ctrs, data['roll_region'], grid)
 
+        grid_list = []
+
         for row in grid:
             grid_list += list(row)
 
+        print(grid)
+
         sense.set_pixels(grid_list)
+
         sleep(.1)
 
 
