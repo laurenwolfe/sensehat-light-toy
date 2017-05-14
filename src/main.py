@@ -151,8 +151,8 @@ def overwrite_grid(grid, sense, color_list, total_rings):
 
         for el in rings:
             if el is not None:
-                for step in range(right - left + 1):
-                    l_edge = int(tmp_left + idx)
+                for step in range(tmp_right - tmp_left + 1):
+                    l_edge = int(tmp_left + step)
                     r_edge = int(tmp_right - idx)
 
                     #4
@@ -160,22 +160,26 @@ def overwrite_grid(grid, sense, color_list, total_rings):
                     #1
                     grid[tmp_right][l_edge] = el
                     #2
-                    grid[r_edge][tmp_right] = el
+                    grid[l_edge][tmp_right] = el
                     #3
                     grid[l_edge][tmp_left] = el
-                    idx += 1
+                    # idx += 1
 
                 print("({},{}), ({},{}), ({},{}), ({},{}),".
-                      format(tmp_left, l_edge, tmp_right, l_edge, r_edge, tmp_right, l_edge, tmp_left))
+                      format(tmp_left, l_edge, tmp_right, l_edge, l_edge, tmp_right, l_edge, tmp_left))
             else:
                 print("rings is None at index {}".format(idx))
+
             tmp_left -= 1
             tmp_right += 1
 
-            if tmp_left < 0:
-                tmp_left = left
-            if tmp_right >= GRID_SIZE:
-                tmp_right = right
+            if tmp_left < 0 or tmp_right > GRID_SIZE:
+                print("out of bounds!")
+
+                if tmp_left < 0:
+                    tmp_left = left
+                if tmp_right >= GRID_SIZE:
+                    tmp_right = right
 
         print("exited grid insertion loop.")
         grid_list = []
