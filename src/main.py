@@ -42,8 +42,10 @@ INDIGO = (75, 0, 130)
 BLANK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
-PITCH = [VIOLET_RED, RED, DARK_RED, BLANK, BLANK, DARK_PURPLE, PURPLE, LIGHT_PURPLE]
-ROLL = [GREEN_YELLOW, GREEN, DARK_GREEN, BLANK, BLANK, DARK_ORANGE, ORANGE, GOLD]
+# PITCH = [VIOLET_RED, RED, DARK_RED, BLANK, BLANK, DARK_PURPLE, PURPLE, LIGHT_PURPLE]
+# ROLL = [GREEN_YELLOW, GREEN, DARK_GREEN, BLANK, BLANK, DARK_ORANGE, ORANGE, GOLD]
+PITCH = [RED, DARK_RED, BLANK, BLANK, DARK_PURPLE, LIGHT_PURPLE]
+ROLL = [GREEN_YELLOW, DARK_GREEN, BLANK, BLANK, DARK_ORANGE, GOLD]
 YAW = [DARK_CYAN, CYAN, BLUE, DARK_BLUE]
 
 
@@ -151,10 +153,10 @@ def main():
 
         # determine whether pitch and roll are +10 degrees from the origin in either direction
         # and if so, which value is higher
-        if pitch > 180:
+        if pitch >= 180:
             pitch = abs(pitch - 360)
 
-        if roll > 180:
+        if roll >= 180:
             roll = abs(roll - 360)
 
         # spin around y axis
