@@ -112,7 +112,6 @@ def shift_grid(grid, region, is_pitch, color_list):
 
 def overwrite_grid(sense, grid, color_list, total_rings):
     # store the steps out from center to set pixel ring
-    ctr = 0
     left = (GRID_SIZE - 1) // 2
     right = GRID_SIZE // 2
 
@@ -140,30 +139,30 @@ def overwrite_grid(sense, grid, color_list, total_rings):
     # output blank rings
     for blank in range(0, num_blank_rings):
         # print("left bound: {}, right bound: {}".format(left, right))
-        for x in range(left, right):
-            for y in range(left, right):
-                sense.set_pixel(x, y, BLANK)
-        ctr += 1
+        for i in range(left, right + 1):
+            grid[i][left] = BLANK
+            grid[i][right] = BLANK
+            grid[left][i] = BLANK
+            grid[right][i] = BLANK
+
         left -= 1
         right += 1
 
     # output color rings
     for ring in range(0, num_color_rings):
-        print("left bound: {}, right bound: {}".format(left, right))
-        print("ptr: {}, color: {}".format(color_list_ptr, color_list[color_list_ptr]))
+        for i in range(left, right + 1):
+            grid[i][left] = color_list[color_list_ptr]
+            grid[i][right] = color_list[color_list_ptr]
+            grid[left][i] = color_list[color_list_ptr]
+            grid[right][i] = color_list[color_list_ptr]
 
-        for x in range(left, right + 1):
-            for y in range(left, right + 1):
-                # sense.set_pixel(x, y, color_list[color_list_ptr])
-                grid[x][y] = color_list[color_list_ptr]
-
-        ctr += 1
         color_list_ptr -= 1
-        left -= 1
-        right += 1
 
         if color_list_ptr < 0:
             color_list_ptr = len(color_list) - 1
+
+        left -= 1
+        right += 1
 
     sleep(DELAY)
 

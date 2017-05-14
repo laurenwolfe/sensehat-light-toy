@@ -17,18 +17,17 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="704">
-              <caret line="311" column="16" lean-forward="false" selection-start-line="311" selection-start-column="16" selection-end-line="311" selection-end-column="16" />
+            <state relative-caret-position="484">
+              <caret line="149" column="0" lean-forward="true" selection-start-line="149" selection-start-column="0" selection-end-line="149" selection-end-column="0" />
               <folding>
                 <element signature="e#0#30#0" expanded="true" />
                 <element signature="e#1148#1204#0" expanded="false" />
                 <element signature="e#1371#1951#0" expanded="false" />
                 <element signature="e#2065#2126#0" expanded="false" />
                 <element signature="e#2248#2910#0" expanded="false" />
-                <element signature="e#2975#4952#0" expanded="false" />
-                <element signature="e#5201#5847#0" expanded="false" />
-                <element signature="e#5901#6855#0" expanded="false" />
-                <element signature="e#6895#8453#0" expanded="false" />
+                <element signature="e#5109#5755#0" expanded="false" />
+                <element signature="e#5809#6763#0" expanded="false" />
+                <element signature="e#6803#8361#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -45,9 +44,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>grid_state</find>
-      <find>indigo</find>
-      <find>red</find>
       <find>green</find>
       <find>blank</find>
       <find>pitch_vals</find>
@@ -67,7 +63,6 @@
       <find>get_r</find>
       <find>GRI</find>
       <find>max_radius</find>
-      <find>ctr</find>
       <find>toward_ctr</find>
       <find>grid</find>
       <find>avg_pitch</find>
@@ -75,6 +70,10 @@
       <find>pitch_region</find>
       <find>roll_region</find>
       <find>clear</find>
+      <find>print</find>
+      <find>print(</find>
+      <find>ctr</find>
+      <find>ctr</find>
     </findStrings>
     <replaceStrings>
       <replace>[blank] * 8</replace>
@@ -118,7 +117,7 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="65" />
+    <option name="x" value="-1615" />
     <option name="y" value="1046" />
     <option name="width" value="1615" />
     <option name="height" value="1054" />
@@ -359,7 +358,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="1046" width="1615" height="1054" extended-state="6" />
+    <frame x="-1615" y="1046" width="1615" height="1054" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.08606811" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -434,10 +433,9 @@
             <element signature="e#1371#1951#0" expanded="false" />
             <element signature="e#2065#2126#0" expanded="false" />
             <element signature="e#2248#2910#0" expanded="false" />
-            <element signature="e#2975#4952#0" expanded="false" />
-            <element signature="e#5201#5847#0" expanded="false" />
-            <element signature="e#5901#6855#0" expanded="false" />
-            <element signature="e#6895#8453#0" expanded="false" />
+            <element signature="e#5109#5755#0" expanded="false" />
+            <element signature="e#5809#6763#0" expanded="false" />
+            <element signature="e#6803#8361#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -460,10 +458,9 @@
             <element signature="e#1371#1951#0" expanded="false" />
             <element signature="e#2065#2126#0" expanded="false" />
             <element signature="e#2248#2910#0" expanded="false" />
-            <element signature="e#2975#4952#0" expanded="false" />
-            <element signature="e#5201#5847#0" expanded="false" />
-            <element signature="e#5901#6855#0" expanded="false" />
-            <element signature="e#6895#8453#0" expanded="false" />
+            <element signature="e#5109#5755#0" expanded="false" />
+            <element signature="e#5809#6763#0" expanded="false" />
+            <element signature="e#6803#8361#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -507,18 +504,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="704">
-          <caret line="311" column="16" lean-forward="false" selection-start-line="311" selection-start-column="16" selection-end-line="311" selection-end-column="16" />
+        <state relative-caret-position="484">
+          <caret line="149" column="0" lean-forward="true" selection-start-line="149" selection-start-column="0" selection-end-line="149" selection-end-column="0" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
             <element signature="e#1148#1204#0" expanded="false" />
             <element signature="e#1371#1951#0" expanded="false" />
             <element signature="e#2065#2126#0" expanded="false" />
             <element signature="e#2248#2910#0" expanded="false" />
-            <element signature="e#2975#4952#0" expanded="false" />
-            <element signature="e#5201#5847#0" expanded="false" />
-            <element signature="e#5901#6855#0" expanded="false" />
-            <element signature="e#6895#8453#0" expanded="false" />
+            <element signature="e#5109#5755#0" expanded="false" />
+            <element signature="e#5809#6763#0" expanded="false" />
+            <element signature="e#6803#8361#0" expanded="false" />
           </folding>
         </state>
       </provider>
