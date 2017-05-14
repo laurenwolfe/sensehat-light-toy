@@ -156,6 +156,8 @@ def overwrite_grid(sense, grid, color_list, total_rings):
             grid[left][i] = color_list[color_list_ptr]
             grid[right][i] = color_list[color_list_ptr]
 
+            print("i: {}, left: {}, right: {}".format(i, left, right))
+
         color_list_ptr -= 1
 
         if color_list_ptr < 0:
@@ -308,7 +310,7 @@ def main():
             grid_list += list(row)
 
         sense.set_pixels(grid_list)
-        sleep(.5)
+        sleep(.3)
 
 
 main()
