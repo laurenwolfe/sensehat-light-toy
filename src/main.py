@@ -8,7 +8,7 @@ from random import randint
 GRID_SIZE = 8
 MAX_PIXELS = GRID_SIZE * 3
 NUM_SAMPLES = 10
-DELAY = 0.05
+DELAY = 0.1
 
 # RGB COLOR CODES
 PINK = (100, 0, 0)
@@ -164,7 +164,7 @@ def overwrite_grid(grid, sense, color_list, total_rings):
             grid_list += list(row)
 
         sense.set_pixels(grid_list)
-        sleep(.1)
+        sleep(.2)
 
 
     '''
