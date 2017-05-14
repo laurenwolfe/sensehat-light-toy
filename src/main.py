@@ -144,8 +144,6 @@ def overwrite_grid(grid, sense, color_list, total_rings):
             rings.pop()
             rings.appendleft(BLANK)
 
-        print("Rings: {}".format(rings))
-
         idx = 0
 
         for el in rings:
@@ -164,7 +162,7 @@ def overwrite_grid(grid, sense, color_list, total_rings):
             grid_list += list(row)
 
         sense.set_pixels(grid_list)
-        sleep(.2)
+        sleep(.1)
 
 
     '''
@@ -396,24 +394,23 @@ def main():
             print("ctrs: {}".format(ctrs['flat']))
             manage_flat_ctrs(ctrs, grid, sense)
         # tilt around z axis (left and right)
-        elif data['avg_pitch'] > data['avg_roll']:
-            print("left: {}, right: {}".format(ctrs['left'], ctrs['right']))
-            manage_pitch_ctrs(ctrs, data['pitch_region'], grid)
-        # tilt around x axis (toward and away)
         else:
-            print("toward: {}, away: {}".format(ctrs['toward'], ctrs['away']))
-            manage_roll_ctrs(ctrs, data['roll_region'], grid)
+            if data['avg_pitch'] > data['avg_roll']:
+                print("left: {}, right: {}".format(ctrs['left'], ctrs['right']))
+                manage_pitch_ctrs(ctrs, data['pitch_region'], grid)
+            # tilt around x axis (toward and away)
+            else:
+                print("toward: {}, away: {}".format(ctrs['toward'], ctrs['away']))
+                manage_roll_ctrs(ctrs, data['roll_region'], grid)
 
-        grid_list = []
+            grid_list = []
 
-        for row in grid:
-            grid_list += list(row)
+            for row in grid:
+                grid_list += list(row)
 
-        # print(grid)
+            sense.set_pixels(grid_list)
 
-        sense.set_pixels(grid_list)
-
-        sleep(.1)
+            sleep(.1)
 
 
 main()
