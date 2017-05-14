@@ -55,37 +55,37 @@ def shift_pitch(grid, region):
     if region == 0:
         for i in range(GRID_SIZE):
             grid[i].popleft()
-            grid[i].append(SOFT_LEFT)
+            grid[i].appendleft(SOFT_LEFT)
 
     # hard left, 45 -> 90
     elif region == 1:
         for i in range(GRID_SIZE):
             grid[i].popleft()
-            grid[i].append(HARD_LEFT)
+            grid[i].appendleft(HARD_LEFT)
 
     # too far left, 90 -> 180:
     elif region == 2:
         for i in range(GRID_SIZE):
             grid[i].popleft()
-            grid.append(BLANK)
+            grid.appendleft(BLANK)
 
     # too far right, 180 -> 270:
     elif region == 3:
         for i in range(GRID_SIZE):
             grid[i].pop()
-            grid[i].appendright(BLANK)
+            grid[i].append(BLANK)
 
     # hard right, 270 -> 315
     elif region == 4:
         for i in range(GRID_SIZE):
             grid[i].pop()
-            grid[i].appendright(HARD_RIGHT)
+            grid[i].append(HARD_RIGHT)
 
     # soft right, 315 -> 360
     elif region == 5:
         for i in range(GRID_SIZE):
             grid[i].pop()
-            grid[i].appendright(SOFT_RIGHT)
+            grid[i].append(SOFT_RIGHT)
 
     return grid
 
