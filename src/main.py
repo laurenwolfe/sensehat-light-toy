@@ -124,23 +124,19 @@ def overwrite_grid(grid, sense, color_list, total_rings):
     tmp_left = left
     tmp_right = right
 
-    for idx in range(total_rings):
-        # Haven't exceeded max pixel flow, add another color ring
-        rings.pop()
-        if idx < MAX_PIXELS // 2:
-            rings.appendleft(color_list[color_idx])
+    rings.pop()
 
-            color_idx -= 1
+    # Wipe rings away with blanks once max is achieved
+    if total_rings > len(rings):
+        rings.appendleft(BLANK)
+    else:
+        rings.appendleft(color_list[color_idx])
 
-            # wrap the list index if we reach 0
-            if color_idx < 0:
-                color_idx = len(color_list) - 1
+        color_idx -= 1
 
-        # Wipe rings away with blanks once max is achieved
-        else:
-            rings.appendleft(BLANK)
-
-        print("idx {}".format(idx))
+        # wrap the list index if we reach 0
+        if color_idx < 0:
+            color_idx = len(color_list) - 1
 
     i = 0
 
@@ -156,13 +152,11 @@ def overwrite_grid(grid, sense, color_list, total_rings):
         i += 1
         tmp_left -= 1
         tmp_right += 1
-        print("i {}".format(i))
 
         push_grid(grid, sense)
 
         # write pixels to board once grid is loaded with newest batch of data
         if tmp_left < 0 or tmp_right >= GRID_SIZE:
-#            push_grid(grid, sense)
             tmp_left = left
             tmp_right = right
 
@@ -293,6 +287,7 @@ def main():
     while True:
         # convert deques to a flattened list
         data = sample_sensor_output(sense)
+
         # determine whether pitch and roll are +10 degrees from the origin in either direction
         # and if so, which value is higher
         if data['avg_pitch'] >= 180:
@@ -303,6 +298,7 @@ def main():
         # keep sensor parallel with the ground
         if data['avg_pitch'] < 15 and data['avg_roll'] < 15:
             manage_flat_ctrs(ctrs, grid, sense)
+
         # tilt around z axis (left and right)
         else:
             if data['avg_pitch'] > data['avg_roll']:
