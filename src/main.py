@@ -137,7 +137,7 @@ def overwrite_grid(grid, sense, color_list, total_rings):
         if color_idx < 0:
             color_idx = len(color_list) - 1
 
-    while i < range(rings) and i is not None:
+    while i < range(len(rings)) and rings['i'] is not None:
         for step in range(tmp_right - tmp_left + 1):
             l_edge = int(tmp_left + step)
 
