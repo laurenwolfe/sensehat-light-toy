@@ -167,6 +167,7 @@ def overwrite_grid(grid, sense, color_list, total_rings):
             if tmp_right >= GRID_SIZE:
                 tmp_right = right
 
+        print("exited grid insertion loop.")
         grid_list = []
 
         for row in grid:
