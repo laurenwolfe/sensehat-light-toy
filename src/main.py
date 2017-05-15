@@ -7,9 +7,9 @@ from random import randint
 
 GRID_SIZE = 8
 MAX_PIXELS = GRID_SIZE * 5
-NUM_SAMPLES = 20
+NUM_SAMPLES = 10
 DELAY = .02
-PAUSE = .05
+PAUSE = .1
 
 # RGB COLOR CODES
 PINK = (100, 0, 15)
@@ -18,14 +18,12 @@ DARK_RED = (130, 15, 30)
 DARK_PURPLE = (100, 0, 100)
 PURPLE = (130, 0, 130)
 LIGHT_PURPLE = (166, 65, 190)
-
 DARK_ORANGE = (180, 120, 0)
 ORANGE = (220, 165, 0)
 GOLD = (255, 215, 0)
 LIME_GREEN = (51, 205, 50)
 GREEN = (30, 170, 30)
 DARK_GREEN = (0, 100, 0)
-
 DARK_CYAN = (0, 140, 140)
 M_CYAN = (0, 195, 195)
 CYAN = (0, 255, 255)
@@ -33,9 +31,7 @@ BLUE = (0, 190, 255)
 M_BLUE = (0, 100, 200)
 MD_BLUE = (0, 70, 160)
 DARK_BLUE = (0, 50, 140)
-
 BLANK = (0, 0, 0)
-
 VIOLET_RED = (199, 21, 133)
 WHITE = (255, 255, 255)
 ORANGE_RED = (255, 69, 0)
@@ -51,27 +47,24 @@ ROLL = [LIME_GREEN, GREEN, DARK_GREEN, BLANK, BLANK, DARK_ORANGE, ORANGE, GOLD]
 YAW = [WHITE, INDIGO, TOMATO, CYAN, VIOLET_RED]
 FLAT = [DARK_CYAN, M_CYAN, CYAN, BLUE, M_BLUE, MD_BLUE, DARK_BLUE]
 
-# PITCH = [RED, DARK_RED, BLANK, BLANK, DARK_BLUE, BLUE]
-# ROLL = [LIME_GREEN, DARK_GREEN, BLANK, BLANK, DARK_ORANGE, ORANGE]
-
 
 # determine number corresponding to color index in list
 def get_region(degrees, list_len):
     vis_segments = list_len - 2
-    segment_size = 180 // vis_segments
+    segment_size =  200 // vis_segments
 
     # calculate region # based on number of visible segments
-    if degrees < 90:
+    if degrees < 100:
         return degrees // segment_size
 
     # only two blank segments, each 90 degrees
-    elif 90 <= degrees < 180:
+    elif 100 <= degrees < 180:
         return (vis_segments // 2) + 1
-    elif 180 <= degrees < 270:
+    elif 180 <= degrees < 260:
         return (vis_segments // 2) + 2
 
     # upper region of values
-    elif degrees >= 270:
+    elif degrees >= 260:
         # How many segments to subtract from the top?
         degrees = abs(degrees - 360)
         return list_len - 1 - (degrees // segment_size)
@@ -91,7 +84,6 @@ def shift_grid(grid, region, is_pitch, color_list):
             for i in range(GRID_SIZE):
                 grid[i].popleft()
                 grid[i].append(color_list[region])
-
         # RIGHT
         else:
             for i in range(GRID_SIZE):
@@ -107,7 +99,6 @@ def shift_grid(grid, region, is_pitch, color_list):
         else:
             grid.popleft()
             grid.append(deque([color_list[region]] * GRID_SIZE))
-
     return grid
 
 
@@ -276,7 +267,7 @@ def main():
     DARK_PURPLE = (100, 0, 100)
     '''
 
-    sense.show_message("Welcome! <3 <3 <3", text_colour=[230, 15, 30], back_colour=[80, 0, 50])
+    sense.show_message("Hel", text_colour=[230, 15, 30], back_colour=[40, 0, 40])
 
     grid = deque([deque([BLANK] * GRID_SIZE)] * GRID_SIZE)
     ctrs = {'left': 0, 'right': 0, 'toward': 0, 'away': 0, 'flat': 0, 'flat_color_idx': randint(0, len(FLAT) - 1)}
