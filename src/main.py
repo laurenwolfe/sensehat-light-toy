@@ -6,21 +6,23 @@ from random import randint
 # import math
 
 GRID_SIZE = 8
-MAX_PIXELS = GRID_SIZE * 2
+MAX_PIXELS = GRID_SIZE * 3
 NUM_SAMPLES = 10
 DELAY = 0.05
 
 # RGB COLOR CODES
-PINK = (100, 0, 0)
-RED = (220, 20, 60)
-DARK_RED = (140, 0, 40)
+PINK = (100, 0, 15)
+RED = (230, 15, 30)
+DARK_RED = (130, 15, 30)
+DARK_PURPLE = (100, 0, 100)
+PURPLE = (130, 0, 130)
+LIGHT_PURPLE = (166, 65, 190)
 
+DARK_ORANGE = (180, 120, 0)
+ORANGE = (220, 165, 0)
 GOLD = (255, 215, 0)
-ORANGE = (255, 165, 0)
-DARK_ORANGE = (255, 140, 0)
-
 LIME_GREEN = (51, 205, 50)
-GREEN = (0, 170, 0)
+GREEN = (30, 170, 30)
 DARK_GREEN = (0, 100, 0)
 
 DARK_CYAN = (0, 140, 140)
@@ -30,10 +32,6 @@ BLUE = (0, 190, 255)
 M_BLUE = (0, 100, 200)
 MD_BLUE = (0, 70, 160)
 DARK_BLUE = (0, 50, 140)
-
-LIGHT_PURPLE = (166, 65, 190)
-PURPLE = (130, 0, 130)
-DARK_PURPLE = (100, 0, 100)
 
 BLANK = (0, 0, 0)
 
@@ -261,15 +259,14 @@ def push_grid(grid, sense):
     for row in grid:
         grid_list += list(row)
 
-    sense.clear()
     sense.set_pixels(grid_list)
-    sleep(.2)
+    sleep(.1)
 
 
 def main():
     sense = SenseHat()
     sense.set_imu_config(False, True, True)
-    # sense.clear()
+    sense.clear()
 
     grid = deque([deque([BLANK] * GRID_SIZE)] * GRID_SIZE)
     ctrs = {'left': 0, 'right': 0, 'toward': 0, 'away': 0, 'flat': 0, 'flat_color_idx': randint(0, len(FLAT) - 1)}
@@ -287,7 +284,7 @@ def main():
             data['avg_roll'] = abs(data['avg_roll'] - 360)
 
         # keep sensor parallel with the ground
-        if data['avg_pitch'] < 15 and data['avg_roll'] < 15:
+        if data['avg_pitch'] < 10 and data['avg_roll'] < 10:
             manage_flat_ctrs(ctrs, grid, sense, rings)
 
         # tilt around z axis (left and right)
