@@ -122,7 +122,7 @@ def overwrite_grid(grid, sense, color_list, ctrs, rings):
 
     rings.pop()
 
-    if ctrs['flat'] <= len(rings):
+    if ctrs['flat'] <= MAX_PIXELS:
         rings.appendleft(color_list[ctrs['flat_color_idx']])
         ctrs['flat_color_idx'] -= 1
 
