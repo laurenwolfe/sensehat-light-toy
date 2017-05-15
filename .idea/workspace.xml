@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e55dba28-993c-48b1-a3d3-cfaed52400ba" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main.py" afterPath="$PROJECT_DIR$/src/main.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -28,17 +27,17 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="755">
-              <caret line="150" column="16" lean-forward="true" selection-start-line="150" selection-start-column="16" selection-end-line="150" selection-end-column="16" />
+            <state relative-caret-position="708">
+              <caret line="145" column="0" lean-forward="false" selection-start-line="145" selection-start-column="0" selection-end-line="145" selection-end-column="0" />
               <folding>
                 <element signature="e#0#30#0" expanded="true" />
                 <element signature="e#1210#1266#0" expanded="false" />
                 <element signature="e#1433#2013#0" expanded="false" />
                 <element signature="e#2127#2188#0" expanded="false" />
                 <element signature="e#2310#2972#0" expanded="false" />
-                <element signature="e#4310#4956#0" expanded="false" />
-                <element signature="e#5010#5964#0" expanded="false" />
-                <element signature="e#6004#7584#0" expanded="false" />
+                <element signature="e#4311#4957#0" expanded="false" />
+                <element signature="e#5011#5965#0" expanded="false" />
+                <element signature="e#6005#7585#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -55,7 +54,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>append</find>
       <find>VISI</find>
       <find>abs</find>
       <find>GRID_SIZE</find>
@@ -85,6 +83,7 @@
       <find>print</find>
       <find>total_rings</find>
       <find>color_idx</find>
+      <find>rings</find>
     </findStrings>
     <replaceStrings>
       <replace>[blank] * 8</replace>
@@ -447,9 +446,9 @@
             <element signature="e#1433#2013#0" expanded="false" />
             <element signature="e#2127#2188#0" expanded="false" />
             <element signature="e#2310#2972#0" expanded="false" />
-            <element signature="e#4310#4956#0" expanded="false" />
-            <element signature="e#5010#5964#0" expanded="false" />
-            <element signature="e#6004#7584#0" expanded="false" />
+            <element signature="e#4311#4957#0" expanded="false" />
+            <element signature="e#5011#5965#0" expanded="false" />
+            <element signature="e#6005#7585#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -472,9 +471,9 @@
             <element signature="e#1433#2013#0" expanded="false" />
             <element signature="e#2127#2188#0" expanded="false" />
             <element signature="e#2310#2972#0" expanded="false" />
-            <element signature="e#4310#4956#0" expanded="false" />
-            <element signature="e#5010#5964#0" expanded="false" />
-            <element signature="e#6004#7584#0" expanded="false" />
+            <element signature="e#4311#4957#0" expanded="false" />
+            <element signature="e#5011#5965#0" expanded="false" />
+            <element signature="e#6005#7585#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -518,17 +517,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="755">
-          <caret line="150" column="16" lean-forward="true" selection-start-line="150" selection-start-column="16" selection-end-line="150" selection-end-column="16" />
+        <state relative-caret-position="708">
+          <caret line="145" column="0" lean-forward="false" selection-start-line="145" selection-start-column="0" selection-end-line="145" selection-end-column="0" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
             <element signature="e#1210#1266#0" expanded="false" />
             <element signature="e#1433#2013#0" expanded="false" />
             <element signature="e#2127#2188#0" expanded="false" />
             <element signature="e#2310#2972#0" expanded="false" />
-            <element signature="e#4310#4956#0" expanded="false" />
-            <element signature="e#5010#5964#0" expanded="false" />
-            <element signature="e#6004#7584#0" expanded="false" />
+            <element signature="e#4311#4957#0" expanded="false" />
+            <element signature="e#5011#5965#0" expanded="false" />
+            <element signature="e#6005#7585#0" expanded="false" />
           </folding>
         </state>
       </provider>

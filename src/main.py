@@ -131,7 +131,7 @@ def overwrite_grid(grid, sense, color_list, ctrs, rings):
     else:
         rings.appendleft(BLANK)
 
-    for i in range(GRID_SIZE):
+    for i in range(len(rings)):
         for step in range(tmp_right - tmp_left + 1):
             l_edge = int(tmp_left + step)
 
@@ -273,7 +273,7 @@ def main():
 
     grid = deque([deque([BLANK] * GRID_SIZE)] * GRID_SIZE)
     ctrs = {'left': 0, 'right': 0, 'toward': 0, 'away': 0, 'flat': 0, 'flat_color_idx': randint(0, len(FLAT) - 1)}
-    rings = deque([None] * GRID_SIZE)
+    rings = deque([BLANK] * GRID_SIZE)
 
     while True:
         # convert deques to a flattened list
