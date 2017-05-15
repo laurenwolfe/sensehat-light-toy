@@ -275,8 +275,8 @@ def main():
     DARK_RED = (130, 15, 30)
     DARK_PURPLE = (100, 0, 100)
     '''
-    
-    sense.show_message("Welcome! <3 <3 <3", text_colour=[230, 15, 30], back_colour=[100, 0, 100])
+
+    sense.show_message("Welcome! <3 <3 <3", text_colour=[230, 15, 30], back_colour=[80, 0, 50])
 
     grid = deque([deque([BLANK] * GRID_SIZE)] * GRID_SIZE)
     ctrs = {'left': 0, 'right': 0, 'toward': 0, 'away': 0, 'flat': 0, 'flat_color_idx': randint(0, len(FLAT) - 1)}
