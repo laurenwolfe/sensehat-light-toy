@@ -1,5 +1,5 @@
 from sense_hat import SenseHat
-from time import sleep, time, gmtime, strftime
+from time import sleep, strftime, tzset
 from collections import deque
 from random import randint
 import os
@@ -52,7 +52,7 @@ FLAT = [DARK_CYAN, M_CYAN, CYAN, BLUE, M_BLUE, MD_BLUE, DARK_BLUE]
 # determine number corresponding to color index in list
 def get_region(degrees, list_len):
     vis_segments = list_len - 2
-    segment_size =  200 // vis_segments
+    segment_size = 200 // vis_segments
 
     # calculate region # based on number of visible segments
     if degrees < 100:
@@ -255,15 +255,14 @@ def push_grid(grid, sense):
     sense.set_pixels(grid_list)
     sleep(PAUSE)
 
+
 def get_greeting(sense):
-    f_temp = sense.get_temperature() * (9.0 / 5) + 32
-
     os.environ['TZ'] = 'US/Pacific'
-    time.tzset()
-
+    tzset()
     weekday = strftime("%A")
-
     hour = int(strftime("%H"))
+
+    f_temp = sense.get_temperature() * (9.0 / 5) + 32
 
     if hour > 23 or hour < 6:
         greeting = "Heya night owl!"
@@ -275,9 +274,7 @@ def get_greeting(sense):
         greeting = "It's a beautiful evening!"
 
     greeting += "I hope this " + weekday + " is the best ever."
-
     greeting += "It's " + str(int(f_temp)) + " degrees F where you're sitting right now."
-
     sense.show_message(greeting, text_colour=[230, 15, 30], back_colour=[40, 0, 40])
 
 
