@@ -262,18 +262,18 @@ def get_greeting(sense):
     weekday = strftime("%A")
     hour = int(strftime("%H"))
 
-    f_temp = sense.get_temperature() * (9.0 / 5) + 32
+    f_temp = int(sense.get_temperature() * (9.0 / 5)) + 32
 
     if hour > 23 or hour < 6:
-        greeting = "Heya night owl!"
+        greeting = "Heya night owl! "
     elif hour >= 6 and hour < 12:
-        greeting = "Good morning, there :D"
+        greeting = "Good morning, there :D "
     elif hour >= 12 and hour < 18:
-        greeting = "Having a lovely afternoon?"
+        greeting = "Having a lovely afternoon? "
     else:
-        greeting = "It's a beautiful evening!"
+        greeting = "It's a beautiful evening! "
 
-    greeting += "I hope this " + weekday + " is the best ever."
+    greeting += "I hope this " + weekday + " is the best ever. "
     greeting += "It's " + str(int(f_temp)) + " degrees F where you're sitting right now."
     sense.show_message(greeting, text_colour=[230, 15, 30], back_colour=[40, 0, 40])
 
