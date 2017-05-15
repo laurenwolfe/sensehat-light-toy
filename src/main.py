@@ -6,7 +6,7 @@ from random import randint
 # import math
 
 GRID_SIZE = 8
-MAX_PIXELS = GRID_SIZE * 3
+MAX_PIXELS = GRID_SIZE * 5
 NUM_SAMPLES = 20
 DELAY = .02
 
@@ -260,7 +260,7 @@ def push_grid(grid, sense):
         grid_list += list(row)
 
     sense.set_pixels(grid_list)
-    sleep(.1)
+    sleep(..05)
 
 
 def main():
