@@ -7,7 +7,7 @@ from random import randint
 
 GRID_SIZE = 8
 MAX_PIXELS = GRID_SIZE * 3
-NUM_SAMPLES = 10
+NUM_SAMPLES = 6
 DELAY = 0.05
 
 # RGB COLOR CODES
