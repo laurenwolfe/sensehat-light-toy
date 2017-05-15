@@ -131,7 +131,7 @@ def overwrite_grid(grid, sense, color_list, ctrs, rings):
     else:
         rings.appendleft(BLANK)
 
-    for i in range(GRID_SIZE // 2):
+    for i in range(GRID_SIZE):
         for step in range(tmp_right - tmp_left + 1):
             l_edge = int(tmp_left + step)
 
