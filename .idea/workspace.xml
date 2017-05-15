@@ -27,17 +27,20 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="544">
-              <caret line="151" column="0" lean-forward="false" selection-start-line="151" selection-start-column="0" selection-end-line="151" selection-end-column="0" />
+            <state relative-caret-position="695">
+              <caret line="151" column="0" lean-forward="true" selection-start-line="151" selection-start-column="0" selection-end-line="151" selection-end-column="0" />
               <folding>
                 <element signature="e#0#30#0" expanded="true" />
                 <element signature="e#1210#1266#0" expanded="false" />
                 <element signature="e#1433#2013#0" expanded="false" />
                 <element signature="e#2127#2188#0" expanded="false" />
                 <element signature="e#2310#2972#0" expanded="false" />
-                <element signature="e#4544#5190#0" expanded="false" />
-                <element signature="e#5244#6198#0" expanded="false" />
-                <element signature="e#6238#7818#0" expanded="false" />
+                <element signature="e#4115#4259#0" expanded="false" />
+                <element signature="e#4315#4961#0" expanded="false" />
+                <element signature="e#5015#5969#0" expanded="false" />
+                <element signature="e#6009#7589#0" expanded="false" />
+                <element signature="e#7624#7756#0" expanded="false" />
+                <element signature="e#7775#9024#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -54,7 +57,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Color.</find>
       <find>append</find>
       <find>VISI</find>
       <find>abs</find>
@@ -81,9 +83,10 @@
       <find>i</find>
       <find>sleep</find>
       <find>left</find>
-      <find>total_rings</find>
       <find>toward</find>
       <find>print</find>
+      <find>total_rings</find>
+      <find>color_idx</find>
     </findStrings>
     <replaceStrings>
       <replace>[blank] * 8</replace>
@@ -106,6 +109,7 @@
       <replace>data['roll_region']</replace>
       <replace>idx</replace>
       <replace>tmp_left</replace>
+      <replace>ctrs['flat_color_idx']</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -445,9 +449,12 @@
             <element signature="e#1433#2013#0" expanded="false" />
             <element signature="e#2127#2188#0" expanded="false" />
             <element signature="e#2310#2972#0" expanded="false" />
-            <element signature="e#4544#5190#0" expanded="false" />
-            <element signature="e#5244#6198#0" expanded="false" />
-            <element signature="e#6238#7818#0" expanded="false" />
+            <element signature="e#4115#4259#0" expanded="false" />
+            <element signature="e#4315#4961#0" expanded="false" />
+            <element signature="e#5015#5969#0" expanded="false" />
+            <element signature="e#6009#7589#0" expanded="false" />
+            <element signature="e#7624#7756#0" expanded="false" />
+            <element signature="e#7775#9024#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -470,9 +477,12 @@
             <element signature="e#1433#2013#0" expanded="false" />
             <element signature="e#2127#2188#0" expanded="false" />
             <element signature="e#2310#2972#0" expanded="false" />
-            <element signature="e#4544#5190#0" expanded="false" />
-            <element signature="e#5244#6198#0" expanded="false" />
-            <element signature="e#6238#7818#0" expanded="false" />
+            <element signature="e#4115#4259#0" expanded="false" />
+            <element signature="e#4315#4961#0" expanded="false" />
+            <element signature="e#5015#5969#0" expanded="false" />
+            <element signature="e#6009#7589#0" expanded="false" />
+            <element signature="e#7624#7756#0" expanded="false" />
+            <element signature="e#7775#9024#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -516,17 +526,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="151" column="0" lean-forward="false" selection-start-line="151" selection-start-column="0" selection-end-line="151" selection-end-column="0" />
+        <state relative-caret-position="695">
+          <caret line="151" column="0" lean-forward="true" selection-start-line="151" selection-start-column="0" selection-end-line="151" selection-end-column="0" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
             <element signature="e#1210#1266#0" expanded="false" />
             <element signature="e#1433#2013#0" expanded="false" />
             <element signature="e#2127#2188#0" expanded="false" />
             <element signature="e#2310#2972#0" expanded="false" />
-            <element signature="e#4544#5190#0" expanded="false" />
-            <element signature="e#5244#6198#0" expanded="false" />
-            <element signature="e#6238#7818#0" expanded="false" />
+            <element signature="e#4115#4259#0" expanded="false" />
+            <element signature="e#4315#4961#0" expanded="false" />
+            <element signature="e#5015#5969#0" expanded="false" />
+            <element signature="e#6009#7589#0" expanded="false" />
+            <element signature="e#7624#7756#0" expanded="false" />
+            <element signature="e#7775#9024#0" expanded="false" />
           </folding>
         </state>
       </provider>

@@ -112,35 +112,26 @@ def shift_grid(grid, region, is_pitch, color_list):
     return grid
 
 
-def overwrite_grid(grid, sense, color_list, total_rings):
+def overwrite_grid(grid, sense, color_list, ctrs, rings):
     # store the steps out from center to set pixel ring
     left = (GRID_SIZE - 1) // 2
     right = GRID_SIZE // 2
-    # rings = deque([None] * total_rings)
-    rings = deque([None] * (MAX_PIXELS + GRID_SIZE))
-
-    color_idx = randint(0, len(color_list) - 1)
 
     tmp_left = left
     tmp_right = right
 
     rings.pop()
 
-    # Wipe rings away with blanks once max is achieved
-    if total_rings > len(rings):
-        rings.appendleft(BLANK)
+    if ctrs['flat'] <= len(rings):
+        rings.appendleft(color_list[ctrs['flat_color_idx']])
+        ctrs['flat_color_idx'] -= 1
+
+        if ctrs['flat_color_idx'] < 0:
+            ctrs['flat_color_idx'] = len(color_list) - 1
     else:
-        rings.appendleft(color_list[color_idx])
+        rings.appendleft(BLANK)
 
-        color_idx -= 1
-
-        # wrap the list index if we reach 0
-        if color_idx < 0:
-            color_idx = len(color_list) - 1
-
-    i = 0
-
-    while i < len(rings) and rings[i] is not None:
+    for i in range(GRID_SIZE // 2):
         for step in range(tmp_right - tmp_left + 1):
             l_edge = int(tmp_left + step)
 
@@ -149,23 +140,22 @@ def overwrite_grid(grid, sense, color_list, total_rings):
             grid[l_edge][tmp_right] = rings[i]
             grid[l_edge][tmp_left] = rings[i]
 
-        i += 1
         tmp_left -= 1
         tmp_right += 1
-
-        push_grid(grid, sense)
 
         # write pixels to board once grid is loaded with newest batch of data
         if tmp_left < 0 or tmp_right >= GRID_SIZE:
             tmp_left = left
             tmp_right = right
 
+    push_grid(grid, sense)
 
-def manage_flat_ctrs(ctrs, grid, sense):
+
+def manage_flat_ctrs(ctrs, grid, sense, rings):
+    overwrite_grid(grid, sense, FLAT, ctrs, rings)
+
     ctrs['flat'] += 1
     ctrs['away'], ctrs['toward'], ctrs['left'], ctrs['right'] = 0, 0, 0, 0
-
-    overwrite_grid(grid, sense, FLAT, ctrs['flat'])
 
 
 def manage_pitch_ctrs(ctrs, pitch_region, grid):
@@ -279,10 +269,11 @@ def push_grid(grid, sense):
 def main():
     sense = SenseHat()
     sense.set_imu_config(False, True, True)
-    sense.clear()
+    # sense.clear()
 
     grid = deque([deque([BLANK] * GRID_SIZE)] * GRID_SIZE)
-    ctrs = {'left': 0, 'right': 0, 'toward': 0, 'away': 0, 'flat': 0}
+    ctrs = {'left': 0, 'right': 0, 'toward': 0, 'away': 0, 'flat': 0, 'flat_color_idx': randint(0, len(FLAT) - 1)}
+    rings = deque([None] * GRID_SIZE)
 
     while True:
         # convert deques to a flattened list
@@ -297,7 +288,7 @@ def main():
 
         # keep sensor parallel with the ground
         if data['avg_pitch'] < 15 and data['avg_roll'] < 15:
-            manage_flat_ctrs(ctrs, grid, sense)
+            manage_flat_ctrs(ctrs, grid, sense, rings)
 
         # tilt around z axis (left and right)
         else:
