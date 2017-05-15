@@ -9,6 +9,7 @@ GRID_SIZE = 8
 MAX_PIXELS = GRID_SIZE * 5
 NUM_SAMPLES = 20
 DELAY = .02
+PAUSE = .05
 
 # RGB COLOR CODES
 PINK = (100, 0, 15)
@@ -260,7 +261,7 @@ def push_grid(grid, sense):
         grid_list += list(row)
 
     sense.set_pixels(grid_list)
-    sleep(..05)
+    sleep(PAUSE)
 
 
 def main():
