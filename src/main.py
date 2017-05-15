@@ -7,8 +7,8 @@ from random import randint
 
 GRID_SIZE = 8
 MAX_PIXELS = GRID_SIZE * 3
-NUM_SAMPLES = 50
-DELAY = .01
+NUM_SAMPLES = 20
+DELAY = .02
 
 # RGB COLOR CODES
 PINK = (100, 0, 15)
@@ -260,7 +260,7 @@ def push_grid(grid, sense):
         grid_list += list(row)
 
     sense.set_pixels(grid_list)
-    # sleep(.1)
+    sleep(.1)
 
 
 def main():
