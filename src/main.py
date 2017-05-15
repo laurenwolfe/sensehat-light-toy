@@ -1,7 +1,8 @@
 from sense_hat import SenseHat
-from time import sleep
+from time import sleep, time, gmtime, strftime
 from collections import deque
 from random import randint
+import os
 
 # import math
 
@@ -254,20 +255,38 @@ def push_grid(grid, sense):
     sense.set_pixels(grid_list)
     sleep(PAUSE)
 
+def get_greeting(sense):
+    f_temp = sense.get_temperature() * (9.0 / 5) + 32
+
+    os.environ['TZ'] = 'US/Pacific'
+    time.tzset()
+
+    weekday = strftime("%A")
+
+    hour = int(strftime("%H"))
+
+    if hour > 23 or hour < 6:
+        greeting = "Heya night owl!"
+    elif hour >= 6 and hour < 12:
+        greeting = "Good morning, there :D"
+    elif hour >= 12 and hour < 18:
+        greeting = "Having a lovely afternoon?"
+    else:
+        greeting = "It's a beautiful evening!"
+
+    greeting += "I hope this " + weekday + " is the best ever."
+
+    greeting += "It's " + str(int(f_temp)) + " degrees F where you're sitting right now."
+
+    sense.show_message(greeting, text_colour=[230, 15, 30], back_colour=[40, 0, 40])
+
 
 def main():
     sense = SenseHat()
     sense.set_imu_config(False, True, True)
     sense.clear()
 
-    '''
-    PINK = (100, 0, 15)
-    RED = (230, 15, 30)
-    DARK_RED = (130, 15, 30)
-    DARK_PURPLE = (100, 0, 100)
-    '''
-
-    sense.show_message("Hel", text_colour=[230, 15, 30], back_colour=[40, 0, 40])
+    get_greeting(sense)
 
     grid = deque([deque([BLANK] * GRID_SIZE)] * GRID_SIZE)
     ctrs = {'left': 0, 'right': 0, 'toward': 0, 'away': 0, 'flat': 0, 'flat_color_idx': randint(0, len(FLAT) - 1)}
