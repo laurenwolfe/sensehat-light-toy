@@ -152,19 +152,22 @@ def inc_pitch_count(sense, ctrs, pitch_region):
     if pitch_region < (len(PITCH) - 2) // 2:
         ctrs['left'] += 1
         ctrs['right'] = 0
+        region = 0
     elif pitch_region >= (len(PITCH) - 1) // 2:
         ctrs['right'] += 1
         ctrs['left'] = 0
+        region = 1
     else:
         ctrs['left'], ctrs['right'] = 0, 0
+        region = -1
 
     # if counter reaches/exceeds grid size, stop outputting color until direction changes
     if ctrs['left'] >= MAX_PIXELS or ctrs['right'] >= MAX_PIXELS:
         color = BLANK
     else:
-        color = PITCH['pitch_region']
+        color = PITCH[pitch_region]
 
-    shift_colors(sense, color, True)
+    shift_colors(sense, color, region, True)
 
 
 def inc_roll_count(sense, ctrs, roll_region):
@@ -175,23 +178,26 @@ def inc_roll_count(sense, ctrs, roll_region):
     if roll_region < (len(ROLL) - 2) // 2:
         ctrs['toward'] += 1
         ctrs['away'] = 0
+        region = 1
     # region count for tilting away
     elif roll_region >= (len(ROLL) - 1) // 2:
         ctrs['away'] += 1
         ctrs['toward'] = 0
+        region = 0
     # in the blank zone between 90 -> 270, reset counters
     else:
         ctrs['away'], ctrs['toward'], = 0, 0
+        region = -1
 
     # if counter reaches/exceeds maximum # of sequential pixels for a given direction, stop outputting
     # until direction changes by setting region equal to a non-visible segment.
     # the pixels fall off the screen in a downward direction.
     if ctrs['away'] > MAX_PIXELS or ctrs['toward'] > MAX_PIXELS:
         color = BLANK
-    elif ctrs['toward'] > ctrs['away']:
-        color = ROLL['roll_region']
+    else:
+        color = ROLL[roll_region]
 
-    shift_colors(sense, color, False)
+    shift_colors(sense, color, region, False)
 
 
 def shift_spiral(sense):
@@ -241,56 +247,54 @@ def shift_rings(sense, ctrs):
     sleep(PAUSE)
 
 
-def shift_colors(sense, region, is_pitch):
+def shift_colors(sense, color, region, is_pitch):
     grid_list = sense.get_pixels()
 
-    if is_pitch:
-        color_list = PITCH
-    else:
-        color_list = ROLL
-
-    color_midpoint = (len(color_list) - 1) // 2
     new_list = [BLANK] * 64
     idx = 0
 
-    # SHIFT LEFT
-    if is_pitch and region <= color_midpoint:
-        while idx < SIZE:
-            for i in range(0, WIDTH - 1):
-                new_list[idx + i + 1] = grid_list[idx + i]
-            idx += WIDTH
-        #add new pixel column
-        for i in range(0, SIZE, WIDTH):
-            new_list[i] = PITCH[region]
-    
-    # SHIFT RIGHT
-    elif is_pitch:
-        while idx < SIZE:
-            for i in range(1, WIDTH):
-                new_list[i + idx - 1] = grid_list[idx + i]
-            idx += WIDTH
-        for i in range(WIDTH - 1, SIZE, WIDTH):
-            new_list[i] = PITCH[region]
+    if region != -1:
+        # SHIFT LEFT
+        if is_pitch and region == 0:
+            while idx < SIZE:
+                for i in range(0, WIDTH - 1):
+                    new_list[idx + i + 1] = grid_list[idx + i]
+                idx += WIDTH
+            #add new pixel column
+            for i in range(0, SIZE, WIDTH):
+                new_list[i] = PITCH[region]
+        
+        # SHIFT RIGHT
+        elif is_pitch:
+            while idx < SIZE:
+                for i in range(1, WIDTH):
+                    new_list[i + idx - 1] = grid_list[idx + i]
+                idx += WIDTH
+            for i in range(WIDTH - 1, SIZE, WIDTH):
+                new_list[i] = PITCH[region]
 
-    #SHIFT UP
-    elif region <= color_midpoint:
-        idx = 8
-        while idx < SIZE:
+        #SHIFT AWAY
+        elif region == 0:
+            idx = 8
+            while idx < SIZE:
+                for i in range(0, WIDTH):
+                    new_list[i + idx - WIDTH] = grid_list[i + idx]
+            for i in range (SIZE - WIDTH, SIZE):
+                new_list[i] = ROLL[region]
+
+        #SHIFT TOWARD    
+        else: 
+            while idx < SIZE - WIDTH:
+                for i in range(0, WIDTH):
+                    new_list[idx + i + WIDTH] = grid_list[idx + i]
             for i in range(0, WIDTH):
-                new_list[i + idx - WIDTH] = grid_list[i + idx]
-        for i in range (SIZE - WIDTH, SIZE):
-            new_list[i] = ROLL[region]
+                new_list[i] = ROLL[region]
 
-    #SHIFT DOWN
-    else: 
-        while idx < SIZE - WIDTH:
-            for i in range(0, WIDTH):
-                new_list[idx + i + WIDTH] = grid_list[idx + i]
-        for i in range(0, WIDTH):
-            new_list[i] = ROLL[region]
-
-    sense.set_pixels(new_list)
-    sleep(PAUSE)
+        sense.set_pixels(new_list)
+        sleep(PAUSE)
+    else {
+        print("unspecified direction.")
+    }
 
 
 def main():
