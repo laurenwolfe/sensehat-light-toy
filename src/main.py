@@ -234,7 +234,7 @@ def shift_rings(sense, ctrs):
         box['bottom_left'] -= WIDTH - 1
 
     if ctrs['flat'] <= MAX_PIXELS:
-        color = FLAT[ctrs['flat_color_idx' % len(FLAT)]]
+        color = FLAT[ctrs['flat_color_idx'] % len(FLAT)]
     else:
         color = BLANK
 
