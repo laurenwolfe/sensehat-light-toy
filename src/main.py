@@ -97,8 +97,8 @@ def sample_sensor_output(sense):
     yaw_sums = [0] * len(YAW)
 
     accel = sense.get_accelerometer_raw()
-    print("x: {x}, y: {y}, z: {z}".format(**raw))
-    logging.warning("x: {x}, y: {y}, z: {z}".format(**raw))
+    print("x: %s, y: %s, z: %s" % (accel['x'], accel['y'], accel['z']))
+    logging.warning("x: %s, y: %s, z: %s" % (accel['x'], accel['y'], accel['z']))
 
     # take sample_size samples at sleep_time interval
     for i in range(NUM_SAMPLES):
