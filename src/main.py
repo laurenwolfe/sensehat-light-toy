@@ -149,11 +149,11 @@ def inc_horizontal_count(sense, ctrs):
 def inc_pitch_count(sense, ctrs, pitch_region):
     # reset counters of all other types -- pitch is dominant sensor input
     ctrs['away'], ctrs['toward'], ctrs['flat'] = 0, 0, 0
-    if pitch_region < (len(PITCH) - 2) // 2:
+    if pitch_region <= (len(PITCH) - 1) // 2:
         ctrs['left'] += 1
         ctrs['right'] = 0
         region = 0
-    elif pitch_region >= (len(PITCH) - 1) // 2:
+    elif pitch_region >= (len(PITCH)) // 2:
         ctrs['right'] += 1
         ctrs['left'] = 0
         region = 1
@@ -178,26 +178,23 @@ def inc_roll_count(sense, ctrs, roll_region):
     if roll_region < (len(ROLL) - 2) // 2:
         ctrs['toward'] += 1
         ctrs['away'] = 0
-        region = 1
     # region count for tilting away
     elif roll_region >= (len(ROLL) - 1) // 2:
         ctrs['away'] += 1
         ctrs['toward'] = 0
-        region = 0
     # in the blank zone between 90 -> 270, reset counters
     else:
         ctrs['away'], ctrs['toward'], = 0, 0
-        region = -1
 
     # if counter reaches/exceeds maximum # of sequential pixels for a given direction, stop outputting
     # until direction changes by setting region equal to a non-visible segment.
     # the pixels fall off the screen in a downward direction.
-    if ctrs['away'] > MAX_PIXELS or ctrs['toward'] > MAX_PIXELS:
+    if ctrs['away'] > MAX_PIXELS or ctrs['toward'] > MAX_PIXELS or roll_region == -1:
         color = BLANK
     else:
         color = ROLL[roll_region]
 
-    shift_colors(sense, color, region, False)
+    shift_colors(sense, color, roll_region, False)
 
 
 def shift_spiral(sense):
@@ -310,6 +307,7 @@ def main():
     ctrs = {'left': 0, 'right': 0, 'toward': 0, 'away': 0, 'flat': 0, 'flat_color_idx': randint(0, len(FLAT) - 1)}
 
     sense = SenseHat()
+    sense.set_rotation(90)
     sense.set_imu_config(False, True, True)
 
     grid_list = [PINK] * 64
