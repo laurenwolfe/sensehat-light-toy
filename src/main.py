@@ -160,9 +160,11 @@ def inc_pitch_count(sense, ctrs, pitch_region):
 
     # if counter reaches/exceeds grid size, stop outputting color until direction changes
     if ctrs['left'] >= MAX_PIXELS or ctrs['right'] >= MAX_PIXELS:
-        pitch_region = BLANK
+        color = BLANK
+    else:
+        color = PITCH['pitch_region']
 
-    shift_colors(sense, pitch_region, True)
+    shift_colors(sense, color, True)
 
 
 def inc_roll_count(sense, ctrs, roll_region):
@@ -184,12 +186,12 @@ def inc_roll_count(sense, ctrs, roll_region):
     # if counter reaches/exceeds maximum # of sequential pixels for a given direction, stop outputting
     # until direction changes by setting region equal to a non-visible segment.
     # the pixels fall off the screen in a downward direction.
-    if ctrs['away'] > MAX_PIXELS:
-        roll_region = len(ROLL) // 2
-    elif ctrs['toward'] > MAX_PIXELS:
-        roll_region = (len(ROLL) - 1) // 2
+    if ctrs['away'] > MAX_PIXELS or ctrs['toward'] > MAX_PIXELS:
+        color = BLANK
+    elif ctrs['toward'] > ctrs['away']:
+        color = ROLL['roll_region']
 
-    shift_colors(sense, roll_region, False)
+    shift_colors(sense, color, False)
 
 
 def shift_spiral(sense):
