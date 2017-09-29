@@ -217,7 +217,7 @@ def shift_rings(sense, ctrs):
     box = {'top_left': 0, 'top_right': WIDTH, 'bottom_left': SIZE - WIDTH, 'bottom_right': SIZE}
 
     while top_left + WIDTH + 1 < bottom_right:
-        color = grid_list[top_left + WIDTH + 1]
+        color = grid_list[box['top_left'] + WIDTH + 1]
 
         for i in range(box['top_left'], box['top_right']):
             new_list[i] = color
@@ -228,10 +228,10 @@ def shift_rings(sense, ctrs):
         for i in range(box['top_right'], box['bottom_right'], WIDTH):
             new_list[i] = color
 
-        top_left += WIDTH + 1
-        bottom_right -= WIDTH + 1
-        top_right += WIDTH - 1
-        bottom_left -= WIDTH - 1
+        box['top_left'] += WIDTH + 1
+        box['bottom_right'] -= WIDTH + 1
+        box['top_right'] += WIDTH - 1
+        box['bottom_left'] -= WIDTH - 1
 
     if ctrs['flat'] <= MAX_PIXELS:
         color = FLAT[ctrs['flat_color_idx' % len(FLAT)]]
@@ -296,6 +296,7 @@ def shift_colors(sense, color, region, is_pitch):
             while idx < SIZE - WIDTH:
                 for i in range(0, WIDTH):
                     new_list[idx + i + WIDTH] = grid_list[idx + i]
+                idx += WIDTH
             for i in range(0, WIDTH):
                 new_list[i] = ROLL[region]
 
