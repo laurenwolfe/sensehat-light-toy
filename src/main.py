@@ -3,7 +3,6 @@ from time import sleep, strftime, tzset
 from collections import deque
 from random import randint
 import os
-import logging
 
 # import math
 
@@ -98,7 +97,6 @@ def sample_sensor_output(sense):
 
     accel = sense.get_accelerometer_raw()
     print("x: %s, y: %s, z: %s" % (accel['x'], accel['y'], accel['z']))
-    logging.warning("x: %s, y: %s, z: %s" % (accel['x'], accel['y'], accel['z']))
 
     # take sample_size samples at sleep_time interval
     for i in range(NUM_SAMPLES):
@@ -227,7 +225,7 @@ def shift_rings(sense, ctrs):
         bottom_left -= WIDTH - 1
 
     if ctrs['flat'] <= MAX_PIXELS:
-        color = FLAT[ctrs['flat_color_idx' % len(color_list)]]
+        color = FLAT[ctrs['flat_color_idx' % len(FLAT)]]
     else:
         color = BLANK
 
