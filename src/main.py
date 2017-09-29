@@ -7,8 +7,16 @@ import logging
 
 # import math
 
-GRID_SIZE = 8
-MAX_PIXELS = GRID_SIZE * 5
+WIDTH = 8
+MAX_PIXELS = WIDTH * 5
+MAX_DEGREES = 360
+
+# How much to increment/decrement to shift grid values to adjacent idx
+LEFT_SHIFT = 1
+RIGHT_SHIFT = -1
+UP_SHIFT = -WIDTH
+DOWN_SHIFT = WIDTH
+
 NUM_SAMPLES = 10
 DELAY = .02
 PAUSE = .1
@@ -60,9 +68,9 @@ def get_region(degrees, list_len):
         return degrees // segment_size
 
     # only two blank segments, each 90 degrees
-    elif 100 <= degrees < 180:
+    elif 100 <= degrees < MAX_DEGREES/2:
         return (vis_segments // 2) + 1
-    elif 180 <= degrees < 260:
+    elif MAX_DEGREES/2 <= degrees < 260:
         return (vis_segments // 2) + 2
 
     # upper region of values
@@ -74,7 +82,7 @@ def get_region(degrees, list_len):
 
 # simply divide into equal regions if all segments are visible
 def get_region_all_visible(degrees, list_len):
-    seg_size = 360 / list_len
+    seg_size = MAX_DEGREES / list_len
     return int(degrees // seg_size)
 
 
@@ -83,31 +91,31 @@ def shift_grid(grid, region, is_pitch, color_list):
     if is_pitch:
         # LEFT
         if region <= (len(color_list) - 1) // 2:
-            for i in range(GRID_SIZE):
+            for i in range(WIDTH):
                 grid[i].popleft()
                 grid[i].append(color_list[region])
         # RIGHT
         else:
-            for i in range(GRID_SIZE):
+            for i in range(WIDTH):
                 grid[i].pop()
                 grid[i].appendleft(color_list[region])
     else:
         # AWAY
         if region <= (len(color_list) - 1) // 2:
             grid.pop()
-            grid.appendleft(deque([color_list[region]] * GRID_SIZE))
+            grid.appendleft(deque([color_list[region]] * WIDTH))
 
         # TOWARD
         else:
             grid.popleft()
-            grid.append(deque([color_list[region]] * GRID_SIZE))
+            grid.append(deque([color_list[region]] * WIDTH))
     return grid
 
 
 def overwrite_grid(grid, sense, color_list, ctrs, rings):
     # store the steps out from center to set pixel ring
-    left = (GRID_SIZE - 1) // 2
-    right = GRID_SIZE // 2
+    left = (WIDTH - 1) // 2
+    right = WIDTH // 2
 
     tmp_left = left
     tmp_right = right
@@ -136,7 +144,7 @@ def overwrite_grid(grid, sense, color_list, ctrs, rings):
         tmp_right += 1
 
         # write pixels to board once grid is loaded with newest batch of data
-        if tmp_left < 0 or tmp_right >= GRID_SIZE:
+        if tmp_left < 0 or tmp_right >= WIDTH:
             tmp_left = left
             tmp_right = right
 
@@ -246,15 +254,25 @@ def sample_sensor_output(sense):
 
     return data
 
-
-def push_grid(grid, sense):
+def make_list(grid):
     grid_list = []
 
     for row in grid:
         grid_list += list(row)
 
+    return grid_list
+
+def push_grid(grid, sense):
+    grid_list = make_list(grid)
+
     sense.set_pixels(grid_list)
     sleep(PAUSE)
+
+def yaw_spiral(grid, sense):
+    horizontal_idx_offset = WIDTH + 1
+    vertical_idx_offset = WIDTH - 1
+
+    grid_list = make_list(grid)
 
 
 def get_greeting(sense):
@@ -284,15 +302,12 @@ def main():
     sense.set_imu_config(False, True, True)
     # sense.clear()
 
-    # Ridiculously long, nooo
-    # get_greeting(sense)
-
     initial_grid = [PINK] * 64
     sense.set_pixels(initial_grid)
 
-    grid = deque([deque([BLANK] * GRID_SIZE)] * GRID_SIZE)
+    grid = deque([deque([BLANK] * WIDTH)] * WIDTH)
     ctrs = {'left': 0, 'right': 0, 'toward': 0, 'away': 0, 'flat': 0, 'flat_color_idx': randint(0, len(FLAT) - 1)}
-    rings = deque([BLANK] * GRID_SIZE)
+    rings = deque([BLANK] * WIDTH)
 
     while True:
         # convert deques to a flattened list
@@ -300,10 +315,12 @@ def main():
 
         # determine whether pitch and roll are +10 degrees from the origin in either direction
         # and if so, which value is higher
-        if data['avg_pitch'] >= 180:
-            data['avg_pitch'] = abs(data['avg_pitch'] - 360)
-        if data['avg_roll'] >= 180:
-            data['avg_roll'] = abs(data['avg_roll'] - 360)
+        if data['avg_pitch'] >= MAX_DEGREES/2:
+            data['avg_pitch'] = abs(data['avg_pitch'] - MAX_DEGREES)
+        if data['avg_roll'] >= MAX_DEGREES/2:
+            data['avg_roll'] = abs(data['avg_roll'] - MAX_DEGREES)
+        print avg_yaw
+        logging.warning(avg_roll)
 
         # keep sensor parallel with the ground
         if data['avg_pitch'] < 10 and data['avg_roll'] < 10:
