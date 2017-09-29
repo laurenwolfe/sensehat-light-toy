@@ -254,7 +254,7 @@ def shift_colors(sense, color, region, is_pitch):
 
     if region != -1:
         # SHIFT LEFT
-        if is_pitch and region < len(roll) // 2:
+        if is_pitch and region < len(PITCH) // 2:
             while idx < SIZE:
                 for i in range(0, WIDTH - 1):
                     new_list[idx + i + 1] = grid_list[idx + i]
@@ -271,7 +271,7 @@ def shift_colors(sense, color, region, is_pitch):
             for i in range(WIDTH - 1, SIZE, WIDTH):
                 new_list[i] = PITCH[region]
         #SHIFT AWAY
-        elif region < len(roll) // 2:
+        elif region < len(ROLL) // 2:
             idx = WIDTH
             while idx < SIZE:
                 for i in range(0, WIDTH):
