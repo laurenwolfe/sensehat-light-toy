@@ -52,8 +52,10 @@ GREEN_YELLOW = (160, 215, 40)
 BLUE_VIOLET = (138, 43, 226)
 INDIGO = (75, 0, 130)
 
-PITCH = [PINK, RED, DARK_RED, DARK_PURPLE, PURPLE, LIGHT_PURPLE]
-ROLL = [LIME_GREEN, GREEN, DARK_GREEN, DARK_ORANGE, ORANGE, GOLD]
+#PITCH = [PINK, RED, DARK_RED, DARK_PURPLE, PURPLE, LIGHT_PURPLE]
+PITCH = [PINK, DARK_RED, DARK_PURPLE, LIGHT_PURPLE]
+#ROLL = [LIME_GREEN, GREEN, DARK_GREEN, DARK_ORANGE, ORANGE, GOLD]
+ROLL = [LIME_GREEN, DARK_GREEN, DARK_ORANGE, GOLD, LIGHT_YELLOW]
 YAW = [WHITE, INDIGO, TOMATO, CYAN, VIOLET_RED]
 FLAT = [DARK_CYAN, M_CYAN, CYAN, BLUE, M_BLUE, MD_BLUE, DARK_BLUE]
 
@@ -252,7 +254,7 @@ def shift_colors(sense, color, region, is_pitch):
 
     if region != -1:
         # SHIFT LEFT
-        if is_pitch and region == 1:
+        if is_pitch and region < len(roll) // 2:
             while idx < SIZE:
                 for i in range(0, WIDTH - 1):
                     new_list[idx + i + 1] = grid_list[idx + i]
@@ -269,7 +271,7 @@ def shift_colors(sense, color, region, is_pitch):
             for i in range(WIDTH - 1, SIZE, WIDTH):
                 new_list[i] = PITCH[region]
         #SHIFT AWAY
-        elif region == 1:
+        elif region < len(roll) // 2:
             idx = WIDTH
             while idx < SIZE:
                 for i in range(0, WIDTH):
