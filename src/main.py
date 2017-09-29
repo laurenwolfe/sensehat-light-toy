@@ -319,6 +319,14 @@ def main():
         # convert deques to a flattened list
         data = sample_sensor_output(sense)
         print(data)
+        pitch = data['avg_pitch']
+        roll = data['avg_roll']
+
+        if pitch > 270:
+            pitch = abs(pitch - MAX_DEGREES)
+
+        if roll > 270:
+            roll = abs(roll - MAX_DEGREES)
 
         '''
         #Adjust degrees to be positive if necessary
@@ -334,19 +342,15 @@ def main():
 
         # sensor parallel with the ground
 
-        if data['avg_pitch'] < 10 and data['avg_roll'] < 10:
-            print "1"
+        if pitch < 10 and roll < 10:
             inc_horizontal_count(sense, ctrs)
         #todo: check for acceleration down and twisting (z or y axis)
 
         # rotate left and right
-        elif data['avg_pitch'] > data['avg_roll']:
-            print "2"
+        elif pitch > roll:
             inc_pitch_count(sense, ctrs, data['pitch_region'])
         # rotate towards and away
         else:
-            print "3"
             inc_roll_count(sense, ctrs, data['roll_region'])
-    print "4"
 
 main()
