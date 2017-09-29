@@ -246,7 +246,7 @@ def shift_colors(sense, region, is_pitch):
     else:
         color_list = ROLL
 
-    color_midpoint = (len(color_list - 1)) // 2
+    color_midpoint = (len(color_list) - 1) // 2
     new_list = BLANK * 64
     idx = 0
 
