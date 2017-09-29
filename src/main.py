@@ -317,14 +317,17 @@ def main():
 
         # sensor parallel with the ground
         if data['avg_pitch'] < 10 and data['avg_roll'] < 10:
-            inc_horizontal_count(ctrs, grid_list, sense, rings)
+            inc_horizontal_count(sense, ctrs)
+            print "1"
         #todo: check for acceleration down and twisting (z or y axis)
 
         # rotate left and right
         elif data['avg_pitch'] > data['avg_roll']:
             inc_pitch_count(sense, ctrs, data['pitch_region'])
+            print "2"
         # rotate towards and away
         else:
             inc_roll_count(sense, ctrs, data['roll_region'])
+            print "3"
 
 main()
