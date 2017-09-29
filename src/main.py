@@ -193,7 +193,7 @@ def inc_roll_count(sense, ctrs, roll_region):
     shift_colors(sense, roll_region, False)
 
 
-def yaw_spiral(sense):
+def shift_spiral(sense):
     grid_list = sense.get_pixels()
     new_list = BLANK * 64
     horizontal_idx_offset = WIDTH + 1
@@ -299,14 +299,14 @@ def main():
         data = sample_sensor_output(sense)
 
         #Adjust degrees to be positive if necessary
-        if data[avg_pitch] < 0:
-            data[avg_pitch] += MAX_DEGREES
+        if data['avg_pitch'] < 0:
+            data['avg_pitch'] += MAX_DEGREES
 
-        if data[avg_roll] < 0:
-            data[avg_roll] += MAX_DEGREES
+        if data['avg_roll'] < 0:
+            data['avg_roll'] += MAX_DEGREES
 
-        data[avg_pitch] = data[avg_pitch] % (MAX_DEGREES)
-        data[avg_roll] = data[avg_roll] % MAX_DEGREES
+        data['avg_pitch'] = data['avg_pitch'] % MAX_DEGREES
+        data['avg_roll'] = data['avg_roll'] % MAX_DEGREES
 
         # sensor parallel with the ground
         if data['avg_pitch'] < 10 and data['avg_roll'] < 10:
