@@ -315,7 +315,7 @@ def main():
             #right
             pitch = abs(pitch - MAX_DEGREES)
             pitch_region = pitch // (MAX_DEGREES // len(PITCH))
-        elif pitch < 270:
+        elif pitch > 270:
             #left
             pitch_region = pitch // (MAX_DEGREES // len(PITCH)) + len(PITCH) // 2
         else: 
