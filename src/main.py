@@ -199,10 +199,8 @@ def count_rounds_pitch(sense, ctrs, pitch_region):
         ctrs['left'], ctrs['right'] = 0, 0
 
     # if counter reaches/exceeds grid size, stop outputting color until direction changes
-    if ctrs['left'] >= MAX_PIXELS:
-        pitch_region = (len(PITCH) - 1) // 2
-    elif ctrs['right'] >= MAX_PIXELS:
-        pitch_region = (len(PITCH)) // 2
+    if ctrs['left'] >= MAX_PIXELS or ctrs['right'] >= MAX_PIXELS:
+        pitch_region = BLANK
 
     shift_list_values(sense, pitch_region, True)
 
@@ -314,9 +312,6 @@ def main():
 
         if data['avg_roll'] >= MAX_DEGREES/2:
             data['avg_roll'] = abs(data['avg_roll'] - MAX_DEGREES)
-
-        #print avg_yaw
-        #logging.warning(avg_roll)
 
         # keep sensor parallel with the ground
         if data['avg_pitch'] < 10 and data['avg_roll'] < 10:
