@@ -193,7 +193,7 @@ def inc_roll_count(sense, ctrs, roll_region):
 
 def shift_spiral(sense):
     grid_list = sense.get_pixels()
-    new_list = BLANK * 64
+    new_list = [BLANK] * 64
     horizontal_idx_offset = WIDTH + 1
     vertical_idx_offset = WIDTH - 1
 
@@ -202,7 +202,7 @@ def shift_spiral(sense):
 
 def shift_rings(sense, ctrs):
     grid_list = sense.get_pixels()
-    new_list = BLANK * 64
+    new_list = [BLANK] * 64
 
     #the four corners of the box
     box = {'top_left': 0, 'top_right': WIDTH, 'bottom_left': SIZE - WIDTH, 'bottom_right': SIZE}
@@ -247,7 +247,7 @@ def shift_colors(sense, region, is_pitch):
         color_list = ROLL
 
     color_midpoint = (len(color_list) - 1) // 2
-    new_list = BLANK * 64
+    new_list = [BLANK] * 64
     idx = 0
 
     # SHIFT LEFT
