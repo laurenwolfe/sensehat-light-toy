@@ -310,6 +310,7 @@ def main():
         data = sample_sensor_output(sense)
         print(data)
 
+        '''
         #Adjust degrees to be positive if necessary
         if data['avg_pitch'] < 0:
             data['avg_pitch'] += MAX_DEGREES
@@ -319,20 +320,23 @@ def main():
 
         data['avg_pitch'] = data['avg_pitch'] % MAX_DEGREES
         data['avg_roll'] = data['avg_roll'] % MAX_DEGREES
+        '''
 
         # sensor parallel with the ground
+
         if data['avg_pitch'] < 10 and data['avg_roll'] < 10:
-            inc_horizontal_count(sense, ctrs)
             print "1"
+            inc_horizontal_count(sense, ctrs)
         #todo: check for acceleration down and twisting (z or y axis)
 
         # rotate left and right
         elif data['avg_pitch'] > data['avg_roll']:
-            inc_pitch_count(sense, ctrs, data['pitch_region'])
             print "2"
+            inc_pitch_count(sense, ctrs, data['pitch_region'])
         # rotate towards and away
         else:
-            inc_roll_count(sense, ctrs, data['roll_region'])
             print "3"
+            inc_roll_count(sense, ctrs, data['roll_region'])
+    print "4"
 
 main()
