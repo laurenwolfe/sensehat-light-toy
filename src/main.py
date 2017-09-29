@@ -238,10 +238,10 @@ def shift_rings(sense, ctrs):
     else:
         color = BLANK
 
-    new_list[top_left] = color
-    new_list[top_right] = color
-    new_list[bottom_left] = color
-    new_list[bottom_right] = color
+    new_list[box['top_left']] = color
+    new_list[box['top_right']] = color
+    new_list[box['bottom_left']] = color
+    new_list[box['bottom_right']] = color
 
     sense.set_pixels(new_list)
     sleep(PAUSE)
