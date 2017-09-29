@@ -216,7 +216,7 @@ def shift_rings(sense, ctrs):
     #the four corners of the box
     box = {'top_left': 0, 'top_right': WIDTH, 'bottom_left': SIZE - WIDTH, 'bottom_right': SIZE}
 
-    while top_left + WIDTH + 1 < bottom_right:
+    while box['top_left'] + WIDTH + 1 < box['bottom_right']:
         color = grid_list[box['top_left'] + WIDTH + 1]
 
         for i in range(box['top_left'], box['top_right']):
