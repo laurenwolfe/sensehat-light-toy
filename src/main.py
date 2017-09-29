@@ -97,18 +97,20 @@ def sample_sensor_output(sense):
     yaw_counts = [0] * len(YAW)
     yaw_sums = [0] * len(YAW)
 
-    accel = sense.get_accelerometer_raw()
     #print("x: %s, y: %s, z: %s" % (accel['x'], accel['y'], accel['z']))
 
     # take sample_size samples at sleep_time interval
     for i in range(NUM_SAMPLES):
         orient = sense.get_orientation()
         p, r, y = int(orient['pitch']), int(orient['roll']), int(orient['yaw'])
+        accel_x, accel_y, accel_z = 0, 0, 0
 
         # determine the region # by converting from degrees
         p_region = get_region(p, len(PITCH))
         r_region = get_region(r, len(ROLL))
         y_region = get_region_all_visible(y, len(YAW))
+
+        accel = sense.get_accelerometer_raw()
 
         # sum each value by region and tally the counts
         pitch_counts[p_region] += 1
@@ -119,6 +121,10 @@ def sample_sensor_output(sense):
 
         yaw_counts[y_region] += 1
         yaw_sums[y_region] += y
+
+        data['accel_x'] = max(data['accel_x'], accel['x'])
+        data['accel_y'] = max(data['accel_y'], accel['y'])
+        data['accel_z'] = max(data['accel_z'], accel['z'])
 
         sleep(DELAY)
 
@@ -317,7 +323,7 @@ def main():
             pitch_region = pitch // (MAX_DEGREES // len(PITCH))
         elif pitch > 270:
             #left
-            pitch_region = pitch // (MAX_DEGREES // len(PITCH)) + len(PITCH) // 2
+            pitch_region = abs(pitch - MAX_DEGREES) // (MAX_DEGREES // len(PITCH)) + (len(PITCH) // 2 - 1)
         else: 
             pitch_region = -1
             print("pitch: %d", pitch)
