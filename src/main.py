@@ -311,21 +311,27 @@ def main():
         pitch = data['avg_pitch']
         roll = data['avg_roll']
 
-        if pitch > 270:
+        if pitch > 0 and pitch < 90:
+            #right
             pitch = abs(pitch - MAX_DEGREES)
             pitch_region = pitch // (MAX_DEGREES // len(PITCH))
-        elif pitch > 0 and pitch < 90:
-            pitch_region = pitch // (MAX_DEGREES // len(PITCH)) + 3
+        elif pitch < 270:
+            #left
+            pitch_region = pitch // (MAX_DEGREES // len(PITCH)) + len(PITCH) // 2
         else: 
             pitch_region = -1
+            print("pitch: %d", pitch)
 
         if roll > 270:
+            #away
             roll = abs(roll - MAX_DEGREES)
             roll_region = roll // (MAX_DEGREES // len(ROLL))
         elif roll > 0 and roll < 90:
-            roll_region = roll // (MAX_DEGREES // len(ROLL)) + 3
+            #towards/forward
+            roll_region = roll // (MAX_DEGREES // len(ROLL)) + len(ROLL) // 2
         else: 
             roll_region = -1
+            print("roll: %d", roll)
 
         # sensor parallel with the ground
 
