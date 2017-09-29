@@ -317,13 +317,16 @@ def main():
         pitch = data['avg_pitch']
         roll = data['avg_roll']
 
+        pitch_region_size = (MAX_DEGREES // len(PITCH)) // 2
+        roll_region_size = (MAX_DEGREES // len(ROLL)) // 2
+
         if pitch > 0 and pitch < 90:
             #right
-            pitch = abs(pitch - MAX_DEGREES)
-            pitch_region = pitch // (MAX_DEGREES // len(PITCH))
+            pitch_region = pitch // pitch_region_size
         elif pitch > 270:
             #left
-            pitch_region = abs(pitch - MAX_DEGREES) // (MAX_DEGREES // len(PITCH)) + (len(PITCH) // 2 - 1)
+            pitch = abs(pitch - MAX_DEGREES)
+            pitch_region = pitch // pitch_region_size + (len(PITCH) // 2 - 1)
         else: 
             pitch_region = -1
             print("pitch: %d", pitch)
@@ -331,10 +334,10 @@ def main():
         if roll > 270:
             #away
             roll = abs(roll - MAX_DEGREES)
-            roll_region = roll // (MAX_DEGREES // len(ROLL))
+            roll_region = roll // roll_region_size
         elif roll > 0 and roll < 90:
             #towards/forward
-            roll_region = roll // (MAX_DEGREES // len(ROLL)) + len(ROLL) // 2
+            roll_region = roll // roll_region_size + (len(ROLL) // 2 - 1)
         else: 
             roll_region = -1
             print("roll: %d", roll)
