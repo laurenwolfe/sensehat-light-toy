@@ -103,7 +103,7 @@ def sample_sensor_output(sense):
     for i in range(NUM_SAMPLES):
         orient = sense.get_orientation()
         p, r, y = int(orient['pitch']), int(orient['roll']), int(orient['yaw'])
-        accel_x, accel_y, accel_z = 0, 0, 0
+        #accel_x, accel_y, accel_z = 0, 0, 0
 
         # determine the region # by converting from degrees
         p_region = get_region(p, len(PITCH))
@@ -122,9 +122,9 @@ def sample_sensor_output(sense):
         yaw_counts[y_region] += 1
         yaw_sums[y_region] += y
 
-        data['accel_x'] = max(data['accel_x'], accel['x'])
-        data['accel_y'] = max(data['accel_y'], accel['y'])
-        data['accel_z'] = max(data['accel_z'], accel['z'])
+        data['accel']['x'] = max(data['accel']['x'], accel['x'])
+        data['accel']['y'] = max(data['accel']['y'], accel['y'])
+        data['accel']['z'] = max(data['accel']['z'], accel['z'])
 
         sleep(DELAY)
 
@@ -142,7 +142,7 @@ def sample_sensor_output(sense):
     yaw_count = max(yaw_counts)
     data['yaw_region'] = yaw_counts.index(yaw_count)
     data['avg_yaw'] = yaw_sums[data['yaw_region']] / yaw_count
-    data['accel'] = accel
+    #data['accel'] = accel
 
     return data
 
