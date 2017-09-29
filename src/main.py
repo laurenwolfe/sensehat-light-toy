@@ -278,7 +278,7 @@ def shift_colors(sense, color, region, is_pitch):
             idx = 8
             while idx < SIZE:
                 for i in range(0, WIDTH):
-                    new_list[i + idx - WIDTH] = grid_list[i + idx]
+                    new_list[idx + i - WIDTH] = grid_list[idx + i]
             for i in range (SIZE - WIDTH, SIZE):
                 new_list[i] = ROLL[region]
 
@@ -292,9 +292,8 @@ def shift_colors(sense, color, region, is_pitch):
 
         sense.set_pixels(new_list)
         sleep(PAUSE)
-    else {
+    else:
         print("unspecified direction.")
-    }
 
 
 def main():
