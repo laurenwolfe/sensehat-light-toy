@@ -96,7 +96,7 @@ def sample_sensor_output(sense):
     yaw_sums = [0] * len(YAW)
 
     accel = sense.get_accelerometer_raw()
-    print("x: %s, y: %s, z: %s" % (accel['x'], accel['y'], accel['z']))
+    #print("x: %s, y: %s, z: %s" % (accel['x'], accel['y'], accel['z']))
 
     # take sample_size samples at sleep_time interval
     for i in range(NUM_SAMPLES):
@@ -134,6 +134,7 @@ def sample_sensor_output(sense):
     yaw_count = max(yaw_counts)
     data['yaw_region'] = yaw_counts.index(yaw_count)
     data['avg_yaw'] = yaw_sums[data['yaw_region']] / yaw_count
+    data['accel'] = accel
 
     return data
 
@@ -302,6 +303,7 @@ def main():
     while True:
         # convert deques to a flattened list
         data = sample_sensor_output(sense)
+        print(data)
 
         #Adjust degrees to be positive if necessary
         if data['avg_pitch'] < 0:
