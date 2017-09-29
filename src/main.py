@@ -140,53 +140,14 @@ def sample_sensor_output(sense):
     return data
 
 
-def overwrite_grid(grid, sense, color_list, ctrs, rings):
-    # store the steps out from center to set pixel ring
-    right = WIDTH // 2
-    left = right - 1
-
-    tmp_left = left
-    tmp_right = right
-
-    rings.pop()
-
-    if ctrs['flat'] <= MAX_PIXELS:
-        rings.appendleft(color_list[ctrs['flat_color_idx']])
-        ctrs['flat_color_idx'] -= 1
-
-        if ctrs['flat_color_idx'] < 0:
-            ctrs['flat_color_idx'] = len(color_list) - 1
-    else:
-        rings.appendleft(BLANK)
-
-    for i in range(len(rings)):
-        for step in range(tmp_right - tmp_left + 1):
-            l_edge = int(tmp_left + step)
-
-            grid[tmp_left][l_edge] = rings[i]
-            grid[tmp_right][l_edge] = rings[i]
-            grid[l_edge][tmp_right] = rings[i]
-            grid[l_edge][tmp_left] = rings[i]
-
-        tmp_left -= 1
-        tmp_right += 1
-
-        # write pixels to board once grid is loaded with newest batch of data
-        if tmp_left < 0 or tmp_right >= WIDTH:
-            tmp_left = left
-            tmp_right = right
-
-    #push_grid(grid, sense)
-
-
-def count_rounds_flat_position(ctrs, grid, sense, rings):
-    overwrite_grid(grid, sense, FLAT, ctrs, rings)
+def inc_horizontal_count(sense, ctrs):
+    shift_rings(sense, ctrs)
 
     ctrs['flat'] += 1
     ctrs['away'], ctrs['toward'], ctrs['left'], ctrs['right'] = 0, 0, 0, 0
 
 
-def count_rounds_pitch(sense, ctrs, pitch_region):
+def inc_pitch_count(sense, ctrs, pitch_region):
     # reset counters of all other types -- pitch is dominant sensor input
     ctrs['away'], ctrs['toward'], ctrs['flat'] = 0, 0, 0
     if pitch_region < (len(PITCH) - 2) // 2:
@@ -202,10 +163,10 @@ def count_rounds_pitch(sense, ctrs, pitch_region):
     if ctrs['left'] >= MAX_PIXELS or ctrs['right'] >= MAX_PIXELS:
         pitch_region = BLANK
 
-    shift_list_values(sense, pitch_region, True)
+    shift_colors(sense, pitch_region, True)
 
 
-def count_rounds_roll(sense, ctrs, roll_region):
+def inc_roll_count(sense, ctrs, roll_region):
     # reset counters of all other types -- roll is dominant sensor input
     ctrs['left'], ctrs['right'], ctrs['flat'] = 0, 0, 0
 
@@ -229,9 +190,7 @@ def count_rounds_roll(sense, ctrs, roll_region):
     elif ctrs['toward'] > MAX_PIXELS:
         roll_region = (len(ROLL) - 1) // 2
 
-    shift_list_values(sense, roll_region, False)
-
-    #shift_grid(grid, roll_region, False, ROLL)
+    shift_colors(sense, roll_region, False)
 
 
 def yaw_spiral(sense):
@@ -243,7 +202,44 @@ def yaw_spiral(sense):
     #get acceleration values. side spins spiral, drops scatter pixels/remove some
 
 
-def shift_list_values(sense, region, is_pitch):
+def shift_rings(sense, ctrs):
+    grid_list = sense.get_pixels()
+    new_list = BLANK * 64
+
+    #the four corners of the box
+    box = {'top_left': 0, 'top_right': WIDTH, 'bottom_left': SIZE - WIDTH, 'bottom_right': SIZE}
+
+    while top_left + WIDTH + 1 < bottom_right:
+        color = grid_list[top_left + WIDTH + 1]
+
+        for i in range(box['top_left'], box['top_right']):
+            new_list[i] = color
+        for i in range(box['bottom_left'], box['bottom_right']):
+            new_list[i] = color
+        for i in range(box['top_left'], box['bottom_left'], WIDTH):
+            new_list[i] = color
+        for i in range(box['top_right'], box['bottom_right'], WIDTH):
+            new_list[i] = color
+
+        top_left += WIDTH + 1
+        bottom_right -= WIDTH + 1
+        top_right += WIDTH - 1
+        bottom_left -= WIDTH - 1
+
+    if ctrs['flat'] <= MAX_PIXELS:
+        color = FLAT[ctrs['flat_color_idx' % len(color_list)]]
+    else:
+        color = BLANK
+
+    new_list[top_left] = color
+    new_list[top_right] = color
+    new_list[bottom_left] = color
+    new_list[bottom_right] = color
+
+    sense.set_pixels(new_list)
+
+
+def shift_colors(sense, region, is_pitch):
     grid_list = sense.get_pixels()
     color_midpoint = (len(color_list - 1)) // 2
     new_list = BLANK * 64
@@ -290,37 +286,38 @@ def shift_list_values(sense, region, is_pitch):
 
 
 def main():
+    ctrs = {'left': 0, 'right': 0, 'toward': 0, 'away': 0, 'flat': 0, 'flat_color_idx': randint(0, len(FLAT) - 1)}
+
     sense = SenseHat()
     sense.set_imu_config(False, True, True)
-    # sense.clear()
 
     grid_list = [PINK] * 64
     sense.set_pixels(grid_list)
-
-    #grid = deque([deque([BLANK] * WIDTH)] * WIDTH)
-    ctrs = {'left': 0, 'right': 0, 'toward': 0, 'away': 0, 'flat': 0, 'flat_color_idx': randint(0, len(FLAT) - 1)}
-    #rings = deque([BLANK] * WIDTH)
 
     while True:
         # convert deques to a flattened list
         data = sample_sensor_output(sense)
 
-        # determine whether pitch and roll are +10 degrees from the origin in either direction
-        # and if so, which value is higher
-        if data['avg_pitch'] >= MAX_DEGREES/2:
-            data['avg_pitch'] = abs(data['avg_pitch'] - MAX_DEGREES)
+        #Adjust degrees to be positive if necessary
+        if data[avg_pitch] < 0:
+            data[avg_pitch] += MAX_DEGREES
 
-        if data['avg_roll'] >= MAX_DEGREES/2:
-            data['avg_roll'] = abs(data['avg_roll'] - MAX_DEGREES)
+        if data[avg_roll] < 0:
+            data[avg_roll] += MAX_DEGREES
 
-        # keep sensor parallel with the ground
+        data[avg_pitch] = data[avg_pitch] % (MAX_DEGREES)
+        data[avg_roll] = data[avg_roll] % MAX_DEGREES
+
+        # sensor parallel with the ground
         if data['avg_pitch'] < 10 and data['avg_roll'] < 10:
-            count_rounds_flat_position(ctrs, grid_list, sense, rings)
-        # tilt around z axis (left and right)
+            inc_horizontal_count(ctrs, grid_list, sense, rings)
+        #todo: check for acceleration down and twisting (z or y axis)
+
+        # rotate left and right
         elif data['avg_pitch'] > data['avg_roll']:
-            count_rounds_pitch(sense, ctrs, data['pitch_region'])
-        # tilt around x axis (toward and away)
+            inc_pitch_count(sense, ctrs, data['pitch_region'])
+        # rotate towards and away
         else:
-            count_rounds_roll(sense, ctrs, data['roll_region'])
+            inc_roll_count(sense, ctrs, data['roll_region'])
 
 main()
