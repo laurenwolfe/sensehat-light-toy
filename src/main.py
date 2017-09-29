@@ -3,6 +3,7 @@ from time import sleep, strftime, tzset
 from collections import deque
 from random import randint
 import os
+import logging
 
 # import math
 
@@ -281,9 +282,13 @@ def get_greeting(sense):
 def main():
     sense = SenseHat()
     sense.set_imu_config(False, True, True)
-    sense.clear()
+    # sense.clear()
 
-    get_greeting(sense)
+    # Ridiculously long, nooo
+    # get_greeting(sense)
+
+    initial_grid = [PINK] * 64
+    sense.set_pixels(initial_grid)
 
     grid = deque([deque([BLANK] * GRID_SIZE)] * GRID_SIZE)
     ctrs = {'left': 0, 'right': 0, 'toward': 0, 'away': 0, 'flat': 0, 'flat_color_idx': randint(0, len(FLAT) - 1)}
@@ -303,7 +308,6 @@ def main():
         # keep sensor parallel with the ground
         if data['avg_pitch'] < 10 and data['avg_roll'] < 10:
             manage_flat_ctrs(ctrs, grid, sense, rings)
-
         # tilt around z axis (left and right)
         else:
             if data['avg_pitch'] > data['avg_roll']:
