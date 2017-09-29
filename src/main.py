@@ -296,7 +296,7 @@ def main():
     ctrs = {'left': 0, 'right': 0, 'toward': 0, 'away': 0, 'flat': 0, 'flat_color_idx': randint(0, len(FLAT) - 1)}
 
     sense = SenseHat()
-    sense.set_rotation(90)
+    sense.set_rotation(180)
     sense.set_imu_config(True, True, True)
 
     grid_list = [PINK] * 64
