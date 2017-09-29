@@ -52,8 +52,8 @@ GREEN_YELLOW = (160, 215, 40)
 BLUE_VIOLET = (138, 43, 226)
 INDIGO = (75, 0, 130)
 
-PITCH = [PINK, RED, DARK_RED, BLANK, BLANK, DARK_PURPLE, PURPLE, LIGHT_PURPLE]
-ROLL = [LIME_GREEN, GREEN, DARK_GREEN, BLANK, BLANK, DARK_ORANGE, ORANGE, GOLD]
+PITCH = [PINK, RED, DARK_RED, DARK_PURPLE, PURPLE, LIGHT_PURPLE]
+ROLL = [LIME_GREEN, GREEN, DARK_GREEN, DARK_ORANGE, ORANGE, GOLD]
 YAW = [WHITE, INDIGO, TOMATO, CYAN, VIOLET_RED]
 FLAT = [DARK_CYAN, M_CYAN, CYAN, BLUE, M_BLUE, MD_BLUE, DARK_BLUE]
 
@@ -324,21 +324,19 @@ def main():
 
         if pitch > 270:
             pitch = abs(pitch - MAX_DEGREES)
+            pitch_region = pitch // (MAX_DEGREES // len(PITCH))
+        elif pitch > 0 and pitch < 90:
+            pitch_region = pitch // (MAX_DEGREES // len(PITCH)) + 3
+        else: 
+            pitch_region = -1
 
         if roll > 270:
             roll = abs(roll - MAX_DEGREES)
-
-        '''
-        #Adjust degrees to be positive if necessary
-        if data['avg_pitch'] < 0:
-            data['avg_pitch'] += MAX_DEGREES
-
-        if data['avg_roll'] < 0:
-            data['avg_roll'] += MAX_DEGREES
-
-        data['avg_pitch'] = data['avg_pitch'] % MAX_DEGREES
-        data['avg_roll'] = data['avg_roll'] % MAX_DEGREES
-        '''
+            roll_region = roll // (MAX_DEGREES // len(ROLL))
+        elif roll > 0 and roll < 90:
+            roll_region = roll // (MAX_DEGREES // len(ROLL)) + 3
+        else: 
+            roll_region = -1
 
         # sensor parallel with the ground
 
@@ -348,9 +346,9 @@ def main():
 
         # rotate left and right
         elif pitch > roll:
-            inc_pitch_count(sense, ctrs, data['pitch_region'])
+            inc_pitch_count(sense, ctrs, pitch_region)
         # rotate towards and away
         else:
-            inc_roll_count(sense, ctrs, data['roll_region'])
+            inc_roll_count(sense, ctrs, roll_region)
 
 main()
