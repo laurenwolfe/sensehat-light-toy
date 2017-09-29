@@ -235,10 +235,17 @@ def shift_rings(sense, ctrs):
     new_list[bottom_right] = color
 
     sense.set_pixels(new_list)
+    sleep(PAUSE)
 
 
 def shift_colors(sense, region, is_pitch):
     grid_list = sense.get_pixels()
+
+    if is_pitch:
+        color_list = PITCH
+    else:
+        color_list = ROLL
+
     color_midpoint = (len(color_list - 1)) // 2
     new_list = BLANK * 64
     idx = 0
