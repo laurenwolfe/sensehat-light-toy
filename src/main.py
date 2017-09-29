@@ -8,6 +8,7 @@ import logging
 # import math
 
 WIDTH = 8
+SIZE = WIDTH * WIDTH
 MAX_PIXELS = WIDTH * 5
 MAX_DEGREES = 360
 
@@ -86,126 +87,6 @@ def get_region_all_visible(degrees, list_len):
     return int(degrees // seg_size)
 
 
-# pop old pixels and insert new values for left/right rotation
-def shift_grid(grid, region, is_pitch, color_list):
-    if is_pitch:
-        # LEFT
-        if region <= (len(color_list) - 1) // 2:
-            for i in range(WIDTH):
-                grid[i].popleft()
-                grid[i].append(color_list[region])
-        # RIGHT
-        else:
-            for i in range(WIDTH):
-                grid[i].pop()
-                grid[i].appendleft(color_list[region])
-    else:
-        # AWAY
-        if region <= (len(color_list) - 1) // 2:
-            grid.pop()
-            grid.appendleft(deque([color_list[region]] * WIDTH))
-
-        # TOWARD
-        else:
-            grid.popleft()
-            grid.append(deque([color_list[region]] * WIDTH))
-    return grid
-
-
-def overwrite_grid(grid, sense, color_list, ctrs, rings):
-    # store the steps out from center to set pixel ring
-    left = (WIDTH - 1) // 2
-    right = WIDTH // 2
-
-    tmp_left = left
-    tmp_right = right
-
-    rings.pop()
-
-    if ctrs['flat'] <= MAX_PIXELS:
-        rings.appendleft(color_list[ctrs['flat_color_idx']])
-        ctrs['flat_color_idx'] -= 1
-
-        if ctrs['flat_color_idx'] < 0:
-            ctrs['flat_color_idx'] = len(color_list) - 1
-    else:
-        rings.appendleft(BLANK)
-
-    for i in range(len(rings)):
-        for step in range(tmp_right - tmp_left + 1):
-            l_edge = int(tmp_left + step)
-
-            grid[tmp_left][l_edge] = rings[i]
-            grid[tmp_right][l_edge] = rings[i]
-            grid[l_edge][tmp_right] = rings[i]
-            grid[l_edge][tmp_left] = rings[i]
-
-        tmp_left -= 1
-        tmp_right += 1
-
-        # write pixels to board once grid is loaded with newest batch of data
-        if tmp_left < 0 or tmp_right >= WIDTH:
-            tmp_left = left
-            tmp_right = right
-
-    push_grid(grid, sense)
-
-
-def manage_flat_ctrs(ctrs, grid, sense, rings):
-    overwrite_grid(grid, sense, FLAT, ctrs, rings)
-
-    ctrs['flat'] += 1
-    ctrs['away'], ctrs['toward'], ctrs['left'], ctrs['right'] = 0, 0, 0, 0
-
-
-def manage_pitch_ctrs(ctrs, pitch_region, grid):
-    # increment / reset directional counters
-    ctrs['away'], ctrs['toward'], ctrs['flat'] = 0, 0, 0
-    if pitch_region < (len(PITCH) - 2) // 2:
-        ctrs['left'] += 1
-        ctrs['right'] = 0
-    elif pitch_region >= (len(PITCH) - 1) // 2:
-        ctrs['right'] += 1
-        ctrs['left'] = 0
-    else:
-        ctrs['left'], ctrs['right'] = 0, 0
-
-    # if counter reaches/exceeds grid size, stop outputting color until direction changes
-    if ctrs['left'] >= MAX_PIXELS:
-        pitch_region = (len(PITCH) - 1) // 2
-    elif ctrs['right'] >= MAX_PIXELS:
-        pitch_region = (len(PITCH)) // 2
-
-    shift_grid(grid, pitch_region, True, PITCH)
-
-
-def manage_roll_ctrs(ctrs, roll_region, grid):
-    # reset counters of all other types -- roll is dominant sensor input
-    ctrs['left'], ctrs['right'], ctrs['flat'] = 0, 0, 0
-
-    # region count for tilting towards
-    if roll_region < (len(ROLL) - 2) // 2:
-        ctrs['toward'] += 1
-        ctrs['away'] = 0
-    # region count for tilting away
-    elif roll_region >= (len(ROLL) - 1) // 2:
-        ctrs['away'] += 1
-        ctrs['toward'] = 0
-    # in the blank zone between 90 -> 270, reset counters
-    else:
-        ctrs['away'], ctrs['toward'], = 0, 0
-
-    # if counter reaches/exceeds maximum # of sequential pixels for a given direction, stop outputting
-    # until direction changes by setting region equal to a non-visible segment.
-    # the pixels fall off the screen in a downward direction.
-    if ctrs['away'] > MAX_PIXELS:
-        roll_region = len(ROLL) // 2
-    elif ctrs['toward'] > MAX_PIXELS:
-        roll_region = (len(ROLL) - 1) // 2
-
-    shift_grid(grid, roll_region, False, ROLL)
-
-
 def sample_sensor_output(sense):
     data = {}
     pitch_counts = [0] * len(PITCH)
@@ -214,6 +95,10 @@ def sample_sensor_output(sense):
     roll_sums = [0] * len(ROLL)
     yaw_counts = [0] * len(YAW)
     yaw_sums = [0] * len(YAW)
+
+    accel = sense.get_accelerometer_raw()
+    print("x: {x}, y: {y}, z: {z}".format(**raw))
+    logging.warning("x: {x}, y: {y}, z: {z}".format(**raw))
 
     # take sample_size samples at sleep_time interval
     for i in range(NUM_SAMPLES):
@@ -254,47 +139,156 @@ def sample_sensor_output(sense):
 
     return data
 
-def make_list(grid):
-    grid_list = []
 
-    for row in grid:
-        grid_list += list(row)
+def overwrite_grid(grid, sense, color_list, ctrs, rings):
+    # store the steps out from center to set pixel ring
+    right = WIDTH // 2
+    left = right - 1
 
-    return grid_list
+    tmp_left = left
+    tmp_right = right
 
-def push_grid(grid, sense):
-    grid_list = make_list(grid)
+    rings.pop()
 
-    sense.set_pixels(grid_list)
-    sleep(PAUSE)
+    if ctrs['flat'] <= MAX_PIXELS:
+        rings.appendleft(color_list[ctrs['flat_color_idx']])
+        ctrs['flat_color_idx'] -= 1
 
-def yaw_spiral(grid, sense):
+        if ctrs['flat_color_idx'] < 0:
+            ctrs['flat_color_idx'] = len(color_list) - 1
+    else:
+        rings.appendleft(BLANK)
+
+    for i in range(len(rings)):
+        for step in range(tmp_right - tmp_left + 1):
+            l_edge = int(tmp_left + step)
+
+            grid[tmp_left][l_edge] = rings[i]
+            grid[tmp_right][l_edge] = rings[i]
+            grid[l_edge][tmp_right] = rings[i]
+            grid[l_edge][tmp_left] = rings[i]
+
+        tmp_left -= 1
+        tmp_right += 1
+
+        # write pixels to board once grid is loaded with newest batch of data
+        if tmp_left < 0 or tmp_right >= WIDTH:
+            tmp_left = left
+            tmp_right = right
+
+    #push_grid(grid, sense)
+
+
+def count_rounds_flat_position(ctrs, grid, sense, rings):
+    overwrite_grid(grid, sense, FLAT, ctrs, rings)
+
+    ctrs['flat'] += 1
+    ctrs['away'], ctrs['toward'], ctrs['left'], ctrs['right'] = 0, 0, 0, 0
+
+
+def count_rounds_pitch(sense, ctrs, pitch_region):
+    # reset counters of all other types -- pitch is dominant sensor input
+    ctrs['away'], ctrs['toward'], ctrs['flat'] = 0, 0, 0
+    if pitch_region < (len(PITCH) - 2) // 2:
+        ctrs['left'] += 1
+        ctrs['right'] = 0
+    elif pitch_region >= (len(PITCH) - 1) // 2:
+        ctrs['right'] += 1
+        ctrs['left'] = 0
+    else:
+        ctrs['left'], ctrs['right'] = 0, 0
+
+    # if counter reaches/exceeds grid size, stop outputting color until direction changes
+    if ctrs['left'] >= MAX_PIXELS:
+        pitch_region = (len(PITCH) - 1) // 2
+    elif ctrs['right'] >= MAX_PIXELS:
+        pitch_region = (len(PITCH)) // 2
+
+    shift_list_values(sense, pitch_region, True)
+
+
+def count_rounds_roll(sense, ctrs, roll_region):
+    # reset counters of all other types -- roll is dominant sensor input
+    ctrs['left'], ctrs['right'], ctrs['flat'] = 0, 0, 0
+
+    # region count for tilting towards
+    if roll_region < (len(ROLL) - 2) // 2:
+        ctrs['toward'] += 1
+        ctrs['away'] = 0
+    # region count for tilting away
+    elif roll_region >= (len(ROLL) - 1) // 2:
+        ctrs['away'] += 1
+        ctrs['toward'] = 0
+    # in the blank zone between 90 -> 270, reset counters
+    else:
+        ctrs['away'], ctrs['toward'], = 0, 0
+
+    # if counter reaches/exceeds maximum # of sequential pixels for a given direction, stop outputting
+    # until direction changes by setting region equal to a non-visible segment.
+    # the pixels fall off the screen in a downward direction.
+    if ctrs['away'] > MAX_PIXELS:
+        roll_region = len(ROLL) // 2
+    elif ctrs['toward'] > MAX_PIXELS:
+        roll_region = (len(ROLL) - 1) // 2
+
+    shift_list_values(sense, roll_region, False)
+
+    #shift_grid(grid, roll_region, False, ROLL)
+
+
+def yaw_spiral(sense):
+    grid_list = sense.get_pixels()
+    new_list = BLANK * 64
     horizontal_idx_offset = WIDTH + 1
     vertical_idx_offset = WIDTH - 1
 
-    grid_list = make_list(grid)
+    #get acceleration values. side spins spiral, drops scatter pixels/remove some
 
 
-def get_greeting(sense):
-    os.environ['TZ'] = 'US/Pacific'
-    tzset()
-    weekday = strftime("%A")
-    hour = int(strftime("%H"))
+def shift_list_values(sense, region, is_pitch):
+    grid_list = sense.get_pixels()
+    color_midpoint = (len(color_list - 1)) // 2
+    new_list = BLANK * 64
+    idx = 0
 
-    f_temp = int(sense.get_temperature() * (9.0 / 5)) + 32
+    # SHIFT LEFT
+    if is_pitch and region <= color_midpoint:
+        while idx < SIZE:
+            for i in range(0, WIDTH - 1):
+                new_list[idx + i + 1] = grid_list[idx + i]
+            idx += WIDTH
+        #add new pixel column
+        for i in range(0, SIZE, WIDTH):
+            new_list[i] = PITCH[region]
+    
+    # SHIFT RIGHT
+    elif is_pitch:
+        while idx < SIZE:
+            for i in range(1, WIDTH):
+                new_list[i + idx - 1] = grid_list[idx + i]
+            idx += WIDTH
+        for i in range(WIDTH - 1, SIZE, WIDTH):
+            new_list[i] = PITCH[region]
 
-    if hour > 23 or hour < 6:
-        greeting = "Heya night owl! "
-    elif hour >= 6 and hour < 12:
-        greeting = "Good morning, there :D "
-    elif hour >= 12 and hour < 18:
-        greeting = "Having a lovely afternoon? "
-    else:
-        greeting = "It's a beautiful evening! "
+    #SHIFT UP
+    elif region <= color_midpoint:
+        idx = 8
+        while idx < SIZE:
+            for i in range(0, WIDTH):
+                new_list[i + idx - WIDTH] = grid_list[i + idx]
+        for i in range (SIZE - WIDTH, SIZE):
+            new_list[i] = ROLL[region]
 
-    greeting += "I hope this " + weekday + " is the best ever. "
-    greeting += "It's " + str(int(f_temp)) + " degrees F where you're sitting right now."
-    sense.show_message(greeting, text_colour=[230, 15, 30], back_colour=[40, 0, 40])
+    #SHIFT DOWN
+    else: 
+        while idx < SIZE - WIDTH:
+            for i in range(0, WIDTH):
+                new_list[idx + i + WIDTH] = grid_list[idx + i]
+        for i in range(0, WIDTH):
+            new_list[i] = ROLL[region]
+
+    sense.set_pixels(new_list)
+    sleep(PAUSE)
 
 
 def main():
@@ -302,12 +296,12 @@ def main():
     sense.set_imu_config(False, True, True)
     # sense.clear()
 
-    initial_grid = [PINK] * 64
-    sense.set_pixels(initial_grid)
+    grid_list = [PINK] * 64
+    sense.set_pixels(grid_list)
 
-    grid = deque([deque([BLANK] * WIDTH)] * WIDTH)
+    #grid = deque([deque([BLANK] * WIDTH)] * WIDTH)
     ctrs = {'left': 0, 'right': 0, 'toward': 0, 'away': 0, 'flat': 0, 'flat_color_idx': randint(0, len(FLAT) - 1)}
-    rings = deque([BLANK] * WIDTH)
+    #rings = deque([BLANK] * WIDTH)
 
     while True:
         # convert deques to a flattened list
@@ -317,22 +311,21 @@ def main():
         # and if so, which value is higher
         if data['avg_pitch'] >= MAX_DEGREES/2:
             data['avg_pitch'] = abs(data['avg_pitch'] - MAX_DEGREES)
+
         if data['avg_roll'] >= MAX_DEGREES/2:
             data['avg_roll'] = abs(data['avg_roll'] - MAX_DEGREES)
-        print avg_yaw
-        logging.warning(avg_roll)
+
+        #print avg_yaw
+        #logging.warning(avg_roll)
 
         # keep sensor parallel with the ground
         if data['avg_pitch'] < 10 and data['avg_roll'] < 10:
-            manage_flat_ctrs(ctrs, grid, sense, rings)
+            count_rounds_flat_position(ctrs, grid_list, sense, rings)
         # tilt around z axis (left and right)
+        elif data['avg_pitch'] > data['avg_roll']:
+            count_rounds_pitch(sense, ctrs, data['pitch_region'])
+        # tilt around x axis (toward and away)
         else:
-            if data['avg_pitch'] > data['avg_roll']:
-                manage_pitch_ctrs(ctrs, data['pitch_region'], grid)
-            # tilt around x axis (toward and away)
-            else:
-                manage_roll_ctrs(ctrs, data['roll_region'], grid)
-
-            push_grid(grid, sense)
+            count_rounds_roll(sense, ctrs, data['roll_region'])
 
 main()
