@@ -175,11 +175,11 @@ def inc_roll_count(sense, ctrs, roll_region):
     ctrs['left'], ctrs['right'], ctrs['flat'] = 0, 0, 0
 
     # region count for tilting towards
-    if roll_region < (len(ROLL) - 2) // 2:
+    if roll_region < len(ROLL) // 2:
         ctrs['toward'] += 1
         ctrs['away'] = 0
     # region count for tilting away
-    elif roll_region >= (len(ROLL) - 1) // 2:
+    elif roll_region >= (len(ROLL)) // 2:
         ctrs['away'] += 1
         ctrs['toward'] = 0
     # in the blank zone between 90 -> 270, reset counters
@@ -252,9 +252,7 @@ def shift_colors(sense, color, region, is_pitch):
 
     if region != -1:
         # SHIFT LEFT
-        if is_pitch and region == 0:
-            print "c"
-
+        if is_pitch and region == 1:
             while idx < SIZE:
                 for i in range(0, WIDTH - 1):
                     new_list[idx + i + 1] = grid_list[idx + i]
@@ -262,22 +260,16 @@ def shift_colors(sense, color, region, is_pitch):
             #add new pixel column
             for i in range(0, SIZE, WIDTH):
                 new_list[i] = PITCH[region]
-        
         # SHIFT RIGHT
         elif is_pitch:
-            print "d"
-
             while idx < SIZE:
                 for i in range(1, WIDTH):
                     new_list[i + idx - 1] = grid_list[idx + i]
                 idx += WIDTH
             for i in range(WIDTH - 1, SIZE, WIDTH):
                 new_list[i] = PITCH[region]
-
         #SHIFT AWAY
-        elif region == 0:
-            print "e"
-
+        elif region == 1:
             idx = WIDTH
             while idx < SIZE:
                 for i in range(0, WIDTH):
@@ -285,11 +277,8 @@ def shift_colors(sense, color, region, is_pitch):
                 idx += WIDTH
             for i in range (SIZE - WIDTH, SIZE):
                 new_list[i] = ROLL[region]
-
         #SHIFT TOWARD    
         else: 
-            print "f"
-
             while idx < SIZE - WIDTH:
                 for i in range(0, WIDTH):
                     new_list[idx + i + WIDTH] = grid_list[idx + i]
@@ -307,7 +296,7 @@ def main():
     ctrs = {'left': 0, 'right': 0, 'toward': 0, 'away': 0, 'flat': 0, 'flat_color_idx': randint(0, len(FLAT) - 1)}
 
     sense = SenseHat()
-    sense.set_rotation(180)
+    sense.set_rotation(90)
     sense.set_imu_config(True, True, True)
 
     grid_list = [PINK] * 64
